@@ -1,0 +1,16 @@
+# Normalise line endings in the repository regardless of the checkout platform.
+# Without this, work done on Windows lands as CRLF and every file reads as
+# wholly rewritten the first time someone opens it on Linux or macOS - and CI
+# runs on Linux.
+* text=auto eol=lf
+
+# Binary, never converted.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ttf binary
+*.otf binary
+*.apk binary
+*.keystore binary
+*.jks binary
