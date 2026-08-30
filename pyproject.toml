@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gora-backend-v2"
+version = "0.1.0"
+description = "Gora v2 API - the corpus schema over Postgres, with the catalog artwork already living in MinIO/R2."
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "asyncpg>=0.30",
+    "alembic>=1.14",
+    "pydantic[email]>=2.9",
+    "pydantic-settings>=2.6",
+    "argon2-cffi>=23.1",
+    "PyJWT>=2.10",
+    "boto3>=1.35",
+    "httpx>=0.27",
+    "python-multipart>=0.0.17",
+    "sentry-sdk[fastapi]>=2.18",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "httpx>=0.27",
+    "aiosqlite>=0.20",
+    "ruff>=0.7",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "C4", "UP", "RUF", "S", "BLE"]
+ignore = [
+    # FastAPI's whole dependency system is `= Depends(...)` in a default
+    # argument. B008 is right about Python in general and wrong about this
+    # framework; rewriting 101 correct signatures to satisfy it would make the
+    # code worse, not safer.
+    "B008",
+    # Reports every file as executable. That is the Windows filesystem this
+    # repository is checked out on, not a property of the source.
+    "EXE002",
+    # Worth flagging in logic, not in a URL or a seeded bio.
+    "E501",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests pin environment variables before importing app.config, which reads them
+# exactly once - so the imports genuinely cannot all sit at the top.
+"tests/conftest.py" = ["E402"]
+# Seeds and tests carry a demo password and fixed invite tokens on purpose.
+# They are published in the README; treating them as secrets helps nobody.
+"scripts/*" = ["E402", "S101", "S105", "S106", "C408"]
+"tests/*" = ["S101", "S105", "S106", "S107"]
+# The asserts in the routers all have the same shape: re-select the row that was
+# just committed, then narrow it from `X | None` to `X`. They assert an invariant
+# the function itself established a line earlier, not a caller's input - which is
+# the case S101 exists to catch. Under `python -O` they would vanish and the next
+# line would raise on None instead, which is a worse message for a branch that
+# cannot be reached.
+"app/routers/*" = ["S101"]

@@ -1,0 +1,6040 @@
+[
+ {
+  "slug": "attend-a-cold-brew-tea-workshop",
+  "title": "Attend a cold-brew tea workshop",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "attend-a-fireside-winter-tea",
+  "title": "Attend a fireside winter tea",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "attend-a-garden-tea-gathering",
+  "title": "Attend a garden tea gathering",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "attend-a-herbal-infusion-class",
+  "title": "Attend a herbal infusion class",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "attend-a-loose-leaf-brewing-lesson",
+  "title": "Attend a loose-leaf brewing lesson",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "attend-a-silent-tea-hour",
+  "title": "Attend a silent tea hour",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "attend-a-sunrise-tea-picnic",
+  "title": "Attend a sunrise tea picnic",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "attend-a-tea-and-food-pairing",
+  "title": "Attend a tea-and-food pairing",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "attend-a-tea-blending-session",
+  "title": "Attend a tea blending session",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "attend-an-afternoon-tea-tasting",
+  "title": "Attend an afternoon tea tasting",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "attend-an-outdoor-festival",
+  "title": "Attend an outdoor festival",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "everyday",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "community"
+  ]
+ },
+ {
+  "slug": "bake-a-braided-celebration-bread",
+  "title": "Bake a braided celebration bread",
+  "category": "Food",
+  "domain": "Baking",
+  "register": "everyday",
+  "party": "solo",
+  "location": "none",
+  "completion": "single",
+  "needs": [
+   "creativity",
+   "family"
+  ]
+ },
+ {
+  "slug": "bake-a-skillet-cornbread",
+  "title": "Bake a skillet cornbread",
+  "category": "Food",
+  "domain": "Baking",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "bake-a-sourdough-loaf",
+  "title": "Bake a sourdough loaf",
+  "category": "Food",
+  "domain": "Baking",
+  "register": "everyday",
+  "party": "solo",
+  "location": "none",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "creativity"
+  ]
+ },
+ {
+  "slug": "build-a-bee-hotel",
+  "title": "Build a bee hotel",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "build-a-cold-frame",
+  "title": "Build a cold frame",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "build-a-compost-tumbler",
+  "title": "Build a compost tumbler",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "build-a-consistent-bedtime-routine",
+  "title": "Build a consistent bedtime routine",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "build-a-darker-sleeping-space",
+  "title": "Build a darker sleeping space",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "build-a-garden-arch",
+  "title": "Build a garden arch",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "build-a-rain-chain-feature",
+  "title": "Build a rain-chain feature",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "build-a-raised-garden-bed",
+  "title": "Build a raised garden bed",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "build-a-shaded-seating-corner",
+  "title": "Build a shaded seating corner",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "build-a-simple-potting-bench",
+  "title": "Build a simple potting bench",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "build-a-small-wildlife-pond",
+  "title": "Build a small wildlife pond",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "build-a-trellis-from-reclaimed-wood",
+  "title": "Build a trellis from reclaimed wood",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "buy-a-snack-from-a-vending-machine",
+  "title": "Buy a snack from a vending machine",
+  "category": "Food",
+  "domain": "Food",
+  "register": "everyday",
+  "party": "solo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "fun"
+  ]
+ },
+ {
+  "slug": "camp-under-the-stars",
+  "title": "Camp under the stars",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "everyday",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "adventure",
+   "connection"
+  ]
+ },
+ {
+  "slug": "capture-a-bird-in-flight",
+  "title": "Capture a bird in flight",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "capture-cloud-shadows-across-hills",
+  "title": "Capture cloud shadows across hills",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "capture-dew-on-a-spiderweb",
+  "title": "Capture dew on a spiderweb",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "capture-frost-on-fallen-leaves",
+  "title": "Capture frost on fallen leaves",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "capture-insects-at-flower-level",
+  "title": "Capture insects at flower level",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "capture-moving-water-with-a-slow-shutter",
+  "title": "Capture moving water with a slow shutter",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "capture-reflections-on-a-still-lake",
+  "title": "Capture reflections on a still lake",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "capture-stars-above-a-dark-landscape",
+  "title": "Capture stars above a dark landscape",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "capture-waves-breaking-over-rocks",
+  "title": "Capture waves breaking over rocks",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "capture-wind-patterns-in-sand",
+  "title": "Capture wind patterns in sand",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "carve-a-small-relief-panel",
+  "title": "Carve a small relief panel",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "carve-a-wooden-spoon",
+  "title": "Carve a wooden spoon",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "climb-a-desert-rock-tower",
+  "title": "Climb a desert rock tower",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "climb-a-frozen-waterfall",
+  "title": "Climb a frozen waterfall",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "aspirational",
+  "party": "duo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "adventure",
+   "courage"
+  ]
+ },
+ {
+  "slug": "climb-a-granite-crag",
+  "title": "Climb a granite crag",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "climb-a-limestone-wall",
+  "title": "Climb a limestone wall",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "climb-a-natural-boulder-field",
+  "title": "Climb a natural boulder field",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "climb-a-scrambling-ridge",
+  "title": "Climb a scrambling ridge",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "climb-a-sea-cliff-route",
+  "title": "Climb a sea cliff route",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "climb-a-treetop-rope-course",
+  "title": "Climb a treetop rope course",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "climb-a-volcanic-slope",
+  "title": "Climb a volcanic slope",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "climb-to-a-mountain-summit",
+  "title": "Climb to a mountain summit",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "aspirational",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "health",
+   "adventure",
+   "awe"
+  ]
+ },
+ {
+  "slug": "complete-a-bodyweight-strength-program",
+  "title": "Complete a bodyweight strength program",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "complete-a-first-unassisted-pull-up",
+  "title": "Complete a first unassisted pull-up",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "complete-a-five-kilometer-fun-run",
+  "title": "Complete a five-kilometer fun run",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "everyday",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "health",
+   "community"
+  ]
+ },
+ {
+  "slug": "complete-a-kettlebell-fundamentals-course",
+  "title": "Complete a kettlebell fundamentals course",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "complete-a-multi-day-rail-trail-journey",
+  "title": "Complete a multi-day rail-trail journey",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "complete-a-self-supported-camping-ride",
+  "title": "Complete a self-supported camping ride",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "complete-an-overnight-bicycle-tour",
+  "title": "Complete an overnight bicycle tour",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "create-a-short-photo-essay",
+  "title": "Create a short photo essay",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "cycle-a-border-to-border-route",
+  "title": "Cycle a border-to-border route",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "aspirational",
+  "party": "solo",
+  "location": "route",
+  "completion": "single",
+  "needs": [
+   "adventure",
+   "courage"
+  ]
+ },
+ {
+  "slug": "cycle-a-car-free-city-route",
+  "title": "Cycle a car-free city route",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "everyday",
+  "party": "group",
+  "location": "route",
+  "completion": "distance",
+  "needs": [
+   "fun",
+   "health"
+  ]
+ },
+ {
+  "slug": "cycle-a-charity-road-event",
+  "title": "Cycle a charity road event",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "cycle-a-coastal-century-ride",
+  "title": "Cycle a coastal century ride",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "solo",
+  "location": "route",
+  "completion": "distance",
+  "needs": [
+   "health",
+   "adventure"
+  ]
+ },
+ {
+  "slug": "cycle-a-forested-hill-circuit",
+  "title": "Cycle a forested hill circuit",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "cycle-a-long-riverside-path",
+  "title": "Cycle a long riverside path",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "everyday",
+  "party": "solo",
+  "location": "route",
+  "completion": "distance",
+  "needs": [
+   "calm",
+   "health"
+  ]
+ },
+ {
+  "slug": "cycle-a-mountain-pass-ascent",
+  "title": "Cycle a mountain-pass ascent",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "solo",
+  "location": "route",
+  "completion": "distance",
+  "needs": [
+   "health",
+   "courage"
+  ]
+ },
+ {
+  "slug": "cycle-a-sunrise-country-lane",
+  "title": "Cycle a sunrise country lane",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "cycle-a-vineyard-road-loop",
+  "title": "Cycle a vineyard road loop",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "everyday",
+  "party": "duo",
+  "location": "route",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "romance"
+  ]
+ },
+ {
+  "slug": "decorate-a-simple-layer-cake",
+  "title": "Decorate a simple layer cake",
+  "category": "Food",
+  "domain": "Baking",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "dive-a-coral-reef",
+  "title": "Dive a coral reef",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "aspirational",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "adventure",
+   "awe"
+  ]
+ },
+ {
+  "slug": "do-a-beginner-class-where-you-know-nobody",
+  "title": "Do a beginner class where you know nobody",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "do-a-cold-water-dip-with-supervision",
+  "title": "Do a cold-water dip with supervision",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "do-a-difficult-phone-call",
+  "title": "Do a difficult phone call",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "do-a-high-ropes-obstacle",
+  "title": "Do a high-ropes obstacle",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "do-a-public-question-at-a-lecture",
+  "title": "Do a public question at a lecture",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "do-a-small-performance-in-front-of-others",
+  "title": "Do a small performance in front of others",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "do-a-solo-day-trip",
+  "title": "Do a solo day trip",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "do-an-unfamiliar-food-order",
+  "title": "Do an unfamiliar food order",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "document-a-community-cleanup",
+  "title": "Document a community cleanup",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "document-one-day-in-a-public-market",
+  "title": "Document one day in a public market",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "draw-a-botanical-study",
+  "title": "Draw a botanical study",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "draw-a-city-street-from-observation",
+  "title": "Draw a city street from observation",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "solo",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "creativity"
+  ]
+ },
+ {
+  "slug": "draw-a-comic-strip-without-words",
+  "title": "Draw a comic strip without words",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "draw-a-portrait-of-a-friend",
+  "title": "Draw a portrait of a friend",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "draw-a-room-using-one-point-perspective",
+  "title": "Draw a room using one-point perspective",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "draw-a-self-portrait-from-a-mirror",
+  "title": "Draw a self-portrait from a mirror",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "draw-a-series-of-hands-at-work",
+  "title": "Draw a series of hands at work",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "draw-a-set-of-animal-gesture-sketches",
+  "title": "Draw a set of animal gesture sketches",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "draw-one-object-every-day-for-a-month",
+  "title": "Draw one object every day for a month",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "streak",
+  "needs": [
+   "growth",
+   "creativity"
+  ]
+ },
+ {
+  "slug": "drive-a-countryside-food-route",
+  "title": "Drive a countryside food route",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "drive-a-desert-highway-at-dawn",
+  "title": "Drive a desert highway at dawn",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "drive-a-mountain-pass-route",
+  "title": "Drive a mountain-pass route",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "drive-a-river-following-route",
+  "title": "Drive a river-following route",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "drive-a-winding-coastal-road",
+  "title": "Drive a winding coastal road",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "eat-a-bowl-of-soup-at-a-covered-market",
+  "title": "Eat a bowl of soup at a covered market",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "eat-a-meal-from-a-night-market",
+  "title": "Eat a meal from a night market",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "eat-a-picnic-assembled-from-market-produce",
+  "title": "Eat a picnic assembled from market produce",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "eat-a-seasonal-dessert-at-a-farm-market",
+  "title": "Eat a seasonal dessert at a farm market",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "eat-a-warm-pastry-at-a-morning-market",
+  "title": "Eat a warm pastry at a morning market",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "eat-breakfast-at-a-produce-market",
+  "title": "Eat breakfast at a produce market",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "eat-fresh-fruit-at-a-roadside-stall",
+  "title": "Eat fresh fruit at a roadside stall",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "eat-grilled-corn-at-an-outdoor-market",
+  "title": "Eat grilled corn at an outdoor market",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "eat-lunch-at-a-fish-market",
+  "title": "Eat lunch at a fish market",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "eat-street-food",
+  "title": "Eat street food",
+  "category": "Food",
+  "domain": "Food",
+  "register": "everyday",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "connection"
+  ]
+ },
+ {
+  "slug": "examine-a-sand-sample-under-magnification",
+  "title": "Examine a sand sample under magnification",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "examine-crystals-through-a-hand-lens",
+  "title": "Examine crystals through a hand lens",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "examine-different-building-stones-in-a-city",
+  "title": "Examine different building stones in a city",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "examine-erosion-along-a-streambank",
+  "title": "Examine erosion along a streambank",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "examine-fossils-in-a-museum-handling-session",
+  "title": "Examine fossils in a museum handling session",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "examine-layers-in-a-road-cut-rock-face",
+  "title": "Examine layers in a road-cut rock face",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "examine-minerals-under-ultraviolet-light",
+  "title": "Examine minerals under ultraviolet light",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "examine-river-sediment-after-a-flood",
+  "title": "Examine river sediment after a flood",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "examine-soil-horizons-in-a-garden-pit",
+  "title": "Examine soil horizons in a garden pit",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "examine-volcanic-rocks-with-a-field-guide",
+  "title": "Examine volcanic rocks with a field guide",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "explore-a-desert-landscape",
+  "title": "Explore a desert landscape",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "aspirational",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "adventure",
+   "awe"
+  ]
+ },
+ {
+  "slug": "fix-a-broken-drawer-runner",
+  "title": "Fix a broken drawer runner",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "fix-a-cracked-picture-frame",
+  "title": "Fix a cracked picture frame",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "fix-a-damaged-window-screen",
+  "title": "Fix a damaged window screen",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "fix-a-dripping-toilet-valve",
+  "title": "Fix a dripping toilet valve",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "fix-a-hole-in-drywall",
+  "title": "Fix a hole in drywall",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "everyday",
+  "party": "solo",
+  "location": "none",
+  "completion": "single",
+  "needs": [
+   "growth"
+  ]
+ },
+ {
+  "slug": "fix-a-leaking-tap",
+  "title": "Fix a leaking tap",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "everyday",
+  "party": "solo",
+  "location": "none",
+  "completion": "single",
+  "needs": [
+   "growth"
+  ]
+ },
+ {
+  "slug": "fix-a-lifted-floor-tile",
+  "title": "Fix a lifted floor tile",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "fix-a-loose-chair-joint",
+  "title": "Fix a loose chair joint",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "fix-a-squeaking-door",
+  "title": "Fix a squeaking door",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "everyday",
+  "party": "solo",
+  "location": "none",
+  "completion": "single",
+  "needs": [
+   "growth"
+  ]
+ },
+ {
+  "slug": "go-skydiving",
+  "title": "Go skydiving",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "aspirational",
+  "party": "solo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "adventure",
+   "courage"
+  ]
+ },
+ {
+  "slug": "grow-a-balcony-tomato-crop",
+  "title": "Grow a balcony tomato crop",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "growth"
+  ]
+ },
+ {
+  "slug": "grow-a-bean-plant-time-lapse",
+  "title": "Grow a bean plant time-lapse",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "grow-a-bed-of-cut-flowers",
+  "title": "Grow a bed of cut flowers",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "grow-a-fragrant-night-garden",
+  "title": "Grow a fragrant night garden",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "grow-a-herb-garden-from-seed",
+  "title": "Grow a herb garden from seed",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "creativity"
+  ]
+ },
+ {
+  "slug": "grow-a-patch-of-culinary-flowers",
+  "title": "Grow a patch of culinary flowers",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "grow-a-patch-of-root-vegetables",
+  "title": "Grow a patch of root vegetables",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "grow-a-salad-garden-for-one-season",
+  "title": "Grow a salad garden for one season",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "duration",
+  "needs": [
+   "calm",
+   "health"
+  ]
+ },
+ {
+  "slug": "grow-a-small-pumpkin-vine",
+  "title": "Grow a small pumpkin vine",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "grow-a-windowsill-citrus-plant",
+  "title": "Grow a windowsill citrus plant",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "grow-mushrooms-from-a-home-kit",
+  "title": "Grow mushrooms from a home kit",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "hear-a-brass-band-outdoors",
+  "title": "Hear a brass band outdoors",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "everyday",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "community"
+  ]
+ },
+ {
+  "slug": "hear-a-choir-in-a-resonant-hall",
+  "title": "Hear a choir in a resonant hall",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "everyday",
+  "party": "duo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "awe"
+  ]
+ },
+ {
+  "slug": "hear-a-community-wind-band",
+  "title": "Hear a community wind band",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "hear-a-folk-session-around-a-table",
+  "title": "Hear a folk session around a table",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "everyday",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "connection"
+  ]
+ },
+ {
+  "slug": "hear-a-percussion-ensemble",
+  "title": "Hear a percussion ensemble",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "hear-a-string-quartet-at-sunset",
+  "title": "Hear a string quartet at sunset",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "hear-a-youth-orchestra",
+  "title": "Hear a youth orchestra",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "hear-an-acoustic-set-in-a-tiny-room",
+  "title": "Hear an acoustic set in a tiny room",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "everyday",
+  "party": "duo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "connection"
+  ]
+ },
+ {
+  "slug": "hear-an-improvised-jazz-set",
+  "title": "Hear an improvised jazz set",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "everyday",
+  "party": "duo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "awe"
+  ]
+ },
+ {
+  "slug": "hike-a-bamboo-grove-path",
+  "title": "Hike a bamboo grove path",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "hike-a-canyon-rim-route",
+  "title": "Hike a canyon rim route",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "hike-a-cloud-forest-trail",
+  "title": "Hike a cloud-forest trail",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "hike-a-coastal-bluff-path",
+  "title": "Hike a coastal bluff path",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "hike-a-glacier-view-trail",
+  "title": "Hike a glacier-view trail",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "hike-a-heathland-track",
+  "title": "Hike a heathland track",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "hike-a-highland-moor-route",
+  "title": "Hike a highland moor route",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "hike-a-rainforest-boardwalk",
+  "title": "Hike a rainforest boardwalk",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "hike-a-volcanic-crater-trail",
+  "title": "Hike a volcanic crater trail",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "hike-through-a-forest-valley",
+  "title": "Hike through a forest valley",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "everyday",
+  "party": "group",
+  "location": "area",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "health",
+   "family"
+  ]
+ },
+ {
+  "slug": "identify-local-tree-leaves",
+  "title": "Identify local tree leaves",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "identify-ten-common-neighborhood-birds",
+  "title": "Identify ten common neighborhood birds",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "count",
+  "needs": []
+ },
+ {
+  "slug": "join-a-beach-litter-pickup",
+  "title": "Join a beach litter pickup",
+  "category": "Community",
+  "domain": "Community",
+  "register": "everyday",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "community",
+   "legacy"
+  ]
+ },
+ {
+  "slug": "join-a-canal-cleanup-by-boat",
+  "title": "Join a canal cleanup by boat",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "join-a-community-center-deep-clean",
+  "title": "Join a community center deep-clean",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "join-a-park-trail-workday",
+  "title": "Join a park trail workday",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "join-a-playground-maintenance-day",
+  "title": "Join a playground maintenance day",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "join-a-riverbank-cleanup",
+  "title": "Join a riverbank cleanup",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "join-a-roadside-litter-walk",
+  "title": "Join a roadside litter walk",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "join-a-storm-drain-marking-project",
+  "title": "Join a storm-drain marking project",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "kayak-through-a-river-canyon",
+  "title": "Kayak through a river canyon",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "aspirational",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "health",
+   "adventure"
+  ]
+ },
+ {
+  "slug": "keep-a-consistent-morning-routine-for-a-month",
+  "title": "Keep a consistent morning routine for a month",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "keep-a-daily-journal-for-one-hundred-days",
+  "title": "Keep a daily journal for one hundred days",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-a-circle-dance",
+  "title": "Learn a circle dance",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-a-partner-dance-basic",
+  "title": "Learn a partner dance basic",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-a-percussive-footwork-routine",
+  "title": "Learn a percussive footwork routine",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-a-short-self-introduction-in-another-language",
+  "title": "Learn a short self-introduction in another language",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-a-signed-alphabet",
+  "title": "Learn a signed alphabet",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "custom",
+  "needs": [
+   "growth",
+   "connection"
+  ]
+ },
+ {
+  "slug": "learn-a-simple-folktale-in-its-original-language",
+  "title": "Learn a simple folktale in its original language",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-a-song-in-another-language",
+  "title": "Learn a song in another language",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "single",
+  "needs": [
+   "growth",
+   "creativity"
+  ]
+ },
+ {
+  "slug": "learn-archery-fundamentals",
+  "title": "Learn archery fundamentals",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-basic-greetings-in-three-languages",
+  "title": "Learn basic greetings in three languages",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "everyday",
+  "party": "solo",
+  "location": "none",
+  "completion": "count",
+  "needs": [
+   "growth",
+   "connection"
+  ]
+ },
+ {
+  "slug": "learn-clay-target-shooting-with-an-instructor",
+  "title": "Learn clay target shooting with an instructor",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-crochet-basics",
+  "title": "Learn crochet basics",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-hand-embroidery",
+  "title": "Learn hand embroidery",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "creativity"
+  ]
+ },
+ {
+  "slug": "learn-how-to-clamp-a-workpiece",
+  "title": "Learn how to clamp a workpiece",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-how-to-maintain-garden-shears",
+  "title": "Learn how to maintain garden shears",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-how-to-measure-with-calipers",
+  "title": "Learn how to measure with calipers",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-how-to-order-a-meal-in-another-language",
+  "title": "Learn how to order a meal in another language",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-how-to-read-a-spirit-level",
+  "title": "Learn how to read a spirit level",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-how-to-sand-wood-evenly",
+  "title": "Learn how to sand wood evenly",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-how-to-sharpen-a-chisel",
+  "title": "Learn how to sharpen a chisel",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-how-to-solder-a-wire-joint",
+  "title": "Learn how to solder a wire joint",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-how-to-use-a-hand-saw",
+  "title": "Learn how to use a hand saw",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-how-to-use-a-sewing-machine",
+  "title": "Learn how to use a sewing machine",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-indoor-axe-throwing",
+  "title": "Learn indoor axe throwing",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-knitting-in-the-round",
+  "title": "Learn knitting in the round",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "creativity"
+  ]
+ },
+ {
+  "slug": "learn-loom-weaving",
+  "title": "Learn loom weaving",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-needle-felting",
+  "title": "Learn needle felting",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-numbers-and-dates-in-a-new-language",
+  "title": "Learn numbers and dates in a new language",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-one-hundred-phrases-in-a-new-language",
+  "title": "Learn one hundred phrases in a new language",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "count",
+  "needs": [
+   "growth",
+   "courage"
+  ]
+ },
+ {
+  "slug": "learn-rug-hooking",
+  "title": "Learn rug hooking",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-safe-drill-use",
+  "title": "Learn safe drill use",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-spinning-wool",
+  "title": "Learn spinning wool",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-to-make-a-handmade-noodle-dish",
+  "title": "Learn to make a handmade noodle dish",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "solo",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "growth",
+   "creativity"
+  ]
+ },
+ {
+  "slug": "learn-to-play-a-musical-instrument",
+  "title": "Learn to play a musical instrument",
+  "category": "Skills",
+  "domain": "Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-to-surf",
+  "title": "Learn to surf",
+  "category": "Skills",
+  "domain": "Skills",
+  "register": "project",
+  "party": "solo",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "health",
+   "adventure",
+   "courage"
+  ]
+ },
+ {
+  "slug": "learn-travel-directions-in-another-language",
+  "title": "Learn travel directions in another language",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "learn-visible-mending",
+  "title": "Learn visible mending",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "single",
+  "needs": [
+   "creativity",
+   "legacy"
+  ]
+ },
+ {
+  "slug": "learn-wheel-thrown-pottery",
+  "title": "Learn wheel-thrown pottery",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "solo",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "creativity"
+  ]
+ },
+ {
+  "slug": "make-a-cut-paper-silhouette",
+  "title": "Make a cut-paper silhouette",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-cyanotype-from-leaves",
+  "title": "Make a cyanotype from leaves",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-flaky-vegetable-pie",
+  "title": "Make a flaky vegetable pie",
+  "category": "Food",
+  "domain": "Baking",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-folded-paper-lamp",
+  "title": "Make a folded paper lamp",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-fruit-shrub-drink",
+  "title": "Make a fruit shrub drink",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-hand-bound-notebook",
+  "title": "Make a hand-bound notebook",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-handmade-envelope-set",
+  "title": "Make a handmade envelope set",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-layered-pastry-slice",
+  "title": "Make a layered pastry slice",
+  "category": "Food",
+  "domain": "Baking",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-linocut-print",
+  "title": "Make a linocut print",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-marbled-paper-set",
+  "title": "Make a marbled paper set",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-miniature-paper-theater",
+  "title": "Make a miniature paper theater",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-pop-up-card",
+  "title": "Make a pop-up card",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-quilled-paper-design",
+  "title": "Make a quilled paper design",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-rustic-fruit-galette",
+  "title": "Make a rustic fruit galette",
+  "category": "Food",
+  "domain": "Baking",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-sculptural-paper-flower",
+  "title": "Make a sculptural paper flower",
+  "category": "Skills",
+  "domain": "Crafts",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-a-small-batch-of-kombucha",
+  "title": "Make a small batch of kombucha",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-cream-puffs",
+  "title": "Make cream puffs",
+  "category": "Food",
+  "domain": "Baking",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-custard-tarts",
+  "title": "Make custard tarts",
+  "category": "Food",
+  "domain": "Baking",
+  "register": "everyday",
+  "party": "solo",
+  "location": "none",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "creativity"
+  ]
+ },
+ {
+  "slug": "make-filled-choux-buns",
+  "title": "Make filled choux buns",
+  "category": "Food",
+  "domain": "Baking",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-fruit-filled-hand-pies",
+  "title": "Make fruit-filled hand pies",
+  "category": "Food",
+  "domain": "Baking",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-homemade-ginger-beer",
+  "title": "Make homemade ginger beer",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-jam-thumbprint-cookies",
+  "title": "Make jam thumbprint cookies",
+  "category": "Food",
+  "domain": "Baking",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "make-laminated-breakfast-pastries",
+  "title": "Make laminated breakfast pastries",
+  "category": "Food",
+  "domain": "Baking",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "observe-a-comet-through-binoculars",
+  "title": "Observe a comet through binoculars",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "observe-a-conjunction-of-bright-planets",
+  "title": "Observe a conjunction of bright planets",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "observe-a-hand-printing-workshop",
+  "title": "Observe a hand-printing workshop",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "observe-a-lunar-eclipse",
+  "title": "Observe a lunar eclipse",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "observe-a-meteor-shower-from-dark-ground",
+  "title": "Observe a meteor shower from dark ground",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "everyday",
+  "party": "group",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "awe",
+   "romance"
+  ]
+ },
+ {
+  "slug": "observe-a-ringed-planet-through-a-telescope",
+  "title": "Observe a ringed planet through a telescope",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "observe-a-star-cluster-through-a-small-telescope",
+  "title": "Observe a star cluster through a small telescope",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "observe-a-traditional-weaving-demonstration",
+  "title": "Observe a traditional weaving demonstration",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "observe-a-wooden-boat-launch",
+  "title": "Observe a wooden boat launch",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "observe-an-orbiting-space-station-passing-overhead",
+  "title": "Observe an orbiting space station passing overhead",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "observe-sunspots-with-approved-equipment",
+  "title": "Observe sunspots with approved equipment",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "observe-the-changing-phases-of-a-nearby-planet",
+  "title": "Observe the changing phases of a nearby planet",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "percentage",
+  "needs": [
+   "awe",
+   "growth"
+  ]
+ },
+ {
+  "slug": "observe-the-moon-through-a-telescope",
+  "title": "Observe the moon through a telescope",
+  "category": "Skills",
+  "domain": "Science & Technology",
+  "register": "everyday",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "awe",
+   "family"
+  ]
+ },
+ {
+  "slug": "organize-a-reunion-picnic",
+  "title": "Organize a reunion picnic",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "organize-a-rotating-dinner-club",
+  "title": "Organize a rotating dinner club",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paddle-a-calm-fjord-inlet",
+  "title": "Paddle a calm fjord inlet",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paddle-a-coastal-lagoon",
+  "title": "Paddle a coastal lagoon",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "duo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "romance"
+  ]
+ },
+ {
+  "slug": "paddle-a-glacier-fed-river-section",
+  "title": "Paddle a glacier-fed river section",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paddle-a-mangrove-channel",
+  "title": "Paddle a mangrove channel",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "adventure"
+  ]
+ },
+ {
+  "slug": "paddle-a-reed-lined-lake",
+  "title": "Paddle a reed-lined lake",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paddle-a-sheltered-sea-bay",
+  "title": "Paddle a sheltered sea bay",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paddle-a-slow-jungle-river",
+  "title": "Paddle a slow jungle river",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paddle-a-tidal-creek",
+  "title": "Paddle a tidal creek",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paint-a-collaborative-tablecloth",
+  "title": "Paint a collaborative tablecloth",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paint-a-family-pet-portrait",
+  "title": "Paint a family pet portrait",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paint-a-garden-sign-without-words",
+  "title": "Paint a garden sign without words",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paint-a-landscape-outdoors",
+  "title": "Paint a landscape outdoors",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paint-a-large-abstract-canvas",
+  "title": "Paint a large abstract canvas",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paint-a-miniature-watercolor-series",
+  "title": "Paint a miniature watercolor series",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paint-a-mural-with-neighbors",
+  "title": "Paint a mural with neighbors",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paint-a-night-scene-from-life",
+  "title": "Paint a night scene from life",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paint-a-set-of-handmade-postcards",
+  "title": "Paint a set of handmade postcards",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "paint-a-still-life-in-one-color",
+  "title": "Paint a still life in one color",
+  "category": "Skills",
+  "domain": "Creativity",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "photograph-a-cook-preparing-a-meal",
+  "title": "Photograph a cook preparing a meal",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "photograph-a-craftsperson-at-work",
+  "title": "Photograph a craftsperson at work",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "solo",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "creativity",
+   "connection"
+  ]
+ },
+ {
+  "slug": "photograph-a-friend-in-window-light",
+  "title": "Photograph a friend in window light",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "photograph-a-gardener-in-their-plot",
+  "title": "Photograph a gardener in their plot",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "photograph-a-musician-during-rehearsal",
+  "title": "Photograph a musician during rehearsal",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "photograph-a-neighbor-in-their-favorite-place",
+  "title": "Photograph a neighbor in their favorite place",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "photograph-a-pet-and-its-owner",
+  "title": "Photograph a pet and its owner",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "photograph-a-street-performer-with-permission",
+  "title": "Photograph a street performer with permission",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "everyday",
+  "party": "solo",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "creativity",
+   "courage"
+  ]
+ },
+ {
+  "slug": "photograph-three-generations-together",
+  "title": "Photograph three generations together",
+  "category": "Skills",
+  "domain": "Photography & Media",
+  "register": "everyday",
+  "party": "group",
+  "location": "optional",
+  "completion": "all_members",
+  "needs": [
+   "family",
+   "legacy"
+  ]
+ },
+ {
+  "slug": "plan-a-day-of-alternating-small-surprises",
+  "title": "Plan a day of alternating small surprises",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "plan-a-handwritten-vow-renewal",
+  "title": "Plan a handwritten vow renewal",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "plan-a-monthly-relationship-check-in",
+  "title": "Plan a monthly relationship check-in",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "duo",
+  "location": "none",
+  "completion": "count",
+  "needs": [
+   "connection",
+   "romance"
+  ]
+ },
+ {
+  "slug": "plan-a-phone-free-evening-together",
+  "title": "Plan a phone-free evening together",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "everyday",
+  "party": "duo",
+  "location": "none",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "connection",
+   "romance"
+  ]
+ },
+ {
+  "slug": "plan-a-recreation-of-your-first-date",
+  "title": "Plan a recreation of your first date",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "plan-a-shared-cooking-challenge",
+  "title": "Plan a shared cooking challenge",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "everyday",
+  "party": "duo",
+  "location": "none",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "connection"
+  ]
+ },
+ {
+  "slug": "plan-a-sunrise-walk-for-two",
+  "title": "Plan a sunrise walk for two",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "plan-a-surprise-picnic-date",
+  "title": "Plan a surprise picnic date",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "everyday",
+  "party": "duo",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "romance"
+  ]
+ },
+ {
+  "slug": "plan-a-two-person-photo-project",
+  "title": "Plan a two-person photo project",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "plant-a-native-pollinator-patch",
+  "title": "Plant a native pollinator patch",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "play-a-beach-volleyball-tournament",
+  "title": "Play a beach volleyball tournament",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "group",
+  "location": "required",
+  "completion": "custom",
+  "needs": [
+   "fun",
+   "health",
+   "community"
+  ]
+ },
+ {
+  "slug": "play-a-casual-cricket-match",
+  "title": "Play a casual cricket match",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "everyday",
+  "party": "group",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "community"
+  ]
+ },
+ {
+  "slug": "play-a-community-basketball-game",
+  "title": "Play a community basketball game",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "everyday",
+  "party": "group",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "community"
+  ]
+ },
+ {
+  "slug": "play-a-field-hockey-practice",
+  "title": "Play a field-hockey practice",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "play-a-friendly-football-match",
+  "title": "Play a friendly football match",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "everyday",
+  "party": "group",
+  "location": "optional",
+  "completion": "all_members",
+  "needs": [
+   "fun",
+   "health",
+   "community"
+  ]
+ },
+ {
+  "slug": "play-a-melody-on-a-borrowed-instrument",
+  "title": "Play a melody on a borrowed instrument",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "play-a-mixed-netball-session",
+  "title": "Play a mixed netball session",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "play-a-neighborhood-baseball-game",
+  "title": "Play a neighborhood baseball game",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "play-a-piece-in-a-student-recital",
+  "title": "Play a piece in a student recital",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "play-a-simple-duet-with-a-friend",
+  "title": "Play a simple duet with a friend",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "play-a-song-at-an-open-mic",
+  "title": "Play a song at an open mic",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "play-a-song-for-a-family-gathering",
+  "title": "Play a song for a family gathering",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "play-a-touch-rugby-game",
+  "title": "Play a touch-rugby game",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "play-a-tune-at-a-community-jam",
+  "title": "Play a tune at a community jam",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "play-an-instrument-in-a-beginner-orchestra",
+  "title": "Play an instrument in a beginner orchestra",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "play-background-music-for-a-small-event",
+  "title": "Play background music for a small event",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "play-percussion-in-a-drum-circle",
+  "title": "Play percussion in a drum circle",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "play-rhythm-in-a-street-ensemble",
+  "title": "Play rhythm in a street ensemble",
+  "category": "Culture",
+  "domain": "Music & Performance",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "practice-a-home-fire-drill",
+  "title": "Practice a home fire drill",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "practice-a-month-of-brief-evening-reflection",
+  "title": "Practice a month of brief evening reflection",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "practice-a-walking-meditation",
+  "title": "Practice a walking meditation",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "practice-box-breathing-before-a-stressful-event",
+  "title": "Practice box breathing before a stressful event",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "practice-breathing-beside-moving-water",
+  "title": "Practice breathing beside moving water",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "practice-composting-food-scraps-at-home",
+  "title": "Practice composting food scraps at home",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "streak",
+  "needs": [
+   "legacy"
+  ]
+ },
+ {
+  "slug": "practice-five-minutes-of-daily-stillness",
+  "title": "Practice five minutes of daily stillness",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "count",
+  "needs": []
+ },
+ {
+  "slug": "practice-hands-only-resuscitation",
+  "title": "Practice hands-only resuscitation",
+  "category": "Skills",
+  "domain": "Practical Skills",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "practice-meditating-at-sunrise",
+  "title": "Practice meditating at sunrise",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "streak",
+  "needs": [
+   "calm",
+   "health"
+  ]
+ },
+ {
+  "slug": "practice-mindful-dishwashing",
+  "title": "Practice mindful dishwashing",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "practice-mindful-eating-for-one-meal",
+  "title": "Practice mindful eating for one meal",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "propagate-a-succulent-leaf",
+  "title": "Propagate a succulent leaf",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "propagate-a-trailing-houseplant",
+  "title": "Propagate a trailing houseplant",
+  "category": "Nature",
+  "domain": "Home & Garden",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "record-a-family-member-singing-an-old-song",
+  "title": "Record a family member singing an old song",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "record-a-family-recipe-being-prepared",
+  "title": "Record a family recipe being prepared",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "record-a-year-of-short-family-interviews",
+  "title": "Record a year of short family interviews",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "record-an-elder-explaining-a-photograph",
+  "title": "Record an elder explaining a photograph",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "record-messages-for-a-future-reunion",
+  "title": "Record messages for a future reunion",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "record-siblings-retelling-the-same-event",
+  "title": "Record siblings retelling the same event",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "record-the-history-of-a-family-object",
+  "title": "Record the history of a family object",
+  "category": "Community",
+  "domain": "Relationships",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "reduce-air-conditioning-use-with-passive-cooling",
+  "title": "Reduce air-conditioning use with passive cooling",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "reduce-car-trips-for-short-errands",
+  "title": "Reduce car trips for short errands",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "reduce-cooking-energy-through-batch-meals",
+  "title": "Reduce cooking energy through batch meals",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "reduce-device-charging-waste",
+  "title": "Reduce device charging waste",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "reduce-food-miles-for-a-weekly-shop",
+  "title": "Reduce food miles for a weekly shop",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "reduce-heating-loss-around-doors",
+  "title": "Reduce heating loss around doors",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "reduce-hot-water-use-for-one-month",
+  "title": "Reduce hot-water use for one month",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "reduce-laundry-energy-with-cold-washing",
+  "title": "Reduce laundry energy with cold washing",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "reduce-lighting-energy-with-better-habits",
+  "title": "Reduce lighting energy with better habits",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "reduce-standby-power-at-home",
+  "title": "Reduce standby power at home",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ride-a-beginner-flow-trail",
+  "title": "Ride a beginner flow trail",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ride-a-bike-park-skills-area",
+  "title": "Ride a bike-park skills area",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ride-a-coastal-bluff-trail",
+  "title": "Ride a coastal bluff trail",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ride-a-desert-mountain-bike-route",
+  "title": "Ride a desert mountain-bike route",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ride-a-guided-canyon-trail",
+  "title": "Ride a guided canyon trail",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ride-a-highland-cross-country-course",
+  "title": "Ride a highland cross-country course",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ride-a-hot-air-balloon",
+  "title": "Ride a hot-air balloon",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "aspirational",
+  "party": "duo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "awe",
+   "romance"
+  ]
+ },
+ {
+  "slug": "ride-a-public-river-ferry",
+  "title": "Ride a public river ferry",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ride-a-rocky-downhill-course",
+  "title": "Ride a rocky downhill course",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ride-a-volcanic-gravel-trail",
+  "title": "Ride a volcanic gravel trail",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ride-a-wooden-canal-boat",
+  "title": "Ride a wooden canal boat",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ride-a-woodland-pump-track",
+  "title": "Ride a woodland pump track",
+  "category": "Fitness",
+  "domain": "Cycling & Wheels",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ride-an-island-water-taxi",
+  "title": "Ride an island water taxi",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "run-a-beach-sunrise-route",
+  "title": "Run a beach sunrise route",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "everyday",
+  "party": "solo",
+  "location": "area",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "health"
+  ]
+ },
+ {
+  "slug": "run-a-charity-night-run",
+  "title": "Run a charity night run",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "run-a-city-stair-course",
+  "title": "Run a city stair course",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "solo",
+  "location": "route",
+  "completion": "single",
+  "needs": [
+   "health",
+   "courage"
+  ]
+ },
+ {
+  "slug": "run-a-forest-relay-leg",
+  "title": "Run a forest relay leg",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "run-a-long-distance-course",
+  "title": "Run a long-distance course",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "solo",
+  "location": "route",
+  "completion": "distance",
+  "needs": [
+   "health",
+   "courage"
+  ]
+ },
+ {
+  "slug": "run-a-mountain-vertical-kilometer",
+  "title": "Run a mountain vertical kilometer",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "run-a-muddy-cross-country-race",
+  "title": "Run a muddy cross-country race",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "run-a-trail-half-marathon",
+  "title": "Run a trail half marathon",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "solo",
+  "location": "route",
+  "completion": "distance",
+  "needs": [
+   "health",
+   "adventure"
+  ]
+ },
+ {
+  "slug": "sail-a-small-dinghy",
+  "title": "Sail a small dinghy",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "sail-between-quiet-islands",
+  "title": "Sail between quiet islands",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "sail-during-a-sunset-regatta",
+  "title": "Sail during a sunset regatta",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "sail-on-a-community-sailing-lesson",
+  "title": "Sail on a community sailing lesson",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "sail-on-a-traditional-wooden-boat",
+  "title": "Sail on a traditional wooden boat",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "sail-on-a-wind-powered-day-trip",
+  "title": "Sail on a wind-powered day trip",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "sail-on-an-overnight-coastal-passage",
+  "title": "Sail on an overnight coastal passage",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "sail-with-a-local-sailing-club",
+  "title": "Sail with a local sailing club",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "see-an-aurora",
+  "title": "See an aurora",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "aspirational",
+  "party": "duo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "awe"
+  ]
+ },
+ {
+  "slug": "skate-along-a-maintained-ice-trail",
+  "title": "Skate along a maintained ice trail",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "skate-on-a-frozen-canal",
+  "title": "Skate on a frozen canal",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "skate-on-an-outdoor-rink",
+  "title": "Skate on an outdoor rink",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ski-a-beginner-cross-country-loop",
+  "title": "Ski a beginner cross-country loop",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "group",
+  "location": "route",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "health"
+  ]
+ },
+ {
+  "slug": "ski-a-family-relay-course",
+  "title": "Ski a family relay course",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ski-a-forest-touring-trail",
+  "title": "Ski a forest touring trail",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "group",
+  "location": "route",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "adventure"
+  ]
+ },
+ {
+  "slug": "ski-a-frozen-lake-track",
+  "title": "Ski a frozen-lake track",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ski-a-gentle-backcountry-route",
+  "title": "Ski a gentle backcountry route",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "aspirational",
+  "party": "group",
+  "location": "route",
+  "completion": "single",
+  "needs": [
+   "adventure",
+   "courage"
+  ]
+ },
+ {
+  "slug": "ski-a-groomed-valley-path",
+  "title": "Ski a groomed valley path",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ski-a-hut-to-hut-trail",
+  "title": "Ski a hut-to-hut trail",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "aspirational",
+  "party": "group",
+  "location": "route",
+  "completion": "duration",
+  "needs": [
+   "adventure",
+   "connection"
+  ]
+ },
+ {
+  "slug": "ski-a-mountain-meadow-circuit",
+  "title": "Ski a mountain meadow circuit",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "ski-a-night-lit-nordic-course",
+  "title": "Ski a night-lit Nordic course",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "snowshoe-across-a-mountain-meadow",
+  "title": "Snowshoe across a mountain meadow",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "snowshoe-across-a-wildlife-tracking-route",
+  "title": "Snowshoe across a wildlife-tracking route",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "snowshoe-along-a-marked-night-trail",
+  "title": "Snowshoe along a marked night trail",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "snowshoe-along-a-ridge-at-sunrise",
+  "title": "Snowshoe along a ridge at sunrise",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "snowshoe-around-a-snowy-lake",
+  "title": "Snowshoe around a snowy lake",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "snowshoe-through-a-silent-forest",
+  "title": "Snowshoe through a silent forest",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "snowshoe-through-a-snow-covered-orchard",
+  "title": "Snowshoe through a snow-covered orchard",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "snowshoe-through-deep-powder-after-snowfall",
+  "title": "Snowshoe through deep powder after snowfall",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "snowshoe-to-a-frozen-waterfall",
+  "title": "Snowshoe to a frozen waterfall",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "snowshoe-to-a-winter-cabin",
+  "title": "Snowshoe to a winter cabin",
+  "category": "Fitness",
+  "domain": "Winter & Snow",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "spend-a-day-repairing-instead-of-replacing",
+  "title": "Spend a day repairing instead of replacing",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "spend-a-holiday-using-reusable-wrapping",
+  "title": "Spend a holiday using reusable wrapping",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "spend-a-month-buying-only-what-is-needed",
+  "title": "Spend a month buying only what is needed",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "duration",
+  "needs": [
+   "growth",
+   "legacy"
+  ]
+ },
+ {
+  "slug": "spend-a-month-carrying-reusable-utensils",
+  "title": "Spend a month carrying reusable utensils",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "spend-a-picnic-with-no-trash",
+  "title": "Spend a picnic with no trash",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "spend-a-week-avoiding-single-use-packaging",
+  "title": "Spend a week avoiding single-use packaging",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "duration",
+  "needs": [
+   "legacy"
+  ]
+ },
+ {
+  "slug": "spend-a-week-cooking-all-leftovers",
+  "title": "Spend a week cooking all leftovers",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "count",
+  "needs": []
+ },
+ {
+  "slug": "spend-a-week-refusing-disposable-cups",
+  "title": "Spend a week refusing disposable cups",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "solo",
+  "location": "none",
+  "completion": "streak",
+  "needs": [
+   "legacy"
+  ]
+ },
+ {
+  "slug": "spend-a-week-weighing-household-waste",
+  "title": "Spend a week weighing household waste",
+  "category": "Skills",
+  "domain": "Sustainability",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "spend-a-weekend-in-a-quiet-coastal-town",
+  "title": "Spend a weekend in a quiet coastal town",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "everyday",
+  "party": "duo",
+  "location": "area",
+  "completion": "duration",
+  "needs": [
+   "calm",
+   "romance"
+  ]
+ },
+ {
+  "slug": "study-how-maps-shaped-exploration",
+  "title": "Study how maps shaped exploration",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "study-how-postal-systems-connected-communities",
+  "title": "Study how postal systems connected communities",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "study-how-public-transport-changed-cities",
+  "title": "Study how public transport changed cities",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "study-night-sky-observation-techniques",
+  "title": "Study night-sky observation techniques",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "study-the-development-of-public-parks",
+  "title": "Study the development of public parks",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "study-the-history-of-bicycles",
+  "title": "Study the history of bicycles",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "study-the-history-of-everyday-clothing",
+  "title": "Study the history of everyday clothing",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "study-the-history-of-household-lighting",
+  "title": "Study the history of household lighting",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "study-the-history-of-street-markets",
+  "title": "Study the history of street markets",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "study-the-story-of-bread-making",
+  "title": "Study the story of bread making",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "study-the-story-of-paper-making",
+  "title": "Study the story of paper making",
+  "category": "Skills",
+  "domain": "Learning",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "support-an-adult-literacy-session",
+  "title": "Support an adult literacy session",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "swim-across-a-calm-lake-cove",
+  "title": "Swim across a calm lake cove",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "swim-in-a-freshwater-cenote",
+  "title": "Swim in a freshwater cenote",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "swim-in-a-tidal-ocean-pool",
+  "title": "Swim in a tidal ocean pool",
+  "category": "Water",
+  "domain": "Water & Marine",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-a-coastal-train-ride",
+  "title": "Take a coastal train ride",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "everyday",
+  "party": "duo",
+  "location": "route",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "romance"
+  ]
+ },
+ {
+  "slug": "take-a-cross-border-rail-journey",
+  "title": "Take a cross-border rail journey",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-a-dumpling-making-class",
+  "title": "Take a dumpling-making class",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-a-flatbread-workshop",
+  "title": "Take a flatbread workshop",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-a-forest-heritage-railway",
+  "title": "Take a forest heritage railway",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-a-full-day-without-scheduled-tasks",
+  "title": "Take a full day without scheduled tasks",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-a-gentle-recovery-week",
+  "title": "Take a gentle recovery week",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-a-lakeside-rail-trip",
+  "title": "Take a lakeside rail trip",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "everyday",
+  "party": "duo",
+  "location": "route",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "family"
+  ]
+ },
+ {
+  "slug": "take-a-mountain-railway-journey",
+  "title": "Take a mountain railway journey",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "everyday",
+  "party": "group",
+  "location": "route",
+  "completion": "single",
+  "needs": [
+   "awe",
+   "family"
+  ]
+ },
+ {
+  "slug": "take-a-quiet-weekend-without-social-media",
+  "title": "Take a quiet weekend without social media",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "everyday",
+  "party": "solo",
+  "location": "none",
+  "completion": "duration",
+  "needs": [
+   "calm",
+   "health"
+  ]
+ },
+ {
+  "slug": "take-a-restorative-bath-after-a-long-walk",
+  "title": "Take a restorative bath after a long walk",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-a-rural-branch-line-trip",
+  "title": "Take a rural branch-line trip",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "everyday",
+  "party": "solo",
+  "location": "route",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "awe"
+  ]
+ },
+ {
+  "slug": "take-a-scenic-commuter-ferry-and-train-route",
+  "title": "Take a scenic commuter ferry-and-train route",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "everyday",
+  "party": "solo",
+  "location": "route",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "fun"
+  ]
+ },
+ {
+  "slug": "take-a-screen-free-sunday",
+  "title": "Take a screen-free Sunday",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-a-silent-lunch-break-outdoors",
+  "title": "Take a silent lunch break outdoors",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-a-slow-morning-with-no-alarm",
+  "title": "Take a slow morning with no alarm",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-a-slow-regional-train-journey",
+  "title": "Take a slow regional train journey",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-a-vegetarian-curry-lesson",
+  "title": "Take a vegetarian curry lesson",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-an-afternoon-nap-in-a-hammock",
+  "title": "Take an afternoon nap in a hammock",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-an-evening-without-electric-light",
+  "title": "Take an evening without electric light",
+  "category": "Fitness",
+  "domain": "Wellness",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "take-an-overnight-sleeper-train",
+  "title": "Take an overnight sleeper train",
+  "category": "Cities",
+  "domain": "Travel",
+  "register": "aspirational",
+  "party": "duo",
+  "location": "route",
+  "completion": "single",
+  "needs": [
+   "adventure",
+   "romance"
+  ]
+ },
+ {
+  "slug": "taste-a-charcoal-grilled-vegetable-plate",
+  "title": "Taste a charcoal-grilled vegetable plate",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "taste-a-clay-pot-rice-meal",
+  "title": "Taste a clay-pot rice meal",
+  "category": "Food",
+  "domain": "Food",
+  "register": "everyday",
+  "party": "duo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "connection"
+  ]
+ },
+ {
+  "slug": "taste-a-coconut-based-stew",
+  "title": "Taste a coconut-based stew",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "taste-a-fermented-grain-pancake",
+  "title": "Taste a fermented grain pancake",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "taste-a-hand-pulled-bread",
+  "title": "Taste a hand-pulled bread",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "taste-a-savory-stuffed-pastry",
+  "title": "Taste a savory stuffed pastry",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "taste-a-slow-cooked-bean-dish",
+  "title": "Taste a slow-cooked bean dish",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "taste-a-sour-soup",
+  "title": "Taste a sour soup",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "taste-a-spiced-rice-platter",
+  "title": "Taste a spiced rice platter",
+  "category": "Food",
+  "domain": "Food",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "tour-a-cluster-of-earth-built-homes",
+  "title": "Tour a cluster of earth-built homes",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "tour-a-heritage-factory-complex",
+  "title": "Tour a heritage factory complex",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "tour-a-historic-public-bath",
+  "title": "Tour a historic public bath",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "tour-a-landmark-free-religious-architecture-trail",
+  "title": "Tour a landmark-free religious architecture trail",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "tour-a-modern-civic-building",
+  "title": "Tour a modern civic building",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "tour-a-restored-railway-station",
+  "title": "Tour a restored railway station",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "tour-a-riverside-warehouse-conversion",
+  "title": "Tour a riverside warehouse conversion",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "tour-a-traditional-courtyard-house",
+  "title": "Tour a traditional courtyard house",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "tour-a-working-lighthouse-interior",
+  "title": "Tour a working lighthouse interior",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "tour-an-old-theater-backstage",
+  "title": "Tour an old theater backstage",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "trek-across-a-salt-flat",
+  "title": "Trek across a salt flat",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "trek-along-a-windswept-plateau",
+  "title": "Trek along a windswept plateau",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "trek-between-remote-huts",
+  "title": "Trek between remote huts",
+  "category": "Adventure",
+  "domain": "Adventure",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-a-blind-coffee-aroma-test",
+  "title": "Try a blind coffee aroma test",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-a-coffee-and-dessert-pairing",
+  "title": "Try a coffee-and-dessert pairing",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-a-coffee-tasting-flight",
+  "title": "Try a coffee tasting flight",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "everyday",
+  "party": "duo",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "romance"
+  ]
+ },
+ {
+  "slug": "try-a-manual-coffee-brewing-workshop",
+  "title": "Try a manual coffee-brewing workshop",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "everyday",
+  "party": "solo",
+  "location": "optional",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "growth"
+  ]
+ },
+ {
+  "slug": "try-a-traditional-pot-brewed-coffee",
+  "title": "Try a traditional pot-brewed coffee",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-badminton-doubles",
+  "title": "Try badminton doubles",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-beach-tennis",
+  "title": "Try beach tennis",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-brewing-coffee-outdoors",
+  "title": "Try brewing coffee outdoors",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-drawing-simple-latte-art",
+  "title": "Try drawing simple latte art",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-padel-with-friends",
+  "title": "Try padel with friends",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-pickleball-at-a-community-court",
+  "title": "Try pickleball at a community court",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-racquetball",
+  "title": "Try racquetball",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-roasting-green-coffee-beans",
+  "title": "Try roasting green coffee beans",
+  "category": "Food",
+  "domain": "Drinks & Nightlife",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-speed-badminton",
+  "title": "Try speed badminton",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-squash-with-a-coach",
+  "title": "Try squash with a coach",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-table-tennis-in-a-park",
+  "title": "Try table tennis in a park",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "try-tennis-on-a-clay-court",
+  "title": "Try tennis on a clay court",
+  "category": "Fitness",
+  "domain": "Sports & Games",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "visit-a-coastal-salt-marsh",
+  "title": "Visit a coastal salt marsh",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "visit-a-community-heritage-room",
+  "title": "Visit a community heritage room",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "visit-a-desert-oasis",
+  "title": "Visit a desert oasis",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "visit-a-folk-art-collection",
+  "title": "Visit a folk-art collection",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "everyday",
+  "party": "solo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "growth"
+  ]
+ },
+ {
+  "slug": "visit-a-kelp-forest-overlook",
+  "title": "Visit a kelp forest overlook",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "visit-a-living-history-farm",
+  "title": "Visit a living-history farm",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "everyday",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "growth",
+   "family"
+  ]
+ },
+ {
+  "slug": "visit-a-mangrove-forest",
+  "title": "Visit a mangrove forest",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "visit-a-museum-after-dark",
+  "title": "Visit a museum after dark",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "everyday",
+  "party": "duo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "growth"
+  ]
+ },
+ {
+  "slug": "visit-a-natural-history-gallery",
+  "title": "Visit a natural-history gallery",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "visit-a-peat-bog",
+  "title": "Visit a peat bog",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "visit-a-prairie-grassland",
+  "title": "Visit a prairie grassland",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "visit-a-river-delta",
+  "title": "Visit a river delta",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "visit-a-speakeasy",
+  "title": "Visit a speakeasy",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "everyday",
+  "party": "duo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "fun",
+   "romance"
+  ]
+ },
+ {
+  "slug": "visit-a-temperate-rainforest",
+  "title": "Visit a temperate rainforest",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "visit-an-alpine-tundra",
+  "title": "Visit an alpine tundra",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "visit-an-open-air-history-museum",
+  "title": "Visit an open-air history museum",
+  "category": "Culture",
+  "domain": "Culture",
+  "register": "everyday",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "growth",
+   "family"
+  ]
+ },
+ {
+  "slug": "volunteer-at-a-community-fridge-restock",
+  "title": "Volunteer at a community fridge restock",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "volunteer-at-a-community-garden",
+  "title": "Volunteer at a community garden",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "connection",
+   "community"
+  ]
+ },
+ {
+  "slug": "volunteer-at-a-community-kitchen",
+  "title": "Volunteer at a community kitchen",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "volunteer-at-a-food-pantry-sorting-shift",
+  "title": "Volunteer at a food pantry sorting shift",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "volunteer-at-a-harvest-donation-drive",
+  "title": "Volunteer at a harvest donation drive",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "volunteer-at-a-meal-delivery-packing-day",
+  "title": "Volunteer at a meal-delivery packing day",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "volunteer-at-a-neighborhood-breakfast-service",
+  "title": "Volunteer at a neighborhood breakfast service",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "volunteer-at-a-senior-meal-event",
+  "title": "Volunteer at a senior meal event",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "volunteer-at-a-soup-fundraiser",
+  "title": "Volunteer at a soup fundraiser",
+  "category": "Community",
+  "domain": "Community",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "walk-a-charity-distance-challenge",
+  "title": "Walk a charity distance challenge",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "walk-a-city-marathon-course",
+  "title": "Walk a city marathon course",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "walk-a-continuous-coastal-section",
+  "title": "Walk a continuous coastal section",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "walk-a-hundred-kilometers-in-one-month",
+  "title": "Walk a hundred kilometers in one month",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "count",
+  "needs": []
+ },
+ {
+  "slug": "walk-a-long-canal-towpath",
+  "title": "Walk a long canal towpath",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "walk-a-multi-day-village-route",
+  "title": "Walk a multi-day village route",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "walk-a-night-walking-event",
+  "title": "Walk a night walking event",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "walk-a-steep-hill-circuit",
+  "title": "Walk a steep hill circuit",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "walk-a-sunrise-to-sunset-route",
+  "title": "Walk a sunrise-to-sunset route",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "walk-a-woodland-endurance-loop",
+  "title": "Walk a woodland endurance loop",
+  "category": "Fitness",
+  "domain": "Fitness",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "walk-through-a-wetland",
+  "title": "Walk through a wetland",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "everyday",
+  "party": "solo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "health"
+  ]
+ },
+ {
+  "slug": "watch-bats-leaving-a-roost",
+  "title": "Watch bats leaving a roost",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "everyday",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "adventure",
+   "awe"
+  ]
+ },
+ {
+  "slug": "watch-birds-at-a-migration-stopover",
+  "title": "Watch birds at a migration stopover",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "everyday",
+  "party": "solo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "awe"
+  ]
+ },
+ {
+  "slug": "watch-butterflies-in-a-meadow",
+  "title": "Watch butterflies in a meadow",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "everyday",
+  "party": "solo",
+  "location": "area",
+  "completion": "single",
+  "needs": [
+   "calm",
+   "awe"
+  ]
+ },
+ {
+  "slug": "watch-fireflies-at-dusk",
+  "title": "Watch fireflies at dusk",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "everyday",
+  "party": "duo",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "awe",
+   "romance"
+  ]
+ },
+ {
+  "slug": "watch-penguins-from-a-viewing-area",
+  "title": "Watch penguins from a viewing area",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "watch-river-otters-at-play",
+  "title": "Watch river otters at play",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "watch-seals-on-a-quiet-coast",
+  "title": "Watch seals on a quiet coast",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "watch-whales-from-shore",
+  "title": "Watch whales from shore",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "everyday",
+  "party": "group",
+  "location": "required",
+  "completion": "single",
+  "needs": [
+   "awe",
+   "family"
+  ]
+ },
+ {
+  "slug": "watch-wild-horses-from-a-safe-distance",
+  "title": "Watch wild horses from a safe distance",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "witness-a-coral-spawning-event",
+  "title": "Witness a coral spawning event",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "witness-a-desert-wildflower-bloom",
+  "title": "Witness a desert wildflower bloom",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "witness-a-mass-bird-migration",
+  "title": "Witness a mass bird migration",
+  "category": "Nature",
+  "domain": "Nature",
+  "register": "project",
+  "party": "any",
+  "location": "required",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "write-a-description-of-your-ideal-ordinary-day",
+  "title": "Write a description of your ideal ordinary day",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "write-a-five-year-life-review",
+  "title": "Write a five-year life review",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "count",
+  "needs": []
+ },
+ {
+  "slug": "write-a-letter-to-your-future-self",
+  "title": "Write a letter to your future self",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "write-a-list-of-lessons-from-failure",
+  "title": "Write a list of lessons from failure",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "write-a-list-of-one-hundred-good-memories",
+  "title": "Write a list of one hundred good memories",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "write-a-page-about-what-success-means-now",
+  "title": "Write a page about what success means now",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "write-a-personal-user-manual",
+  "title": "Write a personal user manual",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "write-a-personal-values-statement",
+  "title": "Write a personal values statement",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "write-a-timeline-of-turning-points",
+  "title": "Write a timeline of turning points",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ },
+ {
+  "slug": "write-an-inventory-of-unfinished-promises",
+  "title": "Write an inventory of unfinished promises",
+  "category": "Skills",
+  "domain": "Personal Growth & Milestones",
+  "register": "project",
+  "party": "any",
+  "location": "optional",
+  "completion": "single",
+  "needs": []
+ }
+]

@@ -1,0 +1,19 @@
+# Secrets. The API holds the Ably root key, the Upstash token and the JWT
+# signing secret; .env is for local wiring and must never be committed.
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Local data
+*.db
+*.sqlite3
