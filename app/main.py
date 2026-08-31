@@ -39,6 +39,9 @@ async def lifespan(app: FastAPI):
     except Exception:
         log.exception("object storage is unreachable")
     yield
+    from app.services.ratelimit import close_redis
+
+    await close_redis()
     await engine.dispose()
 
 

@@ -12,12 +12,13 @@ import datetime as dt
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import or_, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.db import get_session
 from app.deps import current_user
+from app.entitlements import FREE_INVITES_PER_WEEK, PlusRequired
 from app.models import (
     INVITE_PARTIES,
     Friendship,
@@ -143,6 +144,22 @@ async def send_invite(
         raise HTTPException(status_code=422, detail="An invite is duo or group")
     if payload.to_user_id == user.id:
         raise HTTPException(status_code=422, detail="That would be a plan, not an invite")
+
+    # The free ceiling, counted over a rolling week rather than a calendar one
+    # so there is no midnight at which everyone's allowance returns at once.
+    #
+    # Checked before any of the work below: refusing after five queries and a
+    # visibility walk costs the database the same as allowing it. Receiving is
+    # never limited - only the sending side, which is the half that fans out.
+    if not user.is_plus:
+        since = dt.datetime.now(dt.UTC) - dt.timedelta(days=7)
+        sent = await session.scalar(
+            select(func.count())
+            .select_from(Invite)
+            .where(Invite.from_user_id == user.id, Invite.created_at >= since)
+        )
+        if (sent or 0) >= FREE_INVITES_PER_WEEK:
+            raise PlusRequired(f"Sending more than {FREE_INVITES_PER_WEEK} invites a week")
     target = await session.get(User, payload.to_user_id)
     someday = await session.get(Someday, payload.someday_id)
     if target is None or someday is None:

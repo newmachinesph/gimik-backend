@@ -267,8 +267,10 @@ async def test_unlock_returns_to_waiting(client, somedays, make_user):
     assert len((await client.get("/me/somedays", headers=bea)).json()) == 1
 
 
-async def test_groups_membership_not_friendship(client, somedays, make_user):
-    bea = await make_user("Bea")
+async def test_groups_membership_not_friendship(client, somedays, make_user, make_plus_user):
+    # Creating a group is a Plus feature; joining one is not, and Theo stays
+    # free for the whole test to prove it.
+    bea = await make_plus_user("Bea")
     theo = await make_user("Theo")
     theo_id = (await client.get("/auth/me", headers=theo)).json()["id"]
 

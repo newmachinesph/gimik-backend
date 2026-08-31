@@ -1,10 +1,11 @@
-"""Fixed-window rate limiting over Upstash Redis, via REST.
+"""Fixed-window rate limiting over Redis.
 
-REST rather than a Redis connection: there is no pool to size, nothing to keep
-alive per worker, and it works unchanged from a container, a laptop or a
-serverless runtime.
+The compose service locally, a Railway Redis plugin in deployment. This used to
+speak Upstash's REST API; the move to a plain Redis connection made the code
+smaller rather than larger, because INCR and EXPIRE in a pipeline is exactly
+what the REST endpoint was wrapping.
 
-**It fails open.** If Upstash is slow or unreachable the request is allowed.
+**It fails open.** If Redis is slow or unreachable the request is allowed.
 A limiter exists to keep a burst from hurting the database; letting it decide
 who gets served when it is itself broken turns a dependency wobble into a total
 outage. What it must never do is fail *silently* on the way in, so a limiter
@@ -17,11 +18,12 @@ request: a sliding log would need a sorted set and several more.
 
 from __future__ import annotations
 
+import hashlib
 import logging
 import time
 from dataclasses import dataclass
 
-import httpx
+import redis.asyncio as redis
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials
 
@@ -32,6 +34,33 @@ settings = get_settings()
 log = logging.getLogger("gora.ratelimit")
 
 TIMEOUT_SECONDS = 2.0
+
+_client: redis.Redis | None = None
+
+
+def _redis() -> redis.Redis:
+    """One pool for the process, built on first use.
+
+    Not at import time: the module is imported by every router, and a settings
+    file with no Redis configured must not cost a connection attempt.
+    """
+    global _client
+    if _client is None:
+        _client = redis.from_url(
+            settings.redis_url,
+            socket_timeout=TIMEOUT_SECONDS,
+            socket_connect_timeout=TIMEOUT_SECONDS,
+            decode_responses=True,
+        )
+    return _client
+
+
+async def close_redis() -> None:
+    """Released on shutdown, so a reload does not leak the pool."""
+    global _client
+    if _client is not None:
+        await _client.aclose()
+        _client = None
 
 
 @dataclass(frozen=True)
@@ -45,22 +74,13 @@ class Limit:
 
 async def _incr(key: str, ttl: int) -> int | None:
     """INCR the window and set its expiry on first write. None means unknown."""
-    url = settings.upstash_redis_rest_url.rstrip("/")
-    headers = {"Authorization": f"Bearer {settings.upstash_redis_rest_token}"}
     try:
-        async with httpx.AsyncClient(timeout=TIMEOUT_SECONDS) as client:
-            # One pipeline, one round trip: INCR then a best-effort EXPIRE. NX
-            # keeps a refreshed expiry from sliding the window forward forever.
-            response = await client.post(
-                f"{url}/pipeline",
-                headers=headers,
-                json=[["INCR", key], ["EXPIRE", key, str(ttl), "NX"]],
-            )
-        if response.status_code >= 400:
-            log.warning("upstash %s: %s", response.status_code, response.text[:200])
-            return None
-        payload = response.json()
-        return int(payload[0]["result"])
+        pipe = _redis().pipeline()
+        pipe.incr(key)
+        # NX keeps a refreshed expiry from sliding the window forward forever.
+        pipe.expire(key, ttl, nx=True)
+        count, _ = await pipe.execute()
+        return int(count)
     except Exception:
         log.exception("rate limit check failed for %s", key)
         return None
@@ -72,9 +92,15 @@ def _identity(request: Request, credentials: HTTPAuthorizationCredentials | None
     Deliberately the raw bearer rather than the decoded subject: limiting runs
     before authentication, and a token that fails to decode still deserves a
     ceiling - otherwise a bad token is an unlimited one.
+
+    SHA-256 rather than the builtin `hash()`. Python salts string hashing per
+    process, so the builtin gave every worker, every replica and every restart
+    its own set of buckets - which quietly multiplied each limit by the number
+    of processes serving it. The digest is stable everywhere and forever.
     """
     if credentials is not None:
-        return f"tok:{hash(credentials.credentials) & 0xFFFFFFFF:x}"
+        digest = hashlib.sha256(credentials.credentials.encode()).hexdigest()[:16]
+        return f"tok:{digest}"
     client = request.client
     return f"ip:{client.host if client else 'unknown'}"
 

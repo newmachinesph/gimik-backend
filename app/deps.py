@@ -13,7 +13,7 @@ from sqlalchemy.orm import selectinload
 
 from app.db import get_session
 from app.models import User
-from app.security import decode_token
+from app.security import decode_token, token_is_current
 
 bearer = HTTPBearer(auto_error=False)
 
@@ -41,5 +41,10 @@ async def current_user(
     )
     # A token outliving its account must not authenticate.
     if user is None or not user.is_active:
+        raise CREDENTIALS_ERROR
+    # Nor one outliving the password it was issued against. This is the check
+    # that makes signing out, changing a password and spending a reset link
+    # mean something to a token already in the wild.
+    if not token_is_current(payload, user.token_version):
         raise CREDENTIALS_ERROR
     return user

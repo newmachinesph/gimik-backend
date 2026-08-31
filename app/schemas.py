@@ -39,6 +39,16 @@ class ForgotPasswordIn(BaseModel):
     email: EmailStr
 
 
+class EmailIn(BaseModel):
+    """An address on its own - resending a verification link."""
+
+    email: EmailStr
+
+
+class VerifyEmailIn(BaseModel):
+    token: str
+
+
 class ResetPasswordIn(BaseModel):
     token: str
     password: str = Field(min_length=8, max_length=200)
@@ -55,6 +65,12 @@ class PhotoOut(BaseModel):
 class ProfileOut(BaseModel):
     id: uuid.UUID
     email: EmailStr | None = None
+    # Only ever populated for the caller's own profile, alongside the address.
+    email_verified: bool = False
+    # "free" or "plus", derived from `plus_until` rather than stored blindly -
+    # the app reads this to decide what to show, never to decide what to allow.
+    tier: str = "free"
+    plus_until: dt.datetime | None = None
     name: str
     handle: str
     birthday: dt.date | None
@@ -222,8 +238,10 @@ class PlaceOut(BaseModel):
     id: uuid.UUID
     name: str
     area: str
-    lat: float
-    lon: float
+    # Absent unless something has had a reason to resolve them; Autocomplete
+    # alone does not carry coordinates. See the Place model.
+    lat: float | None = None
+    lon: float | None = None
 
 
 class PlanCreate(BaseModel):

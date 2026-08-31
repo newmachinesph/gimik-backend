@@ -19,8 +19,10 @@ os.environ.setdefault("S3_SECRET_KEY", "test")
 # credentials from .env, and a test suite must not reach the network. A shared
 # rate limiter in particular would make the suite order-dependent and fail the
 # moment a bucket is spent - which is exactly how this was discovered.
-os.environ["UPSTASH_REDIS_REST_URL"] = ""
-os.environ["UPSTASH_REDIS_REST_TOKEN"] = ""
+# GOOGLE_MAPS_API_KEY is blanked for the same reason: an empty key makes
+# _provider_search return [] without ever opening a socket.
+os.environ["REDIS_URL"] = ""
+os.environ["GOOGLE_MAPS_API_KEY"] = ""
 os.environ["ABLY_API_KEY"] = ""
 os.environ["SMTP_HOST"] = ""
 os.environ["SENTRY_DSN"] = ""
@@ -98,6 +100,42 @@ async def register(client, email: str, name: str, city: str | None = None) -> di
         patched = await client.patch("/auth/me", json={"city": city}, headers=headers)
         assert patched.status_code == 200, patched.text
     return headers
+
+
+async def grant_plus(client, headers: dict[str, str], *, days: int = 30) -> None:
+    """Entitle the account behind these headers.
+
+    Writes the column directly rather than going through a purchase: there is
+    no endpoint that grants Plus, and there should not be - only the RevenueCat
+    webhook ever moves this, and the webhook is not what these tests are about.
+    """
+    import datetime as dt
+
+    from sqlalchemy import select
+
+    from app.models import User
+    from app.security import decode_token
+
+    token = headers["Authorization"].split(" ", 1)[1]
+    user_id = uuid.UUID(decode_token(token, expect="access")["sub"])
+    async with client.sessionmaker() as session:
+        user = await session.scalar(select(User).where(User.id == user_id))
+        assert user is not None
+        user.plus_until = dt.datetime.now(dt.UTC) + dt.timedelta(days=days)
+        user.tier = "plus"
+        await session.commit()
+
+
+@pytest.fixture
+def make_plus_user(make_user, client):
+    """A registered account that is entitled to everything."""
+
+    async def _make(name: str, city: str | None = None) -> dict[str, str]:
+        headers = await make_user(name, city)
+        await grant_plus(client, headers)
+        return headers
+
+    return _make
 
 
 @pytest.fixture

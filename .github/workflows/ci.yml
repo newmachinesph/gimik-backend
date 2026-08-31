@@ -1,7 +1,8 @@
-# The API's own checks. No Postgres service and no MinIO: the suite runs on
-# in-memory SQLite with storage faked, and conftest blanks the Ably, Upstash,
-# Sentry and SMTP settings so a test run can never reach the network - which is
-# also why it cannot be made flaky by a spent rate-limit bucket.
+# The API's own checks. No Postgres, MinIO or Redis service: the suite runs on
+# in-memory SQLite with storage faked, and conftest blanks the Ably, Redis,
+# Google Maps, Sentry and SMTP settings so a test run can never reach the
+# network - which is also why it cannot be made flaky by a spent rate-limit
+# bucket or a spent Maps quota.
 name: CI
 
 on:

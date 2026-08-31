@@ -46,9 +46,40 @@ def _send(to: str, subject: str, text: str) -> None:
         log.exception("could not send %r to %s", subject, to)
 
 
+def send_verify_email(tasks: BackgroundTasks, *, to: str, name: str, token: str) -> None:
+    """Proves the address. Gates nothing, on purpose.
+
+    The account already works, so this is not a hurdle in the way of using the
+    product - it is the thing that lets Gora send this person mail later
+    without guessing, and lets someone invite them by address knowing it lands.
+    Written to be ignorable today and useful when they get round to it.
+    """
+    first = (name or "there").split(" ")[0]
+    link = f"{settings.app_scheme}://verify?token={token}"
+    tasks.add_task(
+        _send,
+        to,
+        "Confirm your email for Gora",
+        f"""{first},
+
+Confirm this is your address:
+
+{link}
+
+Or paste this code into Settings:
+
+{token}
+
+Nothing breaks if you ignore it - your list already works. Confirming just
+means we can reach you, and that someone inviting you by email finds you.
+
+- Gora
+""",
+    )
+
+
 def send_welcome(tasks: BackgroundTasks, *, to: str, name: str) -> None:
-    """The one email a new account gets. No verification link yet - the account
-    is usable immediately, and a link that gates nothing is just friction."""
+    """The one email a new account gets besides the confirmation."""
     first = (name or "there").split(" ")[0]
     tasks.add_task(
         _send,

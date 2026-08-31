@@ -18,6 +18,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Index,
+    Integer,
     String,
     Text,
     UniqueConstraint,
@@ -29,6 +30,7 @@ from app.models.base import Base, CreatedMixin, IdMixin
 # Vocabulary, enforced in the API layer; strings in the database so SQLite tests
 # and Postgres share one definition.
 GENDERS = {"woman", "man", "nonbinary"}
+TIERS = {"free", "plus"}
 PARTIES = {"solo", "duo", "group", "any"}
 INVITE_PARTIES = {"duo", "group"}
 AUDIENCES = {"friends", "groups", "everyone"}
@@ -63,6 +65,35 @@ class User(Base, IdMixin, CreatedMixin):
     religion: Mapped[str | None] = mapped_column(String(30), nullable=True)
     politics: Mapped[str | None] = mapped_column(String(30), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    # Whether the address has been proven. Deliberately not a gate on sign-in:
+    # an unproven address costs nothing until it is used to reach someone.
+    email_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    # Bumped to invalidate every token already issued for this account. JWTs are
+    # stateless, so this integer is the only thing that can end a session early:
+    # a password change, a reset, or a sign-out-everywhere all move it forward
+    # and every token minted before it stops decoding.
+    token_version: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    # Entitlement. Written by the RevenueCat webhook, never by the client - a
+    # paywall the app enforces is a paywall a patched build walks through, and
+    # the bill for the request it lets past arrives here rather than there.
+    # `plus_until` is the source of truth: `tier` is a label, and an expired
+    # subscription is one whose timestamp has passed, not one someone remembered
+    # to downgrade.
+    tier: Mapped[str] = mapped_column(String(16), default="free", nullable=False)
+    plus_until: Mapped[dt.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+
+    @property
+    def is_plus(self) -> bool:
+        """Entitled right now, regardless of what the label says."""
+        if self.plus_until is None:
+            return False
+        expiry = self.plus_until
+        # SQLite hands back naive datetimes; Postgres does not. Compare in UTC.
+        if expiry.tzinfo is None:
+            expiry = expiry.replace(tzinfo=dt.UTC)
+        return expiry > dt.datetime.now(dt.UTC)
 
     photos: Mapped[list[UserPhoto]] = relationship(
         back_populates="user", order_by="UserPhoto.position", cascade="all, delete-orphan"
@@ -213,21 +244,35 @@ class GroupMember(Base, CreatedMixin):
 class Place(Base, IdMixin, CreatedMixin):
     """A specific place a plan can point at - THE restaurant, not "a restaurant".
 
-    Rows come from user picks: the first search for a place hits the geocoding
-    provider (LocationIQ over OSM), and the result is cached here so repeat
-    searches are answered from this table. Over time this becomes Gora's own
-    catalog of the places people actually go.
+    Rows come from user picks: the first search for a place hits Google Places
+    Autocomplete, and the result is cached here so repeat searches are answered
+    from this table. Over time this becomes Gora's own catalog of the places
+    people actually go.
+
+    Coordinates are nullable because Autocomplete does not return them - only a
+    place ID and two lines of text. Fetching them would mean a Place Details
+    call per result, and nothing in the product reads them: a plan stores the
+    place as the words a person would say out loud. The columns stay for the
+    day something needs a map, and are honest about being empty until then.
+
+    `refreshed_at` exists for Google's terms rather than for performance. Place
+    IDs may be cached indefinitely; the display text may not - so a row past
+    PLACE_CACHE_DAYS is re-fetched rather than served, and the ID it is keyed
+    by survives the refresh.
     """
 
     __tablename__ = "places"
     __table_args__ = (UniqueConstraint("provider", "provider_id"),)
 
-    provider: Mapped[str] = mapped_column(String(20), default="locationiq", nullable=False)
+    provider: Mapped[str] = mapped_column(String(20), default="google", nullable=False)
     provider_id: Mapped[str] = mapped_column(String(64), nullable=False)
     name: Mapped[str] = mapped_column(String(160), nullable=False)
     area: Mapped[str] = mapped_column(String(200), default="", nullable=False)
-    lat: Mapped[float] = mapped_column(nullable=False)
-    lon: Mapped[float] = mapped_column(nullable=False)
+    lat: Mapped[float | None] = mapped_column(nullable=True)
+    lon: Mapped[float | None] = mapped_column(nullable=True)
+    refreshed_at: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), default=lambda: dt.datetime.now(dt.UTC), nullable=False
+    )
 
 
 class Plan(Base, IdMixin, CreatedMixin):

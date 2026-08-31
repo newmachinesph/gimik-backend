@@ -13,6 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_session
 from app.deps import current_user
+from app.entitlements import PLUS_PHOTOS, PlusRequired, photo_allowance
 from app.models import User, UserPhoto
 from app.schemas import ClaimPhotoIn, PhotoOut, PresignUploadIn, PresignUploadOut
 from app.services import ratelimit, storage
@@ -20,7 +21,8 @@ from app.services import ratelimit, storage
 router = APIRouter(prefix="/media", tags=["media"])
 log = logging.getLogger("gora.media")
 
-MAX_PHOTOS = 8
+# The ceiling for anyone; the tier decides how much of it an account gets.
+MAX_PHOTOS = PLUS_PHOTOS
 ALLOWED_TYPES = {"image/jpeg", "image/png", "image/webp"}
 
 
@@ -53,8 +55,13 @@ async def add_photo(
             select(UserPhoto).where(UserPhoto.user_id == user.id).order_by(UserPhoto.position)
         )
     ).all()
-    if len(existing) >= MAX_PHOTOS:
-        raise HTTPException(status_code=409, detail="Eight photos is the limit")
+    allowance = photo_allowance(user)
+    if len(existing) >= allowance:
+        # 402 when more is purchasable, 409 when it simply is not - the app
+        # opens the paywall on the first and shows a plain limit on the second.
+        if not user.is_plus:
+            raise PlusRequired(f"A {PLUS_PHOTOS}-photo profile")
+        raise HTTPException(status_code=409, detail=f"{allowance} photos is the limit")
     photo = UserPhoto(
         user_id=user.id,
         object_key=payload.key,

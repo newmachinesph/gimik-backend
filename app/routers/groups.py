@@ -13,6 +13,7 @@ from sqlalchemy.orm import selectinload
 
 from app.db import get_session
 from app.deps import current_user
+from app.entitlements import requires_plus
 from app.models import Group, GroupMember, Thread, ThreadParticipant, User
 from app.routers.common import holder_out, users_by_ids
 from app.schemas import GroupCreate, GroupOut
@@ -74,7 +75,10 @@ async def my_groups(
 @router.post("", response_model=GroupOut, status_code=status.HTTP_201_CREATED)
 async def create_group(
     payload: GroupCreate,
-    user: User = Depends(current_user),
+    # Creating a group opens an Ably channel that lives as long as the group.
+    # Joining one does not, and is never gated - a group nobody free can enter
+    # is not a group.
+    user: User = Depends(requires_plus("Creating groups")),
     session: AsyncSession = Depends(get_session),
 ) -> GroupOut:
     group = Group(

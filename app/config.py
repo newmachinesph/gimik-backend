@@ -30,6 +30,8 @@ class Settings(BaseSettings):
     jwt_access_ttl_minutes: int = Field(default=30, alias="JWT_ACCESS_TTL_MINUTES")
     jwt_refresh_ttl_days: int = Field(default=30, alias="JWT_REFRESH_TTL_DAYS")
     jwt_reset_ttl_minutes: int = Field(default=30, alias="JWT_RESET_TTL_MINUTES")
+    # A verification link is not a credential; it can afford to be patient.
+    jwt_verify_ttl_hours: int = Field(default=72, alias="JWT_VERIFY_TTL_HOURS")
     jwt_algorithm: str = "HS256"
 
     s3_endpoint_url: str = Field(alias="S3_ENDPOINT_URL")
@@ -43,18 +45,18 @@ class Settings(BaseSettings):
     s3_region: str = Field(default="auto", alias="S3_REGION")
     s3_public_url: str = Field(default="", alias="S3_PUBLIC_URL")
 
-    locationiq_key: str = Field(default="", alias="LOCATIONIQ_KEY")
+    # Google Maps Platform, server-side only. Places Autocomplete + Details.
+    google_maps_api_key: str = Field(default="", alias="GOOGLE_MAPS_API_KEY")
 
     # Realtime. The root key never leaves this process: clients are handed
     # short-lived tokens scoped to their own channels.
     ably_api_key: str = Field(default="", alias="ABLY_API_KEY")
     ably_token_ttl_seconds: int = Field(default=3600, alias="ABLY_TOKEN_TTL_SECONDS")
 
-    # Rate limiting. Upstash over REST so there is no persistent connection to
-    # keep alive per worker; absent credentials disable limiting rather than
+    # Rate limiting. Redis over its own protocol - the compose service locally,
+    # a Railway Redis plugin later. An absent URL disables limiting rather than
     # failing closed, because a broken limiter must not take the API down.
-    upstash_redis_rest_url: str = Field(default="", alias="UPSTASH_REDIS_REST_URL")
-    upstash_redis_rest_token: str = Field(default="", alias="UPSTASH_REDIS_REST_TOKEN")
+    redis_url: str = Field(default="", alias="REDIS_URL")
 
     # Mail. Mailpit locally (:1025, no auth, no TLS); a real relay later.
     smtp_host: str = Field(default="", alias="SMTP_HOST")
@@ -99,7 +101,7 @@ class Settings(BaseSettings):
 
     @property
     def rate_limiting_enabled(self) -> bool:
-        return bool(self.upstash_redis_rest_url and self.upstash_redis_rest_token)
+        return bool(self.redis_url)
 
     @property
     def sentry_enabled(self) -> bool:

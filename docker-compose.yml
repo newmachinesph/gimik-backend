@@ -38,6 +38,35 @@ services:
       timeout: 3s
       retries: 20
 
+  redis:
+    image: redis:7-alpine
+    # Rate limit windows are disposable by definition - a lost counter costs at
+    # most one extra allowed burst - so there is no volume and no persistence.
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:latest
+    # Catches everything the API sends and shows it at http://localhost:8025.
+    # Verification and reset links are only testable if they land somewhere
+    # readable, and this is the only reason they are testable locally at all.
+    ports:
+      # 1026/8026 so a Mailpit already running for another project keeps its
+      # ports, the same reason Postgres sits on 5433 and the API on 8100.
+      # Inside the compose network the API still reaches it on 1025.
+      - "1026:1025"   # SMTP
+      - "8026:8025"   # web UI
+    environment:
+      MP_MAX_MESSAGES: 500
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
   api:
     build: .
     env_file: .env
@@ -47,12 +76,19 @@ services:
       # phone and the browser can actually resolve through the adb reverse.
       S3_ENDPOINT_URL: http://minio:9000
       S3_PUBLIC_URL: ${S3_PUBLIC_URL:-http://localhost:9000}
+      REDIS_URL: redis://redis:6379/0
+      # Mailpit accepts anything and delivers to its own web UI.
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      SMTP_USE_TLS: "false"
     ports:
       - "8100:8000"   # 8100 so the v1 API on 8000 can keep running
     depends_on:
       postgres:
         condition: service_healthy
       minio:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     volumes:
       - ./app:/srv/app:ro
@@ -62,7 +98,13 @@ services:
       # Dev only - the image itself does not ship tests.
       - ./tests:/srv/tests:ro
       - ./pyproject.toml:/srv/pyproject.toml:ro
-    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    # Migrations first, exactly as the image's own CMD does. This override
+    # exists for --reload, and without the upgrade it would quietly start the
+    # dev stack against last week's schema - which is how a missing column gets
+    # discovered from a 500 rather than from a failed boot.
+    command: >
+      sh -c "alembic upgrade head &&
+             exec uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
 volumes:
   postgres-data:
