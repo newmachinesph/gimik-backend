@@ -314,10 +314,10 @@ async def test_two_people_do_not_get_the_same_deck(client, make_user):
 
 def test_taste_starts_neutral_and_moves_with_evidence():
     """The smoothing is the point: one pass is noise, ten are a preference."""
-    someday = Someday(slug="s", title="S", category="Food & Drink", domain="Cafes")
+    shelf = ("Food & Drink", "Cafes")
 
     cold = feed_service.Taste({}, {}, {}, {}, base_rate=0.5, interest_tokens=set())
-    assert cold.score(someday) == pytest.approx(0.5)
+    assert cold.score(*shelf) == pytest.approx(0.5)
 
     barely = feed_service.Taste(
         {}, {"Food & Drink": 1}, {}, {"Cafes": 1}, base_rate=0.5, interest_tokens=set()
@@ -325,24 +325,29 @@ def test_taste_starts_neutral_and_moves_with_evidence():
     convinced = feed_service.Taste(
         {}, {"Food & Drink": 20}, {}, {"Cafes": 20}, base_rate=0.5, interest_tokens=set()
     )
-    assert barely.score(someday) > convinced.score(someday), "evidence should accumulate"
-    assert barely.score(someday) > 0.35, "a single pass must not collapse a category"
-    assert convinced.score(someday) < 0.2, "twenty passes should"
+    assert barely.score(*shelf) > convinced.score(*shelf), "evidence should accumulate"
+    assert barely.score(*shelf) > 0.35, "a single pass must not collapse a category"
+    assert convinced.score(*shelf) < 0.2, "twenty passes should"
 
 
 def test_diversify_breaks_up_a_run_of_one_category():
     """The greedy pass is what stops nine hiking cards in a row."""
 
     def card(slug: str, category: str, score: float) -> feed_service.Candidate:
-        someday = Someday(slug=slug, title=slug, category=category, domain=category)
-        return feed_service.Candidate(someday=someday, score=score)
+        return feed_service.Candidate(
+            someday_id=uuid.uuid4(),
+            title=slug,
+            category=category,
+            domain=category,
+            score=score,
+        )
 
     # Eight strong food cards and two weaker others: sorting alone returns all food.
     candidates = [card("food-" + str(i), "Food", 1.0 - i * 0.01) for i in range(8)]
     candidates += [card("water", "Water", 0.80), card("city", "City", 0.79)]
 
     picked = feed_service.diversify(candidates, limit=4)
-    assert len({c.someday.category for c in picked}) >= 2, (
+    assert len({c.category for c in picked}) >= 2, (
         "a diversity pass that returns one category is not doing anything"
     )
 

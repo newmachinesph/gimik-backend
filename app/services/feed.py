@@ -132,14 +132,26 @@ _WORD = re.compile(r"[a-z0-9]+")
 
 @dataclass
 class Candidate:
-    """One scorable row, flattened out of the join it came from."""
+    """One scorable row, flattened out of the join it came from.
 
-    someday: Someday
+    Deliberately not a `Someday`. Scoring touches every undecided row - 2,522 of
+    them - to choose twenty, and hydrating that many ORM entities to read four
+    columns off each was the single largest cost in the endpoint. These carry
+    only what scoring reads; `someday` is filled in afterwards, for the winners
+    alone.
+    """
+
+    someday_id: uuid.UUID
+    title: str
+    category: str
+    domain: str | None
     keeps: int = 0
     friend_keeps: int = 0
     pool: str = CATALOG
     score: float = 0.0
     reasons: list[str] = field(default_factory=list)
+    # Set by `hydrate` once the page is decided. Never read before that.
+    someday: Someday | None = None
 
 
 @dataclass
@@ -167,18 +179,18 @@ class Taste:
         kept = keeps.get(key, 0)
         return (kept + TASTE_PRIOR * self.base_rate) / (seen + TASTE_PRIOR)
 
-    def score(self, someday: Someday) -> float:
+    def score(self, category_name: str, domain_name: str | None) -> float:
         """Category and subcategory blended two-to-one.
 
         The subcategory is the sharper signal - "Hiking & Mountains" says more
         than "Adventure & Outdoors" - but it is also the sparser one, so it
         informs rather than decides.
         """
-        category = self._rate(self.category_keeps, self.category_total, someday.category)
-        domain = self._rate(self.domain_keeps, self.domain_total, someday.domain)
+        category = self._rate(self.category_keeps, self.category_total, category_name)
+        domain = self._rate(self.domain_keeps, self.domain_total, domain_name)
         return (2 * category + domain) / 3
 
-    def interest_overlap(self, someday: Someday) -> float:
+    def interest_overlap(self, title: str, category: str, domain: str | None) -> float:
         """Word overlap between what someone said they like and this card.
 
         Interests are stored as slugs picked from a bank the app owns
@@ -189,7 +201,7 @@ class Taste:
         """
         if not self.interest_tokens:
             return 0.0
-        text = " ".join(filter(None, [someday.title, someday.domain, someday.category]))
+        text = " ".join(filter(None, [title, domain, category]))
         tokens = set(_WORD.findall(text.lower()))
         hits = len(tokens & self.interest_tokens)
         return min(1.0, hits / 2)
@@ -298,16 +310,58 @@ def _undecided(stmt: Select, user_id: uuid.UUID) -> Select:
 
 
 def _with_counts(friends: set) -> Select:
-    """Base select: one row per someday, with its global and friend keep counts."""
+    """Base select: the four columns scoring reads, plus the two keep counts.
+
+    Columns rather than `select(Someday)` on purpose - see `Candidate`. The
+    entity is fetched once, for the page that was chosen.
+    """
     if friends:
         friend_keeps = func.count(Keep.user_id).filter(Keep.user_id.in_(friends))
     else:
         friend_keeps = func.count(Keep.user_id) * 0
     return (
-        select(Someday, func.count(Keep.user_id).label("keeps"), friend_keeps.label("friend_keeps"))
+        select(
+            Someday.id,
+            Someday.title,
+            Someday.category,
+            Someday.domain,
+            func.count(Keep.user_id).label("keeps"),
+            friend_keeps.label("friend_keeps"),
+        )
         .outerjoin(Keep, Keep.someday_id == Someday.id)
         .group_by(Someday.id)
     )
+
+
+def _rows_to_candidates(rows, pool: str) -> list[Candidate]:
+    return [
+        Candidate(
+            someday_id=row.id,
+            title=row.title,
+            category=row.category,
+            domain=row.domain,
+            keeps=row.keeps,
+            friend_keeps=row.friend_keeps,
+            pool=pool,
+        )
+        for row in rows
+    ]
+
+
+async def hydrate(session: AsyncSession, chosen: list[Candidate]) -> list[Candidate]:
+    """Attach the real rows to the handful of candidates that made the page."""
+    if not chosen:
+        return chosen
+    rows = (
+        await session.scalars(
+            select(Someday).where(Someday.id.in_([c.someday_id for c in chosen]))
+        )
+    ).all()
+    by_id = {row.id: row for row in rows}
+    for candidate in chosen:
+        candidate.someday = by_id.get(candidate.someday_id)
+    # A someday deleted between the two queries has nothing to render.
+    return [candidate for candidate in chosen if candidate.someday is not None]
 
 
 async def _catalog_pool(
@@ -317,10 +371,7 @@ async def _catalog_pool(
     if category:
         stmt = stmt.where(Someday.category == category)
     rows = (await session.execute(stmt.limit(CANDIDATE_LIMIT))).all()
-    return [
-        Candidate(someday=someday, keeps=keeps, friend_keeps=friend_keeps, pool=CATALOG)
-        for someday, keeps, friend_keeps in rows
-    ]
+    return _rows_to_candidates(rows, CATALOG)
 
 
 async def _community_pool(
@@ -335,7 +386,7 @@ async def _community_pool(
     because it is a JSON array and the portable spelling of "array contains" is
     not worth the two hundred rows it would save.
     """
-    stmt = _undecided(_with_counts(friends), user.id).where(
+    stmt = _undecided(_with_counts(friends).add_columns(Someday.owner_id), user.id).where(
         Someday.owner_id.is_not(None), Someday.owner_id != user.id
     )
     if category:
@@ -344,7 +395,7 @@ async def _community_pool(
     if not rows:
         return []
 
-    owner_ids = {someday.owner_id for someday, _, _ in rows}
+    owner_ids = {row.owner_id for row in rows}
     owners = {
         owner.id: owner
         for owner in (await session.scalars(select(User).where(User.id.in_(owner_ids)))).all()
@@ -355,29 +406,26 @@ async def _community_pool(
             await session.scalars(
                 select(Keep).where(
                     Keep.user_id.in_(owner_ids),
-                    Keep.someday_id.in_([someday.id for someday, _, _ in rows]),
+                    Keep.someday_id.in_([row.id for row in rows]),
                 )
             )
         ).all()
     }
 
-    out: list[Candidate] = []
-    for someday, keeps, friend_keeps in rows:
-        keep = author_keeps.get((someday.id, someday.owner_id))
-        owner = owners.get(someday.owner_id)
+    visible_rows = []
+    for row in rows:
+        keep = author_keeps.get((row.id, row.owner_id))
+        owner = owners.get(row.owner_id)
         if keep is None or owner is None:
             continue
         open_to = set(keep.open_to or [])
-        visible = (
+        if (
             ("friends" in open_to and owner.id in friends)
             or ("groups" in open_to and owner.id in peers)
             or ("everyone" in open_to and bool(owner.city) and owner.city == user.city)
-        )
-        if visible:
-            out.append(
-                Candidate(someday=someday, keeps=keeps, friend_keeps=friend_keeps, pool=COMMUNITY)
-            )
-    return out
+        ):
+            visible_rows.append(row)
+    return _rows_to_candidates(visible_rows, COMMUNITY)
 
 
 async def _second_look_pool(
@@ -396,17 +444,13 @@ async def _second_look_pool(
     if category:
         stmt = stmt.where(Someday.category == category)
     rows = (await session.execute(stmt.limit(CANDIDATE_LIMIT))).all()
-    return [
-        Candidate(someday=someday, keeps=keeps, friend_keeps=friend_keeps, pool=SECOND_LOOK)
-        for someday, keeps, friend_keeps in rows
-    ]
+    return _rows_to_candidates(rows, SECOND_LOOK)
 
 
 def score_candidates(candidates: list[Candidate], user: User, taste: Taste, today: dt.date) -> None:
     """Assign every candidate its score and the reasons behind it, in place."""
     ceiling = max((c.keeps for c in candidates), default=0)
     for candidate in candidates:
-        someday = candidate.someday
         # Saturating at three friends: the jump from none to one is the whole
         # signal, and "nine friends kept this" is not nine times the invitation.
         social = (
@@ -414,13 +458,13 @@ def score_candidates(candidates: list[Candidate], user: User, taste: Taste, toda
             if candidate.friend_keeps
             else 0.0
         )
-        interest = taste.interest_overlap(someday)
+        interest = taste.interest_overlap(candidate.title, candidate.category, candidate.domain)
         candidate.score = (
-            W_TASTE * taste.score(someday)
+            W_TASTE * taste.score(candidate.category, candidate.domain)
             + W_SOCIAL * social
             + W_POPULARITY * _popularity(candidate.keeps, ceiling)
             + W_INTEREST * interest
-            + W_EXPLORE * _jitter(user.id, someday.id, today)
+            + W_EXPLORE * _jitter(user.id, candidate.someday_id, today)
         )
         if candidate.pool == SECOND_LOOK:
             candidate.score -= PENALTY_SECOND_LOOK
@@ -455,17 +499,16 @@ def diversify(candidates: list[Candidate], limit: int) -> list[Candidate]:
         for index, candidate in enumerate(pool):
             value = (
                 candidate.score
-                - PENALTY_CATEGORY * seen_category.get(candidate.someday.category, 0)
-                - PENALTY_DOMAIN * seen_domain.get(candidate.someday.domain, 0)
+                - PENALTY_CATEGORY * seen_category.get(candidate.category, 0)
+                - PENALTY_DOMAIN * seen_domain.get(candidate.domain, 0)
             )
             if value > best_value:
                 best_value, best_index = value, index
         picked = pool.pop(best_index)
         chosen.append(picked)
-        category = picked.someday.category
-        seen_category[category] = seen_category.get(category, 0) + 1
-        if picked.someday.domain:
-            seen_domain[picked.someday.domain] = seen_domain.get(picked.someday.domain, 0) + 1
+        seen_category[picked.category] = seen_category.get(picked.category, 0) + 1
+        if picked.domain:
+            seen_domain[picked.domain] = seen_domain.get(picked.domain, 0) + 1
     return chosen
 
 
@@ -500,5 +543,5 @@ async def build_feed(
         candidates += second
 
     score_candidates(candidates, user, taste, today)
-    items = diversify(candidates, limit)
+    items = await hydrate(session, diversify(candidates, limit))
     return FeedPage(items=items, exhausted=not items, pools=pools)
