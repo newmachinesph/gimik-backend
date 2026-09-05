@@ -47,6 +47,8 @@ async def deck(
                 someday=someday_out(item.someday),
                 pool=item.pool,
                 reasons=item.reasons,
+                keeps=item.keeps,
+                friend_keeps=item.friend_keeps,
             )
             for item in page.items
         ],

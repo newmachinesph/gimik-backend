@@ -132,6 +132,11 @@ class FeedItemOut(BaseModel):
     someday: SomedayOut
     pool: str
     reasons: list[str] = Field(default_factory=list)
+    # How many people hold this, and how many of them the viewer knows. The card
+    # says "2 friends want this" rather than a number invented on the client -
+    # which is what it did while the only holder table was the bundled demo one.
+    keeps: int = 0
+    friend_keeps: int = 0
 
 
 class FeedOut(BaseModel):
