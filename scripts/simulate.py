@@ -41,7 +41,8 @@ PIXEL_WEBP = bytes.fromhex(
     "3001009d012a0100010002003425a4000370"
 )
 
-PASSWORD = "simulate-me-1234"  # noqa: S105 - a throwaway for seeded accounts
+# A throwaway for seeded accounts, published here on purpose.
+PASSWORD = "simulate-me-1234"
 
 
 @dataclass

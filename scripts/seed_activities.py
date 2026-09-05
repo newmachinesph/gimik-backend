@@ -34,14 +34,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from botocore.exceptions import ClientError  # noqa: E402
-from sqlalchemy import select  # noqa: E402
+from botocore.exceptions import ClientError
+from sqlalchemy import select
 
-from app.config import get_settings  # noqa: E402
-from app.db import SessionLocal  # noqa: E402
-from app.models import Someday  # noqa: E402
-from app.services import storage  # noqa: E402
-from app.taxonomy import canonical  # noqa: E402
+from app.config import get_settings
+from app.db import SessionLocal
+from app.models import Someday
+from app.services import storage
+from app.taxonomy import canonical
 
 settings = get_settings()
 
@@ -90,14 +90,14 @@ def read_catalog(zip_path: Path, limit: int | None) -> list[dict]:
     for row in rows:
         # `image_file` says .png; the zip ships .webp. Trust the stem, which is
         # `<zero-padded id>-<slug>`, and fall back to composing it from the row.
-        stem = Path(row["image_file"]).stem or "%04d-%s" % (row["id"], row["slug"])
+        stem = Path(row["image_file"]).stem or f"{row['id']:04d}-{row['slug']}"
         member = members.get(stem + ".webp")
         if member is None:
             missing.append(row["slug"])
             continue
         catalog.append({**row, "member": member})
     if missing:
-        print("  ! %d rows have no artwork in the zip, e.g. %s" % (len(missing), missing[:3]))
+        print(f"  ! {len(missing)} rows have no artwork in the zip, e.g. {missing[:3]}")
     return catalog
 
 
@@ -146,9 +146,9 @@ def upload_artwork(zip_path: Path, catalog: list[dict], workers: int) -> tuple[i
                 else:
                     skipped += 1
             except ClientError as error:
-                print("  ! %s: %s" % (futures[future]["slug"], error))
+                print(f"  ! {futures[future]['slug']}: {error}")
             if done % 250 == 0 or done == len(futures):
-                print("  .. artwork %d/%d" % (done, len(futures)))
+                print(f"  .. artwork {done}/{len(futures)}")
     return uploaded, skipped
 
 
@@ -197,19 +197,19 @@ async def main() -> int:
     args = parser.parse_args()
 
     if not args.zip.exists():
-        print("no such export: " + str(args.zip))
+        print(f"no such export: {args.zip}")
         return 1
 
-    print("reading " + args.zip.name + " ...")
+    print(f"reading {args.zip.name} ...")
     catalog = read_catalog(args.zip, args.limit)
-    print("  %d activities with artwork" % len(catalog))
+    print(f"  {len(catalog)} activities with artwork")
 
     created, updated = await upsert_rows(catalog)
-    print("  rows: +%d new, ~%d refreshed" % (created, updated))
+    print(f"  rows: +{created} new, ~{updated} refreshed")
 
     if not args.rows_only:
         uploaded, skipped = upload_artwork(args.zip, catalog, args.workers)
-        print("  artwork: +%d uploaded, =%d already current" % (uploaded, skipped))
+        print(f"  artwork: +{uploaded} uploaded, ={skipped} already current")
 
     print("done.")
     return 0
