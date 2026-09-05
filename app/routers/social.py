@@ -14,7 +14,7 @@ import uuid
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import aliased, selectinload
 
 from app.db import get_session
 from app.deps import current_user
@@ -54,24 +54,27 @@ router = APIRouter(tags=["social"])
 async def _open_solo_thread(
     session: AsyncSession, a: uuid.UUID, b: uuid.UUID, someday_id: uuid.UUID | None
 ) -> Thread:
-    """One solo thread per pair, ever; the invite's someday pins to it."""
-    candidate = (
-        await session.scalars(
-            select(Thread)
-            .join(ThreadParticipant)
-            .where(Thread.kind == "solo", ThreadParticipant.user_id == a)
-        )
-    ).all()
-    for thread in candidate:
-        other = await session.scalar(
-            select(ThreadParticipant.user_id).where(
-                ThreadParticipant.thread_id == thread.id, ThreadParticipant.user_id == b
-            )
-        )
-        if other is not None:
-            if someday_id and thread.someday_id is None:
-                thread.someday_id = someday_id
-            return thread
+    """One solo thread per pair, ever; the invite's someday pins to it.
+
+    Asked as a single join on both participants. It used to load every solo
+    thread `a` had and then ask, one query each, whether `b` was in it - so
+    opening a conversation cost a round trip per conversation that person had
+    already had, and got slower the more they used the app.
+    """
+    mine = aliased(ThreadParticipant)
+    theirs = aliased(ThreadParticipant)
+    thread = await session.scalar(
+        select(Thread)
+        .join(mine, mine.thread_id == Thread.id)
+        .join(theirs, theirs.thread_id == Thread.id)
+        .where(Thread.kind == "solo", mine.user_id == a, theirs.user_id == b)
+        .limit(1)
+    )
+    if thread is not None:
+        if someday_id and thread.someday_id is None:
+            thread.someday_id = someday_id
+        return thread
+
     thread = Thread(kind="solo", someday_id=someday_id)
     session.add(thread)
     await session.flush()
