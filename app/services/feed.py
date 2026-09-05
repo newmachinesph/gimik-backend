@@ -44,11 +44,17 @@ are consumed in order and each is a genuinely different answer to "there is
 nothing left":
 
 1. `catalog`      - the seeded catalog, undecided. The normal case.
-2. `community`    - somedays other people wrote, but only where the author kept
-                    it and opened that keep to somebody this viewer is - a
-                    friend, a group peer, a neighbour in the same city. It reuses
-                    the visibility rule the rest of the app already enforces, so
-                    a private someday stays private.
+2. `community`    - somedays other people wrote, where the author kept it and
+                    opened that keep to somebody this viewer is. It reuses the
+                    visibility rule the rest of the app already enforces, so a
+                    private someday stays private.
+
+                    This one is NOT an exhaustion tier. A friend or group peer
+                    writing something down is drawn on every request and ranked
+                    against the catalog, because burying it behind 2,522 cards
+                    is indistinguishable from not having built it. Only the
+                    `city` half - a stranger who opened a someday to everyone
+                    and lives where you do - waits for the catalog to run dry.
 3. `second_look`  - things passed long enough ago (SECOND_LOOK_DAYS) to be worth
                     asking again. Taste moves, and a pass made during onboarding
                     is not a life sentence. Carries a flag so the card can say so
@@ -127,6 +133,11 @@ CANDIDATE_LIMIT = 5000
 CATALOG = "catalog"
 COMMUNITY = "community"
 SECOND_LOOK = "second_look"
+
+# Who a custom someday's author is to the viewer. KNOWN is drawn every request;
+# CITY waits until the catalog runs dry. See `_community_pool`.
+KNOWN = "known"
+CITY = "city"
 
 _WORD = re.compile(r"[a-z0-9]+")
 
@@ -366,7 +377,13 @@ async def _catalog_pool(
 
 
 async def _community_pool(
-    session: AsyncSession, user: User, friends: set, peers: set, category: str | None
+    session: AsyncSession,
+    user: User,
+    friends: set,
+    peers: set,
+    category: str | None,
+    *,
+    reach: str,
 ) -> list[Candidate]:
     """Somedays other people wrote, filtered by the author's own visibility choice.
 
@@ -376,6 +393,14 @@ async def _community_pool(
     holders list enforces. The open_to test is done here rather than in SQL
     because it is a JSON array and the portable spelling of "array contains" is
     not worth the two hundred rows it would save.
+
+    `reach` splits that rule in two, because the halves deserve different
+    prominence. KNOWN is somebody you have a relationship with - a friend, a
+    group peer - and is drawn on every request: a person you know writing down a
+    plan is the most interesting thing that can appear in this deck, and putting
+    it behind two and a half thousand catalog cards is the same as not having
+    built it. CITY is a stranger who opened a someday to everyone and happens to
+    live where you do; worth offering eventually, not ahead of the catalog.
     """
     stmt = _undecided(_with_counts(friends).add_columns(Someday.owner_id), user.id).where(
         Someday.owner_id.is_not(None), Someday.owner_id != user.id
@@ -410,11 +435,19 @@ async def _community_pool(
         if keep is None or owner is None:
             continue
         open_to = set(keep.open_to or [])
-        if (
-            ("friends" in open_to and owner.id in friends)
-            or ("groups" in open_to and owner.id in peers)
-            or ("everyone" in open_to and bool(owner.city) and owner.city == user.city)
-        ):
+        known = ("friends" in open_to and owner.id in friends) or (
+            "groups" in open_to and owner.id in peers
+        )
+        city = (
+            "everyone" in open_to
+            and owner.id not in friends
+            and owner.id not in peers
+            and bool(owner.city)
+            and owner.city == user.city
+        )
+        # A friend who opened a someday to everyone is still a friend, so they
+        # belong to KNOWN and must not also come back in the CITY draw.
+        if known if reach == KNOWN else city:
             visible_rows.append(row)
     return _rows_to_candidates(visible_rows, COMMUNITY)
 
@@ -523,10 +556,17 @@ async def build_feed(
     candidates = await _catalog_pool(session, user, friends, category)
     pools = {CATALOG: len(candidates)}
 
+    # Always. Somebody you know wrote this down; it competes with the catalog on
+    # score rather than waiting behind all of it, and it starts with the social
+    # signal already lit because its author kept it by definition.
+    known = await _community_pool(session, user, friends, peers, category, reach=KNOWN)
+    pools[COMMUNITY] = len(known)
+    candidates += known
+
     if len(candidates) < limit:
-        community = await _community_pool(session, user, friends, peers, category)
-        pools[COMMUNITY] = len(community)
-        candidates += community
+        strangers = await _community_pool(session, user, friends, peers, category, reach=CITY)
+        pools[CITY] = len(strangers)
+        candidates += strangers
 
     if len(candidates) < limit:
         second = await _second_look_pool(session, user, friends, category)

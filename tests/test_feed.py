@@ -417,3 +417,65 @@ async def test_an_older_category_name_is_accepted_and_stored_canonically(client,
     )
     assert response.status_code == 201, response.text
     assert response.json()["someday"]["category"] == "Food & Drink"
+
+
+async def test_a_friends_someday_does_not_wait_for_the_catalog_to_run_out(client, make_user):
+    """The whole point of letting people write their own.
+
+    This shipped broken: the community pool was drawn only once the catalog pool
+    fell below one page, and the catalog is 2,522 concepts - so a friend's
+    someday was reachable in principle and unreachable in practice. The catalog
+    here is deliberately far larger than the page being asked for.
+    """
+    await make_catalog(client, [(f"c-{i}", "Food & Drink", "Cafes") for i in range(60)])
+    author = await make_user("Author", city="Manila")
+    viewer = await make_user("Viewer", city="Manila")
+    author_id, viewer_id = user_id_of(author), user_id_of(viewer)
+
+    async with client.sessionmaker() as session:
+        session.add(Friendship(requester_id=author_id, addressee_id=viewer_id, status="accepted"))
+        await session.commit()
+
+    made = await client.post(
+        "/somedays",
+        json={
+            "title": "Drive to my lola's town and find her bakery",
+            "category": "City & Social",
+            "open_to": ["friends"],
+            "party_as": ["duo"],
+        },
+        headers=author,
+    )
+    assert made.status_code == 201, made.text
+
+    page = await fetch(client, viewer, limit=10)
+    assert "Drive to my lola's town and find her bakery" in titles(page), (
+        "a friend's someday must compete with the catalog, not queue behind all of it"
+    )
+
+
+async def test_a_strangers_someday_still_waits_for_the_catalog(client, make_user):
+    """Same city is not the same as knowing someone.
+
+    Opening a someday to everyone should reach the neighbourhood eventually. It
+    should not jump the catalog to do it, or the deck becomes whatever strangers
+    typed today.
+    """
+    await make_catalog(client, [(f"c-{i}", "Food & Drink", "Cafes") for i in range(60)])
+    stranger = await make_user("Stranger", city="Manila")
+    viewer = await make_user("Viewer", city="Manila")
+
+    made = await client.post(
+        "/somedays",
+        json={
+            "title": "Queue at the new lugaw place",
+            "category": "Food & Drink",
+            "open_to": ["everyone"],
+            "party_as": ["duo"],
+        },
+        headers=stranger,
+    )
+    assert made.status_code == 201, made.text
+
+    page = await fetch(client, viewer, limit=10)
+    assert "Queue at the new lugaw place" not in titles(page)
