@@ -10,17 +10,22 @@ from __future__ import annotations
 
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_session
 from app.deps import current_user
 from app.models import AUDIENCES, INVITE_PARTIES, GroupMember, Keep, Pass, Someday, User
 from app.routers.common import friend_ids, holder_out, someday_out, users_by_ids
-from app.schemas import HolderOut, KeepIn, KeepOut, SomedayOut, Visibility
+from app.schemas import CatalogPage, HolderOut, KeepIn, KeepOut, SomedayOut, Visibility
+from app.taxonomy import CATEGORIES, canonical
 
 router = APIRouter(tags=["catalog"])
+
+# Two screens of a two-column grid, so the first scroll never waits.
+PAGE_SIZE = 40
+MAX_PAGE_SIZE = 100
 
 
 async def _someday(session: AsyncSession, someday_id: uuid.UUID) -> Someday:
@@ -37,21 +42,53 @@ def _check_visibility(visibility: Visibility) -> None:
         raise HTTPException(status_code=422, detail="Unknown party shape")
 
 
-@router.get("/catalog", response_model=list[SomedayOut])
+@router.get("/categories", response_model=list[str])
+async def categories() -> list[str]:
+    """The filter chips, in the order the app shows them.
+
+    Served rather than hard-coded in the client so the two cannot drift: a
+    category the catalog no longer has is a chip that returns nothing.
+    """
+    return list(CATEGORIES)
+
+
+@router.get("/catalog", response_model=CatalogPage)
 async def catalog(
     q: str | None = None,
     category: str | None = None,
+    offset: int = Query(0, ge=0),
+    limit: int = Query(PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
     session: AsyncSession = Depends(get_session),
-) -> list[SomedayOut]:
-    """The whole seeded catalog. Custom somedays are private to their owner and
-    are not listed here."""
-    stmt = select(Someday).where(Someday.slug.is_not(None)).order_by(Someday.title)
+) -> CatalogPage:
+    """One page of the seeded catalog. Custom somedays are private to their
+    owner and are not listed here.
+
+    This used to return everything. At 522 concepts that was merely wasteful; at
+    2,522 it is a multi-megabyte response the grid throws away all but two
+    screens of, so it pages. Ordering stays alphabetical: this is the browse
+    surface, where people are looking for a thing they already have in mind and
+    a stable A-Z is easier to scan than a ranking that moves. The deck is where
+    ranking belongs, and that is `GET /feed`.
+    """
+    filters = [Someday.slug.is_not(None)]
     if category:
-        stmt = stmt.where(Someday.category == category)
+        # Accept the older one-word names so a client mid-update still filters.
+        filters.append(Someday.category == canonical(category))
     if q:
-        stmt = stmt.where(Someday.title.ilike(f"%{q.strip()}%"))
-    rows = (await session.scalars(stmt)).all()
-    return [someday_out(row) for row in rows]
+        filters.append(Someday.title.ilike(f"%{q.strip()}%"))
+
+    total = await session.scalar(select(func.count()).select_from(Someday).where(*filters)) or 0
+    rows = (
+        await session.scalars(
+            select(Someday).where(*filters).order_by(Someday.title).offset(offset).limit(limit)
+        )
+    ).all()
+    served = offset + len(rows)
+    return CatalogPage(
+        items=[someday_out(row) for row in rows],
+        total=total,
+        next_offset=served if served < total else None,
+    )
 
 
 @router.get("/me/somedays", response_model=list[KeepOut])

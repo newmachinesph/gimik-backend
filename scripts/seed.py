@@ -27,6 +27,7 @@ from sqlalchemy import select
 
 from app.db import SessionLocal
 from app.models import Someday
+from app.taxonomy import canonical
 
 CATALOG_PATH = Path(__file__).resolve().parent.parent / "seed" / "catalog.json"
 
@@ -48,7 +49,7 @@ async def seed() -> tuple[int, int]:
                     Someday(
                         slug=entry["slug"],
                         title=entry["title"],
-                        category=entry["category"],
+                        category=canonical(entry["category"]),
                         domain=entry.get("domain"),
                         register=entry.get("register"),
                         party=entry.get("party", "any"),
@@ -59,7 +60,7 @@ async def seed() -> tuple[int, int]:
                 created += 1
             else:
                 row.title = entry["title"]
-                row.category = entry["category"]
+                row.category = canonical(entry["category"])
                 row.domain = entry.get("domain")
                 row.register = entry.get("register")
                 row.party = entry.get("party", "any")

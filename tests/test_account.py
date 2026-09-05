@@ -89,7 +89,7 @@ async def test_delete_account_actually_deletes_it(client, somedays):
 
     # Give the account something to lose, so a cascade failure would show.
     catalog = await client.get("/catalog")
-    someday_id = catalog.json()[0]["id"]
+    someday_id = catalog.json()["items"][0]["id"]
     kept = await client.put(
         f"/somedays/{someday_id}/keep", json={"open_to": ["friends"], "party_as": ["duo"]}, headers=headers
     )

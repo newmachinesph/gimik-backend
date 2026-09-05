@@ -113,9 +113,42 @@ class SomedayOut(BaseModel):
     slug: str | None
     title: str
     category: str
+    # The subcategory ("Hiking & Mountains"). The feed ranks on it, and a card
+    # that shows it reads as placed rather than loose in a category of 400.
+    domain: str | None = None
     party: str
     needs: list[str]
     artwork_url: str | None = None
+
+
+class FeedItemOut(BaseModel):
+    """A card, plus why it is here.
+
+    `reasons` is what lets the deck explain itself - "2 friends want this",
+    "worth another look" - which is both better product and the only practical
+    way to tell a mis-ranked feed from a working one from the outside.
+    """
+
+    someday: SomedayOut
+    pool: str
+    reasons: list[str] = Field(default_factory=list)
+
+
+class FeedOut(BaseModel):
+    items: list[FeedItemOut]
+    # True when every pool is empty: the client shows an end state rather than
+    # asking again and getting the same nothing.
+    exhausted: bool
+    pools: dict[str, int] = Field(default_factory=dict)
+
+
+class CatalogPage(BaseModel):
+    """One page of browse results. `total` drives the count line and the client
+    stops paging when `next_offset` is null."""
+
+    items: list[SomedayOut]
+    total: int
+    next_offset: int | None = None
 
 
 class Visibility(BaseModel):

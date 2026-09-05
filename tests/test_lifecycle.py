@@ -42,7 +42,11 @@ async def test_register_login_me(client):
 async def test_catalog_carries_minio_artwork(client, somedays):
     listing = await client.get("/catalog")
     assert listing.status_code == 200
-    rows = listing.json()
+    page = listing.json()
+    # The catalog pages now; at two rows there is nothing after the first page.
+    assert page["total"] == 2
+    assert page["next_offset"] is None
+    rows = page["items"]
     assert len(rows) == 2
     by_slug = {row["slug"]: row for row in rows}
     # The artwork URL points into the public catalog bucket the v1 stack seeded.

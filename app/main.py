@@ -9,7 +9,18 @@ from sqlalchemy import text
 
 from app.config import get_settings
 from app.db import engine
-from app.routers import auth, catalog, groups, media, places, plans, realtime, social, threads
+from app.routers import (
+    auth,
+    catalog,
+    feed,
+    groups,
+    media,
+    places,
+    plans,
+    realtime,
+    social,
+    threads,
+)
 
 settings = get_settings()
 log = logging.getLogger("gora")
@@ -63,6 +74,7 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(catalog.router)
+app.include_router(feed.router)
 app.include_router(social.router)
 app.include_router(groups.router)
 app.include_router(threads.router)
