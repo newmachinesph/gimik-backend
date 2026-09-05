@@ -160,6 +160,19 @@ class KeepIn(Visibility):
     pass
 
 
+class SomedayCreate(Visibility):
+    """A someday somebody wrote themselves, plus who it is open to.
+
+    Visibility is set at creation rather than after, because a custom someday is
+    kept by its author the moment it exists - writing it down *is* wanting it -
+    and a keep is what carries visibility. Creating one silently un-open would
+    make the author the only person who could ever see it.
+    """
+
+    title: str = Field(min_length=3, max_length=200)
+    category: str
+
+
 class KeepOut(BaseModel):
     someday: SomedayOut
     open_to: list[str]

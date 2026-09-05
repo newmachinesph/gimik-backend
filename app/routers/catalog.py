@@ -18,8 +18,17 @@ from app.db import get_session
 from app.deps import current_user
 from app.models import AUDIENCES, INVITE_PARTIES, GroupMember, Keep, Pass, Someday, User
 from app.routers.common import friend_ids, holder_out, someday_out, users_by_ids
-from app.schemas import CatalogPage, HolderOut, KeepIn, KeepOut, SomedayOut, Visibility
-from app.taxonomy import CATEGORIES, canonical
+from app.schemas import (
+    CatalogPage,
+    HolderOut,
+    KeepIn,
+    KeepOut,
+    SomedayCreate,
+    SomedayOut,
+    Visibility,
+)
+from app.services import ratelimit
+from app.taxonomy import CATEGORIES, canonical, is_canonical
 
 router = APIRouter(tags=["catalog"])
 
@@ -88,6 +97,80 @@ async def catalog(
         items=[someday_out(row) for row in rows],
         total=total,
         next_offset=served if served < total else None,
+    )
+
+
+@router.post(
+    "/somedays",
+    response_model=KeepOut,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(ratelimit.limiter(ratelimit.SOCIAL_WRITE))],
+)
+async def create_someday(
+    payload: SomedayCreate,
+    user: User = Depends(current_user),
+    session: AsyncSession = Depends(get_session),
+) -> KeepOut:
+    """Write your own someday. It is yours, kept, and visible on your terms.
+
+    The catalog is 2,522 concepts and still will not contain "drive to my lola's
+    town and find the bakery she talks about". Until now there was nowhere to put
+    a sentence like that: the column for it existed and the feed already knew how
+    to show other people's, but nothing could create one, so that pool was always
+    empty.
+
+    Three things happen at once, and they are one act rather than three:
+
+    - The row is written with `owner_id` set and no slug, which is what makes it
+      custom - no slug means no catalog artwork, because nobody drew one.
+    - It is kept immediately. Writing a someday down is wanting it; making the
+      author swipe on their own sentence would be theatre.
+    - The keep carries the visibility from the same form, which is what decides
+      whether anyone else ever sees it. `everyone` reaches the same city, and
+      `friends` reaches friends - the identical rule the rest of the app uses.
+
+    Creating the same sentence twice returns the first one rather than a second
+    row. People retype things, and two identical somedays would split their own
+    holders between them.
+    """
+    _check_visibility(payload)
+    category = canonical(payload.category)
+    if not is_canonical(category):
+        raise HTTPException(status_code=422, detail="Unknown category")
+
+    title = payload.title.strip()
+    existing = await session.scalar(
+        select(Someday).where(
+            Someday.owner_id == user.id,
+            Someday.slug.is_(None),
+            func.lower(Someday.title) == title.lower(),
+        )
+    )
+    someday = existing
+    if someday is None:
+        someday = Someday(
+            title=title,
+            category=category,
+            owner_id=user.id,
+            party="any",
+            register="custom",
+            needs=[],
+        )
+        session.add(someday)
+        await session.flush()
+
+    keep_row = await session.get(Keep, (user.id, someday.id))
+    if keep_row is None:
+        keep_row = Keep(user_id=user.id, someday_id=someday.id)
+        session.add(keep_row)
+    keep_row.open_to = payload.open_to
+    keep_row.party_as = payload.party_as
+    await session.commit()
+    return KeepOut(
+        someday=someday_out(someday),
+        open_to=keep_row.open_to,
+        party_as=keep_row.party_as,
+        kept_at=keep_row.created_at,
     )
 
 

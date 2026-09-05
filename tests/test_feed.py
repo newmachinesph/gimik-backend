@@ -345,3 +345,70 @@ def test_diversify_breaks_up_a_run_of_one_category():
     assert len({c.someday.category for c in picked}) >= 2, (
         "a diversity pass that returns one category is not doing anything"
     )
+
+
+# ------------------------------------------------- somedays people write
+
+
+async def test_writing_your_own_someday_keeps_it_and_leaves_it_off_the_catalog(client, make_user):
+    """A custom someday is yours, wanted, and not editorial content."""
+    headers = await make_user("Author")
+    response = await client.post(
+        "/somedays",
+        json={
+            "title": "Drive to my lola's town and find her bakery",
+            "category": "City & Social",
+            "open_to": ["friends"],
+            "party_as": ["duo"],
+        },
+        headers=headers,
+    )
+    assert response.status_code == 201, response.text
+    made = response.json()
+    assert made["someday"]["slug"] is None, "a custom someday has no slug"
+    assert made["someday"]["artwork_url"] is None, "and therefore no artwork"
+    assert made["open_to"] == ["friends"]
+
+    mine = (await client.get("/me/somedays", headers=headers)).json()
+    assert any(k["someday"]["id"] == made["someday"]["id"] for k in mine), (
+        "writing it down is wanting it - the author should not have to swipe on it"
+    )
+
+    listing = (await client.get("/catalog", params={"q": "lola"})).json()
+    assert listing["total"] == 0, "someone's own sentence is not part of the browsable catalog"
+
+
+async def test_retyping_the_same_someday_does_not_make_a_second_one(client, make_user):
+    """Two identical rows would split their own holders between them."""
+    headers = await make_user("Repeater")
+    body = {
+        "title": "Learn to bake pandesal",
+        "category": "Food & Drink",
+        "open_to": ["friends"],
+        "party_as": ["duo"],
+    }
+    first = (await client.post("/somedays", json=body, headers=headers)).json()
+    second = (await client.post("/somedays", json=body, headers=headers)).json()
+    assert first["someday"]["id"] == second["someday"]["id"]
+
+
+async def test_a_someday_cannot_be_filed_under_an_invented_category(client, make_user):
+    headers = await make_user("Miscategorising")
+    response = await client.post(
+        "/somedays",
+        json={"title": "Something entirely new", "category": "Interpretive Dance", "open_to": [], "party_as": []},
+        headers=headers,
+    )
+    assert response.status_code == 422
+
+
+async def test_an_older_category_name_is_accepted_and_stored_canonically(client, make_user):
+    """A client mid-update still says "Food"; it means Food & Drink."""
+    headers = await make_user("Legacy")
+    response = await client.post(
+        "/somedays",
+        json={"title": "Find the best lugaw in town", "category": "Food", "open_to": [], "party_as": []},
+        headers=headers,
+    )
+    assert response.status_code == 201, response.text
+    assert response.json()["someday"]["category"] == "Food & Drink"
