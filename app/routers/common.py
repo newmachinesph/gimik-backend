@@ -7,7 +7,7 @@ import uuid
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import Friendship, HiddenUser, Someday, User
+from app.models import Friendship, GroupMember, HiddenUser, Someday, User
 from app.schemas import HolderOut, SomedayOut
 from app.services import storage
 
@@ -41,6 +41,23 @@ async def friend_ids(session: AsyncSession, user_id: uuid.UUID) -> set[uuid.UUID
     for requester, addressee in rows:
         ids.add(addressee if requester == user_id else requester)
     return ids
+
+
+async def group_peer_ids(session: AsyncSession, user_id: uuid.UUID) -> set[uuid.UUID]:
+    """Everyone sharing at least one group with this person.
+
+    One query for the whole set, rather than one per candidate. The holders list
+    used to ask "do we share a group?" inside its loop, which is a query per
+    holder and turns a popular someday into a few hundred sequential round trips
+    to answer a question whose answer never changes during the request.
+    """
+    my_groups = select(GroupMember.group_id).where(GroupMember.user_id == user_id)
+    rows = await session.scalars(
+        select(GroupMember.user_id).where(
+            GroupMember.group_id.in_(my_groups), GroupMember.user_id != user_id
+        )
+    )
+    return set(rows.all())
 
 
 async def hidden_ids(session: AsyncSession, user_id: uuid.UUID) -> set[uuid.UUID]:

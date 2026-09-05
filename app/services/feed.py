@@ -79,7 +79,8 @@ from dataclasses import dataclass, field
 from sqlalchemy import Select, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import Friendship, GroupMember, Keep, Pass, Someday, User
+from app.models import Friendship, Keep, Pass, Someday, User
+from app.routers.common import group_peer_ids
 
 # --- weights -------------------------------------------------------------
 # Tuned by hand against the seeded world rather than learned, and deliberately
@@ -231,17 +232,7 @@ async def _peer_ids(session: AsyncSession, user_id: uuid.UUID) -> tuple[set, set
     ).all()
     friends = {addressee if requester == user_id else requester for requester, addressee in rows}
 
-    my_groups = select(GroupMember.group_id).where(GroupMember.user_id == user_id)
-    peers = set(
-        (
-            await session.scalars(
-                select(GroupMember.user_id).where(
-                    GroupMember.group_id.in_(my_groups), GroupMember.user_id != user_id
-                )
-            )
-        ).all()
-    )
-    return friends, peers
+    return friends, await group_peer_ids(session, user_id)
 
 
 async def load_taste(session: AsyncSession, user: User) -> Taste:

@@ -16,8 +16,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_session
 from app.deps import current_user
-from app.models import AUDIENCES, INVITE_PARTIES, GroupMember, Keep, Pass, Someday, User
-from app.routers.common import friend_ids, holder_out, someday_out, users_by_ids
+from app.models import AUDIENCES, INVITE_PARTIES, Keep, Pass, Someday, User
+from app.routers.common import (
+    friend_ids,
+    group_peer_ids,
+    holder_out,
+    someday_out,
+    users_by_ids,
+)
 from app.schemas import (
     CatalogPage,
     HolderOut,
@@ -309,13 +315,7 @@ async def holders(
         return []
 
     my_friends = await friend_ids(session, user.id)
-    my_groups = set(
-        (
-            await session.scalars(
-                select(GroupMember.group_id).where(GroupMember.user_id == user.id)
-            )
-        ).all()
-    )
+    my_peers = await group_peer_ids(session, user.id)
     holders_users = await users_by_ids(session, {keep.user_id for keep in keeps})
 
     visible: list[HolderOut] = []
@@ -327,13 +327,8 @@ async def holders(
         allowed = False
         if "friends" in open_to and holder.id in my_friends:
             allowed = True
-        if not allowed and "groups" in open_to and my_groups:
-            shared = await session.scalar(
-                select(GroupMember.group_id)
-                .where(GroupMember.user_id == holder.id, GroupMember.group_id.in_(my_groups))
-                .limit(1)
-            )
-            allowed = shared is not None
+        if not allowed and "groups" in open_to:
+            allowed = holder.id in my_peers
         if not allowed and "everyone" in open_to and holder.city and holder.city == user.city:
             allowed = True
         if allowed:
