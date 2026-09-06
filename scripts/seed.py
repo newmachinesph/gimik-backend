@@ -55,6 +55,10 @@ async def seed() -> tuple[int, int]:
                         party=entry.get("party", "any"),
                         location=entry.get("location"),
                         needs=entry.get("needs", []),
+                        # Authored in the catalog and previously dropped here,
+                        # which is why twenty-nine trackable concepts shipped as
+                        # if one evening would finish them.
+                        completion=entry.get("completion", "single"),
                     )
                 )
                 created += 1
@@ -66,6 +70,7 @@ async def seed() -> tuple[int, int]:
                 row.party = entry.get("party", "any")
                 row.location = entry.get("location")
                 row.needs = entry.get("needs", [])
+                row.completion = entry.get("completion", "single")
                 updated += 1
         await session.commit()
     return created, updated

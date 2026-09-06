@@ -26,7 +26,7 @@ from app.models.base import utcnow
 from app.routers.common import holder_out, someday_out, users_by_ids
 from app.routers.social import _open_solo_thread
 from app.schemas import AttachmentIn, MessageIn, MessageOut, ThreadDetailOut, ThreadOut
-from app.services import ratelimit, realtime
+from app.services import push, ratelimit, realtime
 
 router = APIRouter(prefix="/threads", tags=["threads"])
 
@@ -210,6 +210,14 @@ async def send_message(
     await realtime.publish(realtime.thread_channel(thread_id), "message", event)
     for recipient in others:
         await realtime.publish(realtime.user_channel(recipient), "message", event)
+    # Everyone in the thread but its author, on the devices they actually carry.
+    await push.send_to(
+        session,
+        list(others),
+        title=user.name,
+        body=message.body[:120],
+        data={"kind": "message", "threadId": str(thread_id)},
+    )
     return out
 
 

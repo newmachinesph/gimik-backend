@@ -17,6 +17,7 @@ from app.routers import (
     media,
     places,
     plans,
+    push,
     realtime,
     social,
     threads,
@@ -81,6 +82,7 @@ app.include_router(threads.router)
 app.include_router(plans.router)
 app.include_router(media.router)
 app.include_router(places.router)
+app.include_router(push.router)
 app.include_router(realtime.router)
 
 

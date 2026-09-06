@@ -43,9 +43,14 @@ from app.schemas import (
     PhotoOut,
     ReportIn,
 )
-from app.services import ratelimit, realtime, storage
+from app.services import push, ratelimit, realtime, storage
 
 router = APIRouter(tags=["social"])
+
+# Two characters is enough to be looking for somebody and short enough to be
+# useless for enumerating a user base one letter at a time.
+SEARCH_FLOOR = 2
+SEARCH_LIMIT = 20
 
 
 # ---------------------------------------------------------------------- invites
@@ -222,6 +227,15 @@ async def send_invite(
             "at": invite.created_at.isoformat(),
         },
     )
+    # And to the phone in their pocket. Ably only reaches an app that is open,
+    # and an invite nobody sees is an invite that lapses in a week.
+    await push.send_to(
+        session,
+        [target.id],
+        title=f"{user.name} wants to do something",
+        body=someday.title,
+        data={"kind": "invite", "inviteId": str(invite.id)},
+    )
     return InviteOut(
         id=invite.id,
         from_user=holder_out(user),
@@ -345,6 +359,13 @@ async def request_friend(
         return {"status": existing.status}
     session.add(Friendship(requester_id=user.id, addressee_id=user_id))
     await session.commit()
+    await push.send_to(
+        session,
+        [user_id],
+        title="New friend request",
+        body=f"{user.name} wants to be friends",
+        data={"kind": "friend_request"},
+    )
     return {"status": "pending"}
 
 
@@ -436,6 +457,50 @@ async def unhide(
 
 
 # ---------------------------------------------------------------------- people
+
+
+@router.get(
+    "/people",
+    response_model=list[HolderOut],
+    dependencies=[Depends(ratelimit.limiter(ratelimit.GENERAL))],
+)
+async def find_people(
+    q: str,
+    user: User = Depends(current_user),
+    session: AsyncSession = Depends(get_session),
+) -> list[HolderOut]:
+    """Find someone by name or handle.
+
+    Until this existed a new account could not reach another person at all: the
+    only ways in were a group invite link or already knowing somebody's exact
+    handle. Everything social the app can do - keeps becoming visible, invites
+    arriving, threads - sat behind that, so half the product waited on the user
+    to go and recruit a friend by other means.
+
+    What it deliberately does not do is act as a directory. There is no listing
+    without a query, the query has a floor so it cannot be walked one letter at
+    a time, results are capped, and it answers on name and handle only - never
+    on email, which would turn the endpoint into a way of asking "does this
+    person have an account".
+    """
+    needle = q.strip()
+    if len(needle) < SEARCH_FLOOR:
+        return []
+    hidden = await hidden_ids(session, user.id)
+    like = f"%{needle}%"
+    rows = (
+        await session.scalars(
+            select(User)
+            .where(
+                User.id != user.id,
+                User.is_active.is_(True),
+                or_(User.name.ilike(like), User.handle.ilike(like)),
+            )
+            .order_by(User.name)
+            .limit(SEARCH_LIMIT)
+        )
+    ).all()
+    return [holder_out(person) for person in rows if person.id not in hidden]
 
 
 @router.get("/people/{handle}", response_model=PersonOut)

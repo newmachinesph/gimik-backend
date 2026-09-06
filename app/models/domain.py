@@ -40,6 +40,16 @@ THREAD_KINDS = {"solo", "group", "plan"}
 SPLITS = {"kkb", "equal", "treat", "others"}
 TIME_SLOTS = {"Morning", "Afternoon", "Evening"}
 ATTACHMENT_TYPES = {"someday", "date", "place"}
+# How a someday finishes. "single" is one evening and is the overwhelming
+# majority; the rest need progress kept against them (see SomedayProgress).
+COMPLETIONS = {"single", "count", "distance", "duration", "streak", "percentage",
+               "custom", "all_members"}
+# When something is actually pleasant here. Deliberately coarse - the Philippines
+# runs on two seasons, not four - and nullable, because it is unknown for most of
+# the catalog rather than assumed.
+SEASONS = {"dry", "wet", "any"}
+# Rough cost to take part, per person. Nullable for the same reason.
+COST_BANDS = {"free", "low", "mid", "high"}
 
 
 class User(Base, IdMixin, CreatedMixin):
@@ -130,6 +140,17 @@ class Someday(Base, IdMixin, CreatedMixin):
     party: Mapped[str] = mapped_column(String(10), default="any", nullable=False)
     location: Mapped[str | None] = mapped_column(String(20), nullable=True)
     needs: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
+    # Authored in the catalog and, until now, dropped by the seeder. Most rows
+    # are "single"; the handful that are not are the difference between a
+    # challenge you can track and a card that lies about being finishable.
+    completion: Mapped[str] = mapped_column(String(16), default="single", nullable=False)
+    target: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    # Both nullable and both mostly empty on purpose. The mechanism to rank on
+    # season and to filter on cost is worth having; inventing a season and a
+    # price for 2,522 real activities is not, because somebody plans an
+    # afternoon around a number that was guessed. Populate from real data.
+    season: Mapped[str | None] = mapped_column(String(8), nullable=True)
+    cost_band: Mapped[str | None] = mapped_column(String(8), nullable=True)
     owner_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("users.id", ondelete="SET NULL"), nullable=True
     )
@@ -391,6 +412,62 @@ class JournalEntry(Base, IdMixin, CreatedMixin):
     )
     body: Mapped[str] = mapped_column(Text, default="", nullable=False)
     photo_key: Mapped[str | None] = mapped_column(String(255), nullable=True)
+
+
+class PushToken(Base, IdMixin, CreatedMixin):
+    """Where to reach someone when the app is closed.
+
+    The whole loop waits on another person answering an invite, and until now
+    that message only existed inside a running app - Ably delivers to a live
+    connection and nowhere else. An invite arriving while the phone was in a
+    pocket stayed invisible until its recipient happened to open Gora, and
+    invites lapse after a week.
+
+    One row per device, keyed by the Expo push token. A token is not a secret
+    but it is a way to reach a person, so it is deleted on sign-out rather than
+    left behind on a shared handset.
+    """
+
+    __tablename__ = "push_tokens"
+    __table_args__ = (UniqueConstraint("token"),)
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    token: Mapped[str] = mapped_column(String(255), nullable=False)
+    platform: Mapped[str] = mapped_column(String(10), default="android", nullable=False)
+    # Bumped whenever the device checks in, so a token nobody has presented in
+    # months can be swept without guessing.
+    seen_at: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), default=lambda: dt.datetime.now(dt.UTC), nullable=False
+    )
+
+
+class SomedayProgress(Base, CreatedMixin):
+    """How far along a someday that cannot be finished in one sitting.
+
+    Most somedays are done once and that is that. A few are not: the catalog has
+    always carried a `completion` of count, distance, duration, streak or
+    percentage on twenty-nine concepts - "100 islands in a year", "30 day plank
+    challenge" - and the seeder dropped that column on the floor, so the app
+    offered them as though a single evening would finish them.
+
+    `count` is whatever the unit is (islands, days, kilometres); `target` is
+    copied from the someday when progress starts, so moving the catalog's
+    goalposts later cannot silently rewrite somebody's history.
+    """
+
+    __tablename__ = "someday_progress"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    someday_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("somedays.id", ondelete="CASCADE"), primary_key=True
+    )
+    count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    target: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    last_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
 class Report(Base, IdMixin, CreatedMixin):

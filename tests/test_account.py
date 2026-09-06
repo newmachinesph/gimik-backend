@@ -110,3 +110,74 @@ async def test_delete_account_actually_deletes_it(client, somedays):
         "/auth/register", json={"email": "rita@test.dev", "password": "third-password-1", "name": "Rita"}
     )
     assert again.status_code == 201
+
+
+# ------------------------------------------------------- reaching a device
+
+
+async def test_a_device_registers_and_moves_between_accounts(client, make_user):
+    """A push token is a handset, not a person.
+
+    The same token arriving for a second account means somebody signed out of
+    that phone and somebody else signed in. The row has to move, or the previous
+    user keeps receiving the new one's notifications on a handset they no longer
+    hold.
+    """
+    from sqlalchemy import select
+
+    from app.models import PushToken
+
+    first = await make_user("First")
+    second = await make_user("Second")
+    token = {"token": "ExponentPushToken[aaaaaaaaaaaaaaaaaaaaaa]", "platform": "android"}
+
+    assert (await client.put("/push/tokens", json=token, headers=first)).status_code == 204
+    assert (await client.put("/push/tokens", json=token, headers=second)).status_code == 204
+
+    async with client.sessionmaker() as session:
+        rows = (await session.scalars(select(PushToken))).all()
+    assert len(rows) == 1, "a handset is one row however many people sign in on it"
+
+    me = (await client.get("/auth/me", headers=second)).json()
+    assert str(rows[0].user_id) == me["id"], "and it belongs to whoever signed in last"
+
+
+async def test_forgetting_a_device_leaves_other_devices_alone(client, make_user):
+    """Signing out of a borrowed phone must not silence the one in your pocket."""
+    from sqlalchemy import select
+
+    from app.models import PushToken
+
+    headers = await make_user("Owner")
+    mine = {"token": "ExponentPushToken[mmmmmmmmmmmmmmmmmmmmmm]", "platform": "android"}
+    borrowed = {"token": "ExponentPushToken[bbbbbbbbbbbbbbbbbbbbbb]", "platform": "android"}
+    await client.put("/push/tokens", json=mine, headers=headers)
+    await client.put("/push/tokens", json=borrowed, headers=headers)
+
+    response = await client.request("DELETE", "/push/tokens", json=borrowed, headers=headers)
+    assert response.status_code == 204
+
+    async with client.sessionmaker() as session:
+        left = (await session.scalars(select(PushToken.token))).all()
+    assert left == [mine["token"]]
+
+
+async def test_sending_to_nobody_touches_no_network(client, make_user):
+    """The overwhelmingly common case: an account with no registered device.
+
+    It must short-circuit before the HTTP client is ever constructed - this
+    suite has no network, so anything else would fail here rather than in
+    production, which is at least the right order to find out.
+    """
+    from app.security import decode_token
+    from app.services import push
+
+    headers = await make_user("Unreachable")
+    import uuid as _uuid
+
+    user_id = _uuid.UUID(
+        decode_token(headers["Authorization"].split(" ", 1)[1], expect="access")["sub"]
+    )
+    async with client.sessionmaker() as session:
+        assert await push.send_to(session, [user_id], title="hi", body="there") == 0
+        assert await push.send_to(session, [], title="hi", body="there") == 0

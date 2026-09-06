@@ -147,6 +147,13 @@ class FeedOut(BaseModel):
     pools: dict[str, int] = Field(default_factory=dict)
 
 
+class PushTokenIn(BaseModel):
+    """A device asking to be reachable when the app is not open."""
+
+    token: str = Field(min_length=8, max_length=255)
+    platform: str = Field(default="android", max_length=10)
+
+
 class CatalogPage(BaseModel):
     """One page of browse results. `total` drives the count line and the client
     stops paging when `next_offset` is null."""
