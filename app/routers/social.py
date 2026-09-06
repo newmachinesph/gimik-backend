@@ -26,6 +26,7 @@ from app.models import (
     HiddenUser,
     Invite,
     Keep,
+    Plan,
     Report,
     Someday,
     Thread,
@@ -526,6 +527,27 @@ async def person(
         (await session.scalars(select(Keep.someday_id).where(Keep.user_id == user.id))).all()
     )
     somedays = [someday_out(someday) for _, someday in their_keeps]
+    # What they have finished. Only the fact of it: the journal entry attached
+    # to a done plan is private and stays that way.
+    # Ordered newest-first, deduplicated in Python rather than with DISTINCT:
+    # Postgres refuses SELECT DISTINCT alongside an ORDER BY whose expression is
+    # not in the select list, and SQLite happily allows it - so the test suite
+    # passed and the real database did not.
+    done_rows = (
+        await session.execute(
+            select(Someday, Plan.done_at)
+            .join(Plan, Plan.someday_id == Someday.id)
+            .where(Plan.owner_id == target.id, Plan.done_at.is_not(None))
+            .order_by(Plan.done_at.desc())
+        )
+    ).all()
+    seen: set = set()
+    record = []
+    for someday, _done_at in done_rows:
+        if someday.id in seen:
+            continue
+        seen.add(someday.id)
+        record.append(someday_out(someday))
     in_common = [someday_out(someday) for _, someday in their_keeps if someday.id in mine]
 
     accepted = await friend_ids(session, user.id)
@@ -559,6 +581,7 @@ async def person(
         ],
         somedays=somedays,
         in_common=in_common,
+        record=record,
         is_friend=target.id in accepted,
         request_pending=pending is not None,
     )

@@ -419,6 +419,11 @@ class PersonOut(BaseModel):
     photos: list[PhotoOut]
     somedays: list[SomedayOut]
     in_common: list[SomedayOut]
+    # Things they have actually done. The journal stays private - the words and
+    # the photograph are theirs - but that a plan happened is the one piece of
+    # evidence this app has that any of it is real, and hiding it entirely left
+    # a profile that could only ever promise.
+    record: list[SomedayOut]
     is_friend: bool
     request_pending: bool
 

@@ -17,6 +17,7 @@ from app.models import (
     TIME_SLOTS,
     JournalEntry,
     Keep,
+    Place,
     Plan,
     PlanPerson,
     Someday,
@@ -25,6 +26,7 @@ from app.models import (
     User,
 )
 from app.models.base import utcnow
+from app.routers import places
 from app.routers.common import holder_out, someday_out, users_by_ids
 from app.schemas import JournalIn, JournalOut, PlanCreate, PlanOut, PlanPatch
 from app.services import storage
@@ -120,6 +122,13 @@ async def lock(
     )
     session.add(plan)
     await session.flush()
+    # A place becomes worth locating the moment somebody commits to going. One
+    # Details call, cached on the row - see places.ensure_coordinates for why it
+    # does not happen while searching.
+    if plan.place_id is not None:
+        chosen = await session.get(Place, plan.place_id)
+        if chosen is not None:
+            await places.ensure_coordinates(session, chosen)
     member_ids = {user.id, *payload.people}
     for member_id in member_ids:
         if member_id != user.id and await session.get(User, member_id) is None:

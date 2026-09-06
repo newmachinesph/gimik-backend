@@ -113,6 +113,54 @@ async def _provider_search(q: str, session_token: str | None) -> list[dict]:
         return []
 
 
+DETAILS_URL = "https://places.googleapis.com/v1/places/"
+
+
+async def ensure_coordinates(session: AsyncSession, place: Place) -> Place:
+    """Fill in a place's latitude and longitude, once, on first real use.
+
+    Autocomplete does not return coordinates - only an id and two lines of text
+    - so the columns have been sitting nullable and empty since they were added,
+    with a comment admitting nothing read them. Getting them means a Place
+    Details call, and the reason it was never done per search result is the
+    bill: a debounced search is many predictions and one of them gets chosen.
+
+    So this runs when a place is committed to a plan rather than when it is
+    listed. One call per plan, cached on the row forever after, which is what
+    Google's terms allow for an id even though the display text has to be
+    refreshed.
+
+    Failure is not an error. A place without coordinates is exactly what the app
+    had before, and a plan should never fail to save because a maps API was
+    slow.
+    """
+    if place.lat is not None and place.lon is not None:
+        return place
+    if not settings.google_maps_api_key or place.provider != PROVIDER:
+        return place
+    try:
+        async with httpx.AsyncClient(timeout=6.0) as client:
+            response = await client.get(
+                DETAILS_URL + place.provider_id,
+                headers={
+                    "X-Goog-Api-Key": settings.google_maps_api_key,
+                    "X-Goog-FieldMask": "location",
+                },
+            )
+        if response.status_code != 200:
+            log.warning("place details %s: %s", response.status_code, response.text[:200])
+            return place
+        location = response.json().get("location") or {}
+        lat, lon = location.get("latitude"), location.get("longitude")
+        if lat is None or lon is None:
+            return place
+        place.lat, place.lon = float(lat), float(lon)
+        await session.commit()
+    except httpx.HTTPError:
+        log.exception("place details failed")
+    return place
+
+
 def _prediction(suggestion: dict) -> tuple[str, str, str] | None:
     """(place_id, name, area) from one suggestion, or None if it is unusable."""
     prediction = suggestion.get("placePrediction") or {}
