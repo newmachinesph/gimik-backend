@@ -116,6 +116,11 @@ class SomedayOut(BaseModel):
     # The subcategory ("Hiking & Mountains"). The feed ranks on it, and a card
     # that shows it reads as placed rather than loose in a category of 400.
     domain: str | None = None
+    # "single" for almost everything. Anything else is a thing you chip at, and
+    # the card has to say so rather than offering a Lock-a-date button for
+    # "100 islands in a year".
+    completion: str = "single"
+    target: int | None = None
     party: str
     needs: list[str]
     artwork_url: str | None = None
@@ -145,6 +150,22 @@ class FeedOut(BaseModel):
     # asking again and getting the same nothing.
     exhausted: bool
     pools: dict[str, int] = Field(default_factory=dict)
+
+
+class ProgressIn(BaseModel):
+    """One more island, day, or kilometre. Negative to correct a mistake."""
+
+    step: int = Field(default=1, ge=-1000, le=1000)
+
+
+class ProgressOut(BaseModel):
+    someday_id: uuid.UUID
+    count: int
+    target: int | None
+    last_at: dt.datetime | None
+    # True once count has met the target - or, when a concept has no number
+    # attached, once the person says so by marking the plan done.
+    complete: bool
 
 
 class PushTokenIn(BaseModel):
@@ -190,6 +211,9 @@ class KeepOut(BaseModel):
     open_to: list[str]
     party_as: list[str]
     kept_at: dt.datetime
+    # Only ever set for a someday that cannot be finished in one sitting, which
+    # keeps a list of ordinary keeps from carrying a column of nulls.
+    progress: ProgressOut | None = None
 
 
 class HolderOut(BaseModel):

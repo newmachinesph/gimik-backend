@@ -97,6 +97,12 @@ W_SOCIAL = 0.8
 W_POPULARITY = 0.35
 W_INTEREST = 0.45
 W_EXPLORE = 0.25
+# "People who kept this also kept that." Below taste and social on purpose: it
+# is a hint drawn from strangers, and it should colour an order rather than
+# decide one. It is also the only signal that can introduce something nobody in
+# your life has touched, which is what stops the deck narrowing to your friends'
+# taste over time.
+W_KINDRED = 0.5
 
 # How hard a repeated category (or subcategory) is charged inside one page.
 #
@@ -159,6 +165,7 @@ class Candidate:
     domain: str | None
     keeps: int = 0
     friend_keeps: int = 0
+    kindred_keeps: int = 0
     pool: str = CATALOG
     score: float = 0.0
     reasons: list[str] = field(default_factory=list)
@@ -244,6 +251,43 @@ async def _peer_ids(session: AsyncSession, user_id: uuid.UUID) -> tuple[set, set
     friends = {addressee if requester == user_id else requester for requester, addressee in rows}
 
     return friends, await group_peer_ids(session, user_id)
+
+
+# How many like-minded strangers to consider. Bounded because a popular someday
+# has thousands of holders and the top few hundred say the same thing as all of
+# them.
+KINDRED_LIMIT = 300
+
+
+async def kindred_counts(session: AsyncSession, user_id: uuid.UUID) -> dict[uuid.UUID, int]:
+    """For each someday, how many people who share your taste have kept it.
+
+    "Share your taste" is defined narrowly and cheaply: they kept something you
+    kept. That is a weaker claim than a real similarity model and a much better
+    one than popularity, which only ever says what is popular.
+
+    Two queries. The first finds the people, the second counts what they kept.
+    Returning a plain dict keeps the scoring loop free of database access.
+    """
+    mine = select(Keep.someday_id).where(Keep.user_id == user_id)
+    peers = (
+        await session.scalars(
+            select(Keep.user_id)
+            .where(Keep.someday_id.in_(mine), Keep.user_id != user_id)
+            .distinct()
+            .limit(KINDRED_LIMIT)
+        )
+    ).all()
+    if not peers:
+        return {}
+    rows = (
+        await session.execute(
+            select(Keep.someday_id, func.count(Keep.user_id))
+            .where(Keep.user_id.in_(peers))
+            .group_by(Keep.someday_id)
+        )
+    ).all()
+    return dict(rows)
 
 
 async def load_taste(session: AsyncSession, user: User) -> Taste:
@@ -471,7 +515,13 @@ async def _second_look_pool(
     return _rows_to_candidates(rows, SECOND_LOOK)
 
 
-def score_candidates(candidates: list[Candidate], user: User, taste: Taste, today: dt.date) -> None:
+def score_candidates(
+    candidates: list[Candidate],
+    user: User,
+    taste: Taste,
+    today: dt.date,
+    kindred: dict[uuid.UUID, int] | None = None,
+) -> None:
     """Assign every candidate its score and the reasons behind it, in place."""
     ceiling = max((c.keeps for c in candidates), default=0)
     for candidate in candidates:
@@ -483,7 +533,18 @@ def score_candidates(candidates: list[Candidate], user: User, taste: Taste, toda
             else 0.0
         )
         interest = taste.interest_overlap(candidate.title, candidate.category, candidate.domain)
+        candidate.kindred_keeps = (kindred or {}).get(candidate.someday_id, 0)
+        # Saturating like the friend signal: that six like-minded people kept
+        # this rather than one is the whole message, and sixty is not ten times
+        # the message.
+        kin = (
+            min(1.0, math.log1p(candidate.kindred_keeps) / math.log(6))
+            if candidate.kindred_keeps
+            else 0.0
+        )
         candidate.score = (
+            W_KINDRED * kin
+            +
             W_TASTE * taste.score(candidate.category, candidate.domain)
             + W_SOCIAL * social
             + W_POPULARITY * _popularity(candidate.keeps, ceiling)
@@ -499,6 +560,8 @@ def score_candidates(candidates: list[Candidate], user: User, taste: Taste, toda
             candidate.reasons.append("community")
         if interest > 0:
             candidate.reasons.append("interest")
+        if candidate.kindred_keeps:
+            candidate.reasons.append("kindred")
 
 
 def diversify(candidates: list[Candidate], limit: int) -> list[Candidate]:
@@ -573,6 +636,7 @@ async def build_feed(
         pools[SECOND_LOOK] = len(second)
         candidates += second
 
-    score_candidates(candidates, user, taste, today)
+    kindred = await kindred_counts(session, user.id)
+    score_candidates(candidates, user, taste, today, kindred)
     items = await hydrate(session, diversify(candidates, limit))
     return FeedPage(items=items, exhausted=not items, pools=pools)

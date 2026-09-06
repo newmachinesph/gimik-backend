@@ -8,6 +8,7 @@ city when open to Everyone.
 
 from __future__ import annotations
 
+import datetime as dt
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
@@ -16,7 +17,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_session
 from app.deps import current_user
-from app.models import AUDIENCES, INVITE_PARTIES, Keep, Pass, Someday, User
+from app.models import (
+    AUDIENCES,
+    INVITE_PARTIES,
+    Keep,
+    Pass,
+    Someday,
+    SomedayProgress,
+    User,
+)
 from app.routers.common import (
     friend_ids,
     group_peer_ids,
@@ -29,6 +38,8 @@ from app.schemas import (
     HolderOut,
     KeepIn,
     KeepOut,
+    ProgressIn,
+    ProgressOut,
     SomedayCreate,
     Visibility,
 )
@@ -192,12 +203,33 @@ async def my_somedays(
             .order_by(Keep.created_at)
         )
     ).all()
+    # One extra query for the whole list rather than one per row: most keeps are
+    # ordinary and carry no progress at all.
+    trackable = [someday.id for _, someday in rows if someday.completion != "single"]
+    progress: dict[uuid.UUID, SomedayProgress] = {}
+    if trackable:
+        progress = {
+            row.someday_id: row
+            for row in (
+                await session.scalars(
+                    select(SomedayProgress).where(
+                        SomedayProgress.user_id == user.id,
+                        SomedayProgress.someday_id.in_(trackable),
+                    )
+                )
+            ).all()
+        }
     return [
         KeepOut(
             someday=someday_out(someday),
             open_to=keep.open_to,
             party_as=keep.party_as,
             kept_at=keep.created_at,
+            progress=(
+                _progress_out(progress[someday.id], someday)
+                if someday.id in progress
+                else None
+            ),
         )
         for keep, someday in rows
     ]
@@ -291,6 +323,73 @@ async def set_visibility(
         party_as=existing.party_as,
         kept_at=existing.created_at,
     )
+
+
+def _progress_out(row: SomedayProgress, someday: Someday) -> ProgressOut:
+    target = row.target if row.target is not None else someday.target
+    return ProgressOut(
+        someday_id=someday.id,
+        count=row.count,
+        target=target,
+        last_at=row.last_at,
+        complete=target is not None and row.count >= target,
+    )
+
+
+@router.post("/somedays/{someday_id}/progress", response_model=ProgressOut)
+async def add_progress(
+    someday_id: uuid.UUID,
+    payload: ProgressIn,
+    user: User = Depends(current_user),
+    session: AsyncSession = Depends(get_session),
+) -> ProgressOut:
+    """Chip away at something that cannot be done in one evening.
+
+    The catalog has carried a `completion` of count, distance, duration, streak
+    or percentage since it was written, and until now nothing could record a
+    single island of "100 islands in a year" - the app offered a Lock-a-date
+    button and called it finished. This is the missing verb.
+
+    Refused on a `single` someday rather than quietly accepted: a count against
+    a thing that happens once means the caller has misunderstood the concept,
+    and silently storing it would leave a number nothing knows how to show.
+
+    `target` is copied from the catalog the first time somebody starts, so
+    editing the catalog later cannot rewrite what a person was working toward.
+    """
+    someday = await _someday(session, someday_id)
+    if someday.completion == "single":
+        raise HTTPException(status_code=409, detail="This one happens once")
+
+    row = await session.get(SomedayProgress, (user.id, someday_id))
+    if row is None:
+        # count=0 explicitly: the column default is applied by the database at
+        # INSERT, so a freshly constructed row still reads None in Python and
+        # the first increment would be None + 1.
+        row = SomedayProgress(
+            user_id=user.id, someday_id=someday_id, target=someday.target, count=0
+        )
+        session.add(row)
+    # Never below zero: an undo past the start is a correction, not a debt.
+    row.count = max(0, row.count + payload.step)
+    row.last_at = dt.datetime.now(dt.UTC)
+    await session.commit()
+    return _progress_out(row, someday)
+
+
+@router.get("/somedays/{someday_id}/progress", response_model=ProgressOut)
+async def read_progress(
+    someday_id: uuid.UUID,
+    user: User = Depends(current_user),
+    session: AsyncSession = Depends(get_session),
+) -> ProgressOut:
+    someday = await _someday(session, someday_id)
+    row = await session.get(SomedayProgress, (user.id, someday_id))
+    if row is None:
+        return ProgressOut(
+            someday_id=someday_id, count=0, target=someday.target, last_at=None, complete=False
+        )
+    return _progress_out(row, someday)
 
 
 @router.get("/somedays/{someday_id}/holders", response_model=list[HolderOut])
