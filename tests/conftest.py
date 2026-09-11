@@ -26,6 +26,11 @@ os.environ["GOOGLE_MAPS_API_KEY"] = ""
 os.environ["ABLY_API_KEY"] = ""
 os.environ["SMTP_HOST"] = ""
 os.environ["SENTRY_DSN"] = ""
+# Pinned rather than blanked: blank would disable Google sign-in entirely and
+# the endpoint's own tests could not run. A fake id keeps the audience check
+# live while guaranteeing no real client is ever accepted here.
+os.environ["GOOGLE_CLIENT_ID"] = "test-client-id.apps.googleusercontent.com"
+os.environ["GOOGLE_IOS_CLIENT_ID"] = ""
 
 import pytest
 from httpx import ASGITransport, AsyncClient

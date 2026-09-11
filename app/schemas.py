@@ -25,6 +25,12 @@ class LoginIn(BaseModel):
     password: str
 
 
+class GoogleSignInIn(BaseModel):
+    """The ID token Google minted for the app. Verified server-side, never trusted."""
+
+    id_token: str = Field(min_length=1, max_length=8192)
+
+
 class TokenPair(BaseModel):
     access_token: str
     refresh_token: str

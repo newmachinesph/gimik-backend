@@ -111,7 +111,7 @@ class Sim:
         suffix = uuid.uuid4().hex[:8]
         # Not a .test/.invalid TLD: the API validates addresses properly and
         # rejects reserved names, which is correct and worth not working around.
-        email = f"sim-{person.name.split()[0].lower()}-{suffix}@sim.gora.ph"
+        email = f"sim-{person.name.split()[0].lower()}-{suffix}@sim.gimik.ph"
         body = {"email": email, "password": PASSWORD, "name": person.name, "gender": "woman"}
         response = self.call("POST", "/auth/register", json=body, expect=201)
         person.token = response.json()["access_token"]

@@ -18,7 +18,7 @@ PLACE_CACHE_DAYS is therefore refreshed from the provider rather than served,
 while the ID it is keyed by survives - which keeps every plan already pointing
 at that row intact.
 
-Search is a Gora Plus feature. It is the dearest call in the stack by a wide
+Search is a Gimik Plus feature. It is the dearest call in the stack by a wide
 margin, and free accounts type the place name instead, which the plan screen
 has always accepted.
 """
@@ -41,7 +41,7 @@ from app.schemas import PlaceOut
 
 router = APIRouter(prefix="/places", tags=["places"])
 settings = get_settings()
-log = logging.getLogger("gora.places")
+log = logging.getLogger("gimik.places")
 
 PROVIDER = "google"
 PROVIDER_URL = "https://places.googleapis.com/v1/places:autocomplete"

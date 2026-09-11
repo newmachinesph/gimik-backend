@@ -8,6 +8,7 @@ import uuid
 
 import jwt
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
+from fastapi.concurrency import run_in_threadpool
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -18,6 +19,7 @@ from app.models import GENDERS, User
 from app.schemas import (
     EmailIn,
     ForgotPasswordIn,
+    GoogleSignInIn,
     LoginIn,
     ProfileOut,
     ProfilePatch,
@@ -35,10 +37,11 @@ from app.security import (
     verify_password,
 )
 from app.services import email as email_service
+from app.services import google_auth
 from app.services import ratelimit, storage
 
 router = APIRouter(prefix="/auth", tags=["auth"])
-log = logging.getLogger("gora.auth")
+log = logging.getLogger("gimik.auth")
 
 
 def _profile(user: User, *, include_email: bool) -> ProfileOut:
@@ -85,7 +88,7 @@ def _pair_for(user: User) -> TokenPair:
 
 
 async def _unique_handle(session: AsyncSession, name: str) -> str:
-    base = re.sub(r"[^a-z0-9]+", "", name.lower()) or "gora"
+    base = re.sub(r"[^a-z0-9]+", "", name.lower()) or "gimik"
     handle = base
     suffix = 0
     while await session.scalar(select(User.id).where(User.handle == handle)):
@@ -145,8 +148,73 @@ async def login(payload: LoginIn, session: AsyncSession = Depends(get_session)) 
     user = await session.scalar(select(User).where(User.email == payload.email.lower()))
     # One error for both a missing account and a wrong password: the response
     # must not confirm which emails have accounts.
-    if user is None or not verify_password(payload.password, user.password_hash):
+    # A Google-only account has no password_hash and lands here too, which is
+    # the same answer for the same reason: say nothing about who exists.
+    if (
+        user is None
+        or user.password_hash is None
+        or not verify_password(payload.password, user.password_hash)
+    ):
         raise HTTPException(status_code=401, detail="That email and password do not match")
+    return _pair_for(user)
+
+
+@router.post(
+    "/google",
+    response_model=TokenPair,
+    dependencies=[Depends(ratelimit.limiter(ratelimit.SIGN_IN))],
+)
+async def google_sign_in(
+    payload: GoogleSignInIn,
+    tasks: BackgroundTasks,
+    session: AsyncSession = Depends(get_session),
+) -> TokenPair:
+    """Sign in - or sign up - with a Google ID token.
+
+    Three cases, tried in this order: a Google account seen before, a Google
+    account whose verified address already has a password account here, and
+    somebody new. The middle case links rather than duplicates, because the
+    alternative is one person with two accounts and half their somedays in each.
+
+    Linking is only safe because the verifier refuses tokens whose email Google
+    has not confirmed; without that check this would be a way to claim anyone's
+    account by putting their address on a fresh Google profile.
+    """
+    try:
+        claims = await run_in_threadpool(google_auth.verify_id_token, payload.id_token)
+    except google_auth.GoogleAuthError as exc:
+        # The detail stays vague on purpose; the reason goes to the log.
+        log.info("Google sign-in rejected: %s", exc)
+        raise HTTPException(
+            status_code=401, detail="That Google sign-in could not be verified"
+        ) from exc
+
+    user = await session.scalar(select(User).where(User.google_sub == claims["sub"]))
+    if user is not None:
+        return _pair_for(user)
+
+    user = await session.scalar(select(User).where(User.email == claims["email"]))
+    if user is not None:
+        user.google_sub = claims["sub"]
+        # Google has just proved the address, so the flag can only improve.
+        user.email_verified = True
+        await session.commit()
+        return _pair_for(user)
+
+    name = claims["name"] or claims["email"].split("@")[0]
+    user = User(
+        email=claims["email"],
+        # No password: this account has never had one. See User.password_hash.
+        password_hash=None,
+        google_sub=claims["sub"],
+        name=name[:80],
+        handle=await _unique_handle(session, name),
+        email_verified=True,
+    )
+    session.add(user)
+    await session.commit()
+    # No verification mail: the address arrived already proved. Welcome only.
+    email_service.send_welcome(tasks, to=user.email, name=user.name)
     return _pair_for(user)
 
 

@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "gora-backend-v2"
+name = "gimik-backend"
 version = "0.1.0"
-description = "Gora v2 API - the corpus schema over Postgres, with the catalog artwork already living in MinIO/R2."
+description = "Gimik v2 API - the corpus schema over Postgres, with the catalog artwork already living in MinIO/R2."
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.115",
@@ -20,6 +20,10 @@ dependencies = [
     "boto3>=1.35",
     "httpx>=0.27",
     "redis>=5.2",
+    # Google ID-token verification. requests is google-auth's transport;
+    # the library refuses to import its verifier without one.
+    "google-auth>=2.35",
+    "requests>=2.32",
     "python-multipart>=0.0.17",
     "sentry-sdk[fastapi]>=2.18",
 ]

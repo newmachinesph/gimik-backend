@@ -28,7 +28,7 @@ import httpx
 from app.config import get_settings
 
 settings = get_settings()
-log = logging.getLogger("gora.realtime")
+log = logging.getLogger("gimik.realtime")
 
 REST_BASE = "https://rest.ably.io"
 PUBLISH_TIMEOUT_SECONDS = 5.0

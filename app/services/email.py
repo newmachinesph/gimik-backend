@@ -20,7 +20,7 @@ from fastapi import BackgroundTasks
 from app.config import get_settings
 
 settings = get_settings()
-log = logging.getLogger("gora.email")
+log = logging.getLogger("gimik.email")
 
 TIMEOUT_SECONDS = 10
 
@@ -50,7 +50,7 @@ def send_verify_email(tasks: BackgroundTasks, *, to: str, name: str, token: str)
     """Proves the address. Gates nothing, on purpose.
 
     The account already works, so this is not a hurdle in the way of using the
-    product - it is the thing that lets Gora send this person mail later
+    product - it is the thing that lets Gimik send this person mail later
     without guessing, and lets someone invite them by address knowing it lands.
     Written to be ignorable today and useful when they get round to it.
     """
@@ -59,7 +59,7 @@ def send_verify_email(tasks: BackgroundTasks, *, to: str, name: str, token: str)
     tasks.add_task(
         _send,
         to,
-        "Confirm your email for Gora",
+        "Confirm your email for Gimik",
         f"""{first},
 
 Confirm this is your address:
@@ -73,7 +73,7 @@ Or paste this code into Settings:
 Nothing breaks if you ignore it - your list already works. Confirming just
 means we can reach you, and that someone inviting you by email finds you.
 
-- Gora
+- Gimik
 """,
     )
 
@@ -84,7 +84,7 @@ def send_welcome(tasks: BackgroundTasks, *, to: str, name: str) -> None:
     tasks.add_task(
         _send,
         to,
-        "Your Gora list is open",
+        "Your Gimik list is open",
         f"""{first},
 
 Your list is open.
@@ -95,7 +95,7 @@ a few things on it.
 
 Three is usually enough to start.
 
-- Gora
+- Gimik
 {settings.app_base_url}
 """,
     )
@@ -108,15 +108,15 @@ def send_password_changed(tasks: BackgroundTasks, *, to: str, name: str) -> None
     tasks.add_task(
         _send,
         to,
-        "Your Gora password changed",
+        "Your Gimik password changed",
         f"""{first},
 
-Your Gora password was just changed.
+Your Gimik password was just changed.
 
 If that was you, there is nothing to do. If it was not, reply to this message
 straight away.
 
-- Gora
+- Gimik
 """,
     )
 
@@ -133,10 +133,10 @@ def send_password_reset(tasks: BackgroundTasks, *, to: str, name: str, token: st
     tasks.add_task(
         _send,
         to,
-        "Reset your Gora password",
+        "Reset your Gimik password",
         f"""{first},
 
-Open this on the phone with Gora installed:
+Open this on the phone with Gimik installed:
 
 {link}
 
@@ -147,6 +147,6 @@ Or paste this code into the app's reset screen:
 The link works for {settings.jwt_reset_ttl_minutes} minutes. If you did not ask
 for it, ignore this - nothing has changed.
 
-- Gora
+- Gimik
 """,
     )

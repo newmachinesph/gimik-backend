@@ -11,12 +11,12 @@ COPY seed ./seed
 COPY scripts ./scripts
 
 RUN pip install --no-cache-dir . \
-    && adduser --system --group --no-create-home gora \
-    && chown -R gora:gora /srv
+    && adduser --system --group --no-create-home gimik \
+    && chown -R gimik:gimik /srv
 
 # Not root. A process that only needs to read its own source and talk to
 # Postgres has no business being able to write the filesystem it runs on.
-USER gora
+USER gimik
 
 # Documentation only; the platform decides the real port through $PORT.
 EXPOSE 8000

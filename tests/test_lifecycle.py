@@ -39,7 +39,7 @@ async def test_register_login_me(client):
     assert wrong.status_code == 401
 
 
-async def test_catalog_carries_minio_artwork(client, somedays):
+async def test_catalog_carries_public_artwork(client, somedays):
     listing = await client.get("/catalog")
     assert listing.status_code == 200
     page = listing.json()
@@ -49,10 +49,14 @@ async def test_catalog_carries_minio_artwork(client, somedays):
     rows = page["items"]
     assert len(rows) == 2
     by_slug = {row["slug"]: row for row in rows}
-    # The artwork URL points into the public catalog bucket the v1 stack seeded.
-    assert by_slug["dive-a-coral-reef"]["artwork_url"].endswith(
-        "/gora-catalog/catalog/dive-a-coral-reef.webp"
-    )
+    # The artwork URL is a plain, unsigned URL at the catalog key for the slug.
+    # The host and bucket are deployment config - MinIO puts the bucket in the
+    # path, R2's public hostname is already rooted at one - so only the key is
+    # asserted here, which is the part the code actually decides.
+    artwork = by_slug["dive-a-coral-reef"]["artwork_url"]
+    assert artwork.startswith("http")
+    assert artwork.endswith("/catalog/dive-a-coral-reef.webp")
+    assert "?" not in artwork  # unsigned, so it stays cacheable
 
 
 async def test_keep_pass_visibility(client, somedays, make_user):

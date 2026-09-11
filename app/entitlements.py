@@ -54,7 +54,7 @@ class PlusRequired(HTTPException):
     def __init__(self, feature: str) -> None:
         super().__init__(
             status_code=status.HTTP_402_PAYMENT_REQUIRED,
-            detail=f"{feature} is part of Gora Plus.",
+            detail=f"{feature} is part of Gimik Plus.",
         )
 
 

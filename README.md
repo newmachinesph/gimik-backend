@@ -1,6 +1,6 @@
 # gora-backend-v2
 
-The Gora corpus as an API: FastAPI + SQLAlchemy (async) + Alembic over
+The Gimik corpus as an API: FastAPI + SQLAlchemy (async) + Alembic over
 Postgres, with the catalog artwork served from the MinIO bucket the v1 stack
 (`getgora-backend`) already seeded. **Not wired to the app yet** - gora-v2 runs
 on its on-device demo store until the gateway seam is flipped.

@@ -24,7 +24,7 @@ from app.routers import (
 )
 
 settings = get_settings()
-log = logging.getLogger("gora")
+log = logging.getLogger("gimik")
 
 # Before anything else can fail. `send_default_pii` stays off: this API handles
 # people's messages and locations, and the useful part of a report is the stack,
@@ -58,7 +58,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Gora API v2",
+    title="Gimik API v2",
     version="2.0.0",
     docs_url=None if settings.is_production else "/docs",
     openapi_url=None if settings.is_production else "/openapi.json",

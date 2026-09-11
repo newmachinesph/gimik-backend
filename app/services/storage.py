@@ -26,7 +26,7 @@ from botocore.exceptions import ClientError
 from app.config import get_settings
 
 settings = get_settings()
-log = logging.getLogger("gora.storage")
+log = logging.getLogger("gimik.storage")
 
 DEFAULT_EXPIRY_SECONDS = 900
 
@@ -120,8 +120,17 @@ def ensure_catalog_bucket() -> None:
 
 
 def catalog_url(slug: str) -> str:
-    """The plain, cacheable URL of a catalog artwork - no signature, by design."""
+    """The plain, cacheable URL of a catalog artwork - no signature, by design.
+
+    MinIO addresses buckets by path, so the bucket has to be a URL segment. R2's
+    public `*.r2.dev` hostname is already rooted at a single bucket, so naming it
+    again there gives a 404. The public host decides which shape to emit.
+    """
+    from urllib.parse import urlsplit
+
     base = (settings.s3_public_url or settings.s3_endpoint_url).rstrip("/")
+    if urlsplit(base).netloc.endswith(".r2.dev"):
+        return f"{base}/catalog/{slug}.webp"
     return f"{base}/{settings.s3_catalog_bucket}/catalog/{slug}.webp"
 
 

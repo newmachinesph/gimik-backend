@@ -48,9 +48,9 @@ from app.security import hash_password
 
 # Everyone in the demo world shares this. It is not a secret and the seed is
 # never run against a real database - `--reset` would be catastrophic there.
-DEMO_PASSWORD = "gora-demo-1234"
+DEMO_PASSWORD = "gimik-demo-1234"
 # Not a reserved TLD: pydantic's EmailStr rejects .test/.example outright.
-DEMO_DOMAIN = "gora.ph"
+DEMO_DOMAIN = "gimik.ph"
 
 UTC = dt.UTC
 
@@ -212,6 +212,25 @@ async def seed_world(*, do_reset: bool) -> dict[str, int]:
         if not somedays:
             raise SystemExit("catalog is empty - run scripts/seed.py first")
         by_slug = {s.slug: s for s in somedays if s.slug}
+        # The cast and Bea's list were written against the first catalog, whose
+        # category names were single words and whose slugs were phrases. A later
+        # export renamed both. Rather than freeze the demo to one export, the
+        # names below are resolved against whatever catalog is actually loaded,
+        # and anything that does not resolve falls back to a deterministic pick
+        # so the demo is never silently empty - which is what "keeps_cast: 0"
+        # meant the first time this ran against the 2,000-activity export.
+        CATEGORY_ALIASES = {
+            "Nature": "Nature & Countryside",
+            "Adventure": "Adventure & Outdoors",
+            "Water": "Water & Islands",
+            "Food": "Food & Drink",
+            "Cities": "City & Social",
+            "Culture": "Culture & Heritage",
+            "Community": "City & Social",
+            "Fitness": "Wellness & Sports",
+            "Skills": "Travel & Learning",
+        }
+
         by_category: dict[str, list[Someday]] = {}
         for someday in sorted(somedays, key=lambda s: s.slug or ""):
             by_category.setdefault(someday.category, []).append(someday)
@@ -236,7 +255,8 @@ async def seed_world(*, do_reset: bool) -> dict[str, int]:
         for spec in PEOPLE:
             person = people[spec["handle"]]
             for category in spec["leans"]:
-                for someday in by_category.get(category, [])[:8]:
+                resolved = category if category in by_category else CATEGORY_ALIASES.get(category, category)
+                for someday in by_category.get(resolved, [])[:8]:
                     await keep(person, someday, hours=24 * 30, open_to=("friends", "everyone"))
                     kept += 1
         # Everyone also holds a few of Bea's twelve, which is what makes the
@@ -252,6 +272,18 @@ async def seed_world(*, do_reset: bool) -> dict[str, int]:
         counts["keeps_cast"] = kept
 
         mine = [by_slug[slug] for slug in MY_SLUGS if slug in by_slug]
+        if len(mine) < len(MY_SLUGS):
+            # One from each category, in a fixed order, so a re-run keeps the
+            # same twelve and screenshots stay comparable between seeds.
+            chosen = {s.id for s in mine}
+            for category in sorted(by_category):
+                for someday in by_category[category]:
+                    if someday.id not in chosen:
+                        mine.append(someday)
+                        chosen.add(someday.id)
+                        break
+                if len(mine) >= len(MY_SLUGS):
+                    break
         for index, someday in enumerate(mine):
             await keep(me, someday, hours=24 * (len(mine) - index))
         done_someday = by_slug.get(DONE_SLUG)

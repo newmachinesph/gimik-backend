@@ -31,7 +31,7 @@ from app.config import get_settings
 from app.deps import bearer
 
 settings = get_settings()
-log = logging.getLogger("gora.ratelimit")
+log = logging.getLogger("gimik.ratelimit")
 
 TIMEOUT_SECONDS = 2.0
 

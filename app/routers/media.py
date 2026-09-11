@@ -19,7 +19,7 @@ from app.schemas import ClaimPhotoIn, PhotoOut, PresignUploadIn, PresignUploadOu
 from app.services import ratelimit, storage
 
 router = APIRouter(prefix="/media", tags=["media"])
-log = logging.getLogger("gora.media")
+log = logging.getLogger("gimik.media")
 
 # The ceiling for anyone; the tier decides how much of it an account gets.
 MAX_PHOTOS = PLUS_PHOTOS

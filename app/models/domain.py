@@ -56,7 +56,12 @@ class User(Base, IdMixin, CreatedMixin):
     __tablename__ = "users"
 
     email: Mapped[str] = mapped_column(String(320), unique=True, nullable=False)
-    password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
+    # Null for an account created through Google: there is no password to
+    # store, and a sentinel string would be a lie every caller has to decode.
+    password_hash: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    # Google's stable subject claim, which outlives an email change. Unique so
+    # one Google account can only ever reach one user; null until it is used.
+    google_sub: Mapped[str | None] = mapped_column(String(255), unique=True, nullable=True)
     name: Mapped[str] = mapped_column(String(80), default="", nullable=False)
     handle: Mapped[str] = mapped_column(String(40), unique=True, nullable=False)
     # Set once at sign-up and never editable afterwards (corpus 9).
@@ -267,7 +272,7 @@ class Place(Base, IdMixin, CreatedMixin):
 
     Rows come from user picks: the first search for a place hits Google Places
     Autocomplete, and the result is cached here so repeat searches are answered
-    from this table. Over time this becomes Gora's own catalog of the places
+    from this table. Over time this becomes Gimik's own catalog of the places
     people actually go.
 
     Coordinates are nullable because Autocomplete does not return them - only a
@@ -420,7 +425,7 @@ class PushToken(Base, IdMixin, CreatedMixin):
     The whole loop waits on another person answering an invite, and until now
     that message only existed inside a running app - Ably delivers to a live
     connection and nowhere else. An invite arriving while the phone was in a
-    pocket stayed invisible until its recipient happened to open Gora, and
+    pocket stayed invisible until its recipient happened to open Gimik, and
     invites lapse after a week.
 
     One row per device, keyed by the Expo push token. A token is not a secret

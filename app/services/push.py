@@ -1,7 +1,7 @@
 """Reaching someone whose app is closed.
 
 Ably delivers to a live connection, which covers the case where both people are
-looking at Gora in the same moment - and almost nothing else. The product's
+looking at Gimik in the same moment - and almost nothing else. The product's
 whole loop waits on somebody answering an invite, and an invite that lapses
 after a week is a poor thing to leave sitting in an app nobody has opened.
 
@@ -33,7 +33,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import PushToken
 
-log = logging.getLogger("gora.push")
+log = logging.getLogger("gimik.push")
 
 EXPO_ENDPOINT = "https://exp.host/--/api/v2/push/send"
 # Expo accepts up to 100 messages per request.

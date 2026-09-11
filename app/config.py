@@ -48,6 +48,14 @@ class Settings(BaseSettings):
     # Google Maps Platform, server-side only. Places Autocomplete + Details.
     google_maps_api_key: str = Field(default="", alias="GOOGLE_MAPS_API_KEY")
 
+    # Google sign-in. A Google ID token names the client it was minted for in
+    # its `aud` claim, and that client differs by platform: the Android library
+    # must be given the *web* client id to get a token at all, while iOS uses
+    # its own. Both are therefore valid audiences, and an empty one is dropped
+    # rather than accepted - a blank audience would match nothing on purpose.
+    google_client_id: str = Field(default="", alias="GOOGLE_CLIENT_ID")
+    google_ios_client_id: str = Field(default="", alias="GOOGLE_IOS_CLIENT_ID")
+
     # Realtime. The root key never leaves this process: clients are handed
     # short-lived tokens scoped to their own channels.
     ably_api_key: str = Field(default="", alias="ABLY_API_KEY")
@@ -64,10 +72,10 @@ class Settings(BaseSettings):
     smtp_username: str = Field(default="", alias="SMTP_USERNAME")
     smtp_password: str = Field(default="", alias="SMTP_PASSWORD")
     smtp_use_tls: bool = Field(default=False, alias="SMTP_USE_TLS")
-    mail_from: str = Field(default="Gora <hello@gora.ph>", alias="MAIL_FROM")
+    mail_from: str = Field(default="Gimik <hello@gimik.ph>", alias="MAIL_FROM")
     app_base_url: str = Field(default="http://localhost:8100", alias="APP_BASE_URL")
     # The deep link a reset email points at, opened by the app itself.
-    app_scheme: str = Field(default="gora", alias="APP_SCHEME")
+    app_scheme: str = Field(default="gimik", alias="APP_SCHEME")
 
     sentry_dsn: str = Field(default="", alias="SENTRY_DSN")
     sentry_traces_sample_rate: float = Field(default=0.1, alias="SENTRY_TRACES_SAMPLE_RATE")
@@ -92,7 +100,7 @@ class Settings(BaseSettings):
         )
         if self.is_production:
             raise ValueError(message)
-        logging.getLogger("gora.config").warning("%s Fine locally, not for deployment.", message)
+        logging.getLogger("gimik.config").warning("%s Fine locally, not for deployment.", message)
         return self
 
     @property
@@ -128,6 +136,11 @@ class Settings(BaseSettings):
         scheme = "postgresql+asyncpg"
         kept = [(k, v) for k, v in parse_qsl(parts.query) if k.lower() not in _LIBPQ_ONLY]
         return urlunsplit((scheme, parts.netloc, parts.path, urlencode(kept), parts.fragment))
+
+    @property
+    def google_audiences(self) -> list[str]:
+        """Client ids a Google ID token may be addressed to. Empty disables it."""
+        return [c for c in (self.google_client_id, self.google_ios_client_id) if c]
 
     @property
     def requires_tls(self) -> bool:
