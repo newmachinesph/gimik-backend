@@ -1,0 +1,64 @@
+{
+  "name": "Gimik Email Worker",
+  "description": "RQ worker and scheduler for Gimik transactional email",
+  "billing": {
+    "deploymentPlan": "nf-compute-10",
+    "buildPlan": "nf-compute-400-16"
+  },
+  "deployment": {
+    "instances": 1,
+    "docker": {
+      "configType": "customCommand",
+      "customCommand": "python -m app.worker"
+    },
+    "storage": {
+      "ephemeralStorage": {
+        "storageSize": 1024
+      }
+    }
+  },
+  "ports": [],
+  "buildSource": "git",
+  "vcsData": {
+    "projectUrl": "https://github.com/sumnora/gimik-backend",
+    "projectType": "github",
+    "accountLogin": "sumnora",
+    "projectBranch": "main"
+  },
+  "buildSettings": {
+    "storage": {
+      "ephemeralStorage": {
+        "storageSize": 16384
+      }
+    },
+    "dockerfile": {
+      "buildEngine": "buildkit",
+      "dockerFilePath": "/Dockerfile",
+      "dockerWorkDir": "/",
+      "buildkit": {
+        "useCache": true,
+        "cacheStorageSize": 32768
+      }
+    }
+  },
+  "buildConfiguration": {
+    "pathIgnoreRules": [],
+    "isAllowList": false,
+    "ciIgnoreFlags": [
+      "[skip ci]",
+      "[ci skip]",
+      "[no ci]",
+      "[skip nf]",
+      "[nf skip]",
+      "[northflank skip]",
+      "[skip northflank]"
+    ],
+    "ignoreEmptyCommits": false,
+    "dockerCredentials": [],
+    "storage": {
+      "ephemeralStorage": {
+        "storageSize": 16384
+      }
+    }
+  }
+}

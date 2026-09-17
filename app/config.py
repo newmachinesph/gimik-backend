@@ -66,6 +66,11 @@ class Settings(BaseSettings):
     # failing closed, because a broken limiter must not take the API down.
     redis_url: str = Field(default="", alias="REDIS_URL")
 
+    # Transactional mail is queued separately from rate-limit traffic, but it
+    # shares the same Redis deployment. The worker and API must use the same
+    # name; keeping it configurable lets staging and production coexist safely.
+    email_queue_name: str = Field(default="email", alias="EMAIL_QUEUE_NAME")
+
     # Mail. Mailpit locally (:1025, no auth, no TLS); a real relay later.
     smtp_host: str = Field(default="", alias="SMTP_HOST")
     smtp_port: int = Field(default=1025, alias="SMTP_PORT")

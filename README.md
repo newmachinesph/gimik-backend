@@ -53,3 +53,15 @@ keep -> be seen -> invite -> accept -> thread -> lock -> done -> journal - plus
 the social edges (mutual friendship, group membership vs friendship, quiet
 hide/unhide, visibility gating). SQLite in memory, storage faked, the app
 otherwise real.
+
+## Email worker
+
+Production email is persisted to the Redis-backed `email` queue. Run one
+worker with the scheduler enabled so delayed retries and explicitly scheduled
+messages are promoted:
+
+    python -m app.worker
+
+SMTP delivery uses ZeptoMail (`smtp.zeptomail.com:587`) with STARTTLS. Set
+`SMTP_USERNAME=emailapikey`, `SMTP_PASSWORD` to the ZeptoMail send-mail token,
+and `MAIL_FROM` to a verified sender such as `Gimik <noreply@gimik.app>`.

@@ -1,0 +1,94 @@
+{
+  "name": "Gimik Backend",
+  "description": "Production FastAPI backend for Gimik",
+  "billing": {
+    "deploymentPlan": "nf-compute-20",
+    "buildPlan": "nf-compute-400-16"
+  },
+  "deployment": {
+    "instances": 1,
+    "docker": {
+      "configType": "default"
+    },
+    "storage": {
+      "ephemeralStorage": {
+        "storageSize": 1024
+      }
+    }
+  },
+  "ports": [
+    {
+      "name": "p01",
+      "internalPort": 8000,
+      "public": true,
+      "vpcAccessible": false,
+      "protocol": "HTTP"
+    }
+  ],
+  "buildSource": "git",
+  "vcsData": {
+    "projectUrl": "https://github.com/sumnora/gimik-backend",
+    "projectType": "github",
+    "accountLogin": "sumnora",
+    "projectBranch": "main"
+  },
+  "buildSettings": {
+    "storage": {
+      "ephemeralStorage": {
+        "storageSize": 16384
+      }
+    },
+    "dockerfile": {
+      "buildEngine": "buildkit",
+      "dockerFilePath": "/Dockerfile",
+      "dockerWorkDir": "/",
+      "buildkit": {
+        "useCache": true,
+        "cacheStorageSize": 32768
+      }
+    }
+  },
+  "buildConfiguration": {
+    "pathIgnoreRules": [],
+    "isAllowList": false,
+    "ciIgnoreFlags": [
+      "[skip ci]",
+      "[ci skip]",
+      "[no ci]",
+      "[skip nf]",
+      "[nf skip]",
+      "[northflank skip]",
+      "[skip northflank]"
+    ],
+    "ignoreEmptyCommits": false,
+    "dockerCredentials": [],
+    "storage": {
+      "ephemeralStorage": {
+        "storageSize": 16384
+      }
+    }
+  },
+  "healthChecks": [
+    {
+      "protocol": "HTTP",
+      "type": "readinessProbe",
+      "path": "/health",
+      "port": 8000,
+      "initialDelaySeconds": 10,
+      "periodSeconds": 30,
+      "timeoutSeconds": 5,
+      "failureThreshold": 3,
+      "successThreshold": 1
+    },
+    {
+      "protocol": "HTTP",
+      "type": "livenessProbe",
+      "path": "/health",
+      "port": 8000,
+      "initialDelaySeconds": 30,
+      "periodSeconds": 60,
+      "timeoutSeconds": 5,
+      "failureThreshold": 3
+    }
+  ]
+}
