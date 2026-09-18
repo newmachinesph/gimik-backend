@@ -379,7 +379,7 @@ async def test_person_page_and_media(client, somedays, make_user):
             headers=bea,
         )
     ).json()
-    assert presigned["key"].startswith(me["id"])
+    assert presigned["key"].startswith(f"users/{me['id']}/")
     added = await client.post(
         "/media/photos",
         json={"key": presigned["key"], "upload_url": ""},

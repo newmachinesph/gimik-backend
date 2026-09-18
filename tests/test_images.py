@@ -13,6 +13,23 @@ from app.services import images, storage
 process_upload = images.process_upload
 
 
+def test_normalized_key_moves_under_users_without_changing_hash():
+    import hashlib
+
+    raw = "owner/iphone.heic"
+    expected = f"users/owner/photos/{hashlib.sha256(raw.encode()).hexdigest()}.webp"
+    assert images.normalized_key(raw) == expected
+    assert images.normalized_key(f"users/{raw}") == expected
+
+
+async def test_nested_and_foreign_user_keys_are_rejected(client, make_user, somedays):
+    headers = await make_user("FoldersQA")
+    owner = (await client.get("/auth/me", headers=headers)).json()["id"]
+    for key, code in [("users/other/photo.jpg", 403), (f"users/{owner}/photos/a.webp", 422), (f"users/{owner}/../a.jpg", 422)]:
+        assert (await client.post("/media/photos", json={"key": key}, headers=headers)).status_code == code
+        assert (await client.post(f"/somedays/{somedays['reef']}/journal", json={"photo_key": key}, headers=headers)).status_code == code
+
+
 def fixture_bytes(fmt="PNG", size=(80, 60), **options):
     out = io.BytesIO()
     Image.new("RGB", size, (240, 85, 25)).save(out, format=fmt, **options)

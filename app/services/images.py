@@ -33,8 +33,11 @@ class InvalidImage(ValueError):
 
 def normalized_key(key: str) -> str:
     # Stable for retries, separate from the writable presigned raw object.
-    digest = hashlib.sha256(key.encode()).hexdigest()
-    return f"{key.split('/', 1)[0]}/photos/{digest}.webp"
+    # Strip the new root when hashing so migration preserves retry identity.
+    legacy_key = key.removeprefix("users/")
+    digest = hashlib.sha256(legacy_key.encode()).hexdigest()
+    owner = storage.upload_key_owner(key)
+    return f"users/{owner}/photos/{digest}.webp"
 
 
 def normalize(data: bytes) -> bytes:

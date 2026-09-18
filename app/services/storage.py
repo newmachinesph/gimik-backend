@@ -69,9 +69,19 @@ def _signing_client() -> Any:
 
 
 def object_key(user_id: str, filename: str) -> str:
-    """Namespaced by owner, so a listing can never span two people's media."""
+    """Keep user media under one root, separate from catalog artwork."""
     suffix = filename.rsplit(".", 1)[-1].lower() if "." in filename else "bin"
-    return f"{user_id}/{uuid.uuid4()}.{suffix}"
+    if not suffix.isalnum() or len(suffix) > 10:
+        suffix = "bin"
+    return f"users/{user_id}/{uuid.uuid4()}.{suffix}"
+
+
+def upload_key_owner(key: str) -> str:
+    """Parse new and legacy raw keys; never allow claiming normalized photos."""
+    parts = key.removeprefix("users/").split("/")
+    if len(parts) != 2 or not parts[1] or parts[1] in {".", ".."} or "\\" in parts[1]:
+        raise ValueError("Use the original upload key")
+    return parts[0]
 
 
 def ensure_bucket() -> None:

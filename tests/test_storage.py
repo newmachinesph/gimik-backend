@@ -3,6 +3,21 @@ import pytest
 from app.services import storage
 
 
+def test_user_media_root():
+    key = storage.object_key("owner", "iphone.HEIC")
+    assert key.startswith("users/owner/")
+    assert key.endswith(".heic")
+    assert storage.upload_key_owner(key) == "owner"
+    assert storage.upload_key_owner("owner/legacy.jpg") == "owner"
+    assert storage.object_key("owner", "bad.ext/path").endswith(".bin")
+
+
+@pytest.mark.parametrize("key", ["users/owner/photos/a.webp", "owner/photos/a.webp", "users/owner/", "owner/..", "owner/a\\b"])
+def test_upload_key_rejects_non_raw_objects(key):
+    with pytest.raises(ValueError):
+        storage.upload_key_owner(key)
+
+
 @pytest.mark.parametrize(
     ("endpoint", "public", "expected"),
     [

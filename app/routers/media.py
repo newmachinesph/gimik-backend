@@ -52,10 +52,12 @@ async def add_photo(
     session: AsyncSession = Depends(get_session),
 ) -> PhotoOut:
     # Only keys inside the caller's own namespace can become their photos.
-    if not payload.key.startswith(f"{user.id}/"):
+    if not payload.key.startswith((f"users/{user.id}/", f"{user.id}/")):
         raise HTTPException(status_code=403, detail="Not your object")
-    if "/" in payload.key.split("/", 1)[1]:
-        raise HTTPException(status_code=422, detail="Use the original upload key")
+    try:
+        storage.upload_key_owner(payload.key)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
     # Serialize claims for this account so parallel uploads cannot reuse a slot.
     await session.scalar(select(User).where(User.id == user.id).with_for_update())
     existing = (
@@ -64,9 +66,9 @@ async def add_photo(
         )
     ).all()
     target = images.normalized_key(payload.key)
-    claimed = next((photo for photo in existing if photo.object_key == target), None)
+    claimed = next((photo for photo in existing if photo.object_key in {target, target.removeprefix("users/")}), None)
     if claimed:
-        return PhotoOut(id=claimed.id, position=claimed.position, url=storage.presign_download(target))
+        return PhotoOut(id=claimed.id, position=claimed.position, url=storage.presign_download(claimed.object_key))
     allowance = photo_allowance(user)
     if len(existing) >= allowance:
         # 402 when more is purchasable, 409 when it simply is not - the app

@@ -263,10 +263,12 @@ async def add_journal(
         raise HTTPException(status_code=404, detail="No such someday")
     photo_key = None
     if payload.photo_key:
-        if not payload.photo_key.startswith(f"{user.id}/"):
+        if not payload.photo_key.startswith((f"users/{user.id}/", f"{user.id}/")):
             raise HTTPException(status_code=403, detail="Not your object")
-        if "/" in payload.photo_key.split("/", 1)[1]:
-            raise HTTPException(status_code=422, detail="Use the original upload key")
+        try:
+            storage.upload_key_owner(payload.photo_key)
+        except ValueError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
         try:
             photo_key = await anyio.to_thread.run_sync(images.process_upload, payload.photo_key, limiter=images.image_limiter)
         except images.InvalidImage as error:
