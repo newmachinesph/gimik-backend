@@ -37,8 +37,7 @@ from app.security import (
     verify_password,
 )
 from app.services import email as email_service
-from app.services import google_auth
-from app.services import ratelimit, storage
+from app.services import google_auth, ratelimit, storage
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 log = logging.getLogger("gimik.auth")
