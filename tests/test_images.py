@@ -113,3 +113,15 @@ async def test_presign_all_supported_types(client, make_user, mime):
     headers = await make_user("PhotoQA")
     response = await client.post("/media/presign", json={"filename": "image.file", "content_type": mime}, headers=headers)
     assert response.status_code == 200
+
+
+async def test_journal_photos_are_owned_and_normalized(client, make_user, somedays):
+    headers = await make_user("JournalQA")
+    route = f"/somedays/{somedays['reef']}/journal"
+    refused = await client.post(route, json={"body": "", "photo_key": "another-owner/private.heic"}, headers=headers)
+    assert refused.status_code == 403
+    ticket = await client.post("/media/presign", json={"filename": "journal.heic", "content_type": "image/heic"}, headers=headers)
+    saved = await client.post(route, json={"body": "", "photo_key": ticket.json()["key"]}, headers=headers)
+    assert saved.status_code == 201
+    assert saved.json()["photo_url"].endswith(".webp")
+    assert (await client.get(route, headers=headers)).json()[0]["id"] == saved.json()["id"]

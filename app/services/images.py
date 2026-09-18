@@ -6,6 +6,7 @@ import hashlib
 import io
 import warnings
 
+import anyio
 from botocore.exceptions import ClientError
 from PIL import Image, ImageCms, ImageOps, UnidentifiedImageError
 from pillow_heif import register_heif_opener
@@ -13,6 +14,7 @@ from pillow_heif import register_heif_opener
 from app.services import storage
 
 register_heif_opener(thumbnails=False)
+image_limiter = anyio.CapacityLimiter(1)
 
 MAX_BYTES = 25 * 1024 * 1024
 MAX_PIXELS = 25_000_000

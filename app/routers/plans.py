@@ -3,8 +3,11 @@ order, exactly as the corpus draws the journey."""
 
 from __future__ import annotations
 
+import logging
 import uuid
 
+import anyio
+from botocore.exceptions import BotoCoreError, ClientError
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -29,9 +32,10 @@ from app.models.base import utcnow
 from app.routers import places
 from app.routers.common import holder_out, someday_out, users_by_ids
 from app.schemas import JournalIn, JournalOut, PlanCreate, PlanOut, PlanPatch
-from app.services import storage
+from app.services import images, storage
 
 router = APIRouter(tags=["plans"])
+log = logging.getLogger("gimik.plans")
 
 
 async def _plan_out(session: AsyncSession, plan: Plan) -> PlanOut:
@@ -257,14 +261,31 @@ async def add_journal(
         raise HTTPException(status_code=422, detail="An entry needs words or a photo")
     if await session.get(Someday, someday_id) is None:
         raise HTTPException(status_code=404, detail="No such someday")
+    photo_key = None
+    if payload.photo_key:
+        if not payload.photo_key.startswith(f"{user.id}/"):
+            raise HTTPException(status_code=403, detail="Not your object")
+        if "/" in payload.photo_key.split("/", 1)[1]:
+            raise HTTPException(status_code=422, detail="Use the original upload key")
+        try:
+            photo_key = await anyio.to_thread.run_sync(images.process_upload, payload.photo_key, limiter=images.image_limiter)
+        except images.InvalidImage as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        except (BotoCoreError, ClientError) as error:
+            raise HTTPException(status_code=503, detail="Photo storage is temporarily unavailable. Try again.") from error
     entry = JournalEntry(
         user_id=user.id,
         someday_id=someday_id,
         body=payload.body.strip(),
-        photo_key=payload.photo_key,
+        photo_key=photo_key,
     )
     session.add(entry)
     await session.commit()
+    if payload.photo_key:
+        try:
+            await anyio.to_thread.run_sync(storage.delete_object, payload.photo_key)
+        except (BotoCoreError, ClientError):
+            log.warning("could not remove original journal photo after normalization")
     return JournalOut(
         id=entry.id,
         someday_id=entry.someday_id,

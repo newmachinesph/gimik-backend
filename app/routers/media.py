@@ -27,7 +27,6 @@ log = logging.getLogger("gimik.media")
 MAX_PHOTOS = PLUS_PHOTOS
 ALLOWED_TYPES = images.ALLOWED_TYPES
 # Bound decoder memory and keep blocking S3/codec work off the event loop.
-image_limiter = anyio.CapacityLimiter(1)
 
 
 @router.post(
@@ -76,7 +75,7 @@ async def add_photo(
             raise PlusRequired(f"A {PLUS_PHOTOS}-photo profile")
         raise HTTPException(status_code=409, detail=f"{allowance} photos is the limit")
     try:
-        target = await anyio.to_thread.run_sync(images.process_upload, payload.key, limiter=image_limiter)
+        target = await anyio.to_thread.run_sync(images.process_upload, payload.key, limiter=images.image_limiter)
     except images.InvalidImage as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
     except (BotoCoreError, ClientError) as error:
