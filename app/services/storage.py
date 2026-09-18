@@ -123,13 +123,20 @@ def catalog_url(slug: str) -> str:
     """The plain, cacheable URL of a catalog artwork - no signature, by design.
 
     MinIO addresses buckets by path, so the bucket has to be a URL segment. R2's
-    public `*.r2.dev` hostname is already rooted at a single bucket, so naming it
-    again there gives a 404. The public host decides which shape to emit.
+    public hostname (r2.dev or a custom domain) is already rooted at a bucket.
+    An explicit catalog root also supports CDNs independently of S3 signing.
     """
     from urllib.parse import urlsplit
 
+    if settings.s3_catalog_public_url:
+        return f"{settings.s3_catalog_public_url.rstrip('/')}/catalog/{slug}.webp"
     base = (settings.s3_public_url or settings.s3_endpoint_url).rstrip("/")
-    if urlsplit(base).netloc.endswith(".r2.dev"):
+    public_host = urlsplit(base).hostname or ""
+    endpoint_host = urlsplit(settings.s3_endpoint_url).hostname or ""
+    r2_public_domain = bool(settings.s3_public_url) and endpoint_host.endswith(
+        ".r2.cloudflarestorage.com"
+    ) and public_host != endpoint_host
+    if public_host.endswith(".r2.dev") or r2_public_domain:
         return f"{base}/catalog/{slug}.webp"
     return f"{base}/{settings.s3_catalog_bucket}/catalog/{slug}.webp"
 

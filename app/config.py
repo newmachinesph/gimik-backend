@@ -44,6 +44,8 @@ class Settings(BaseSettings):
     s3_catalog_bucket: str = Field(default="gora-catalog", alias="S3_CATALOG_BUCKET")
     s3_region: str = Field(default="auto", alias="S3_REGION")
     s3_public_url: str = Field(default="", alias="S3_PUBLIC_URL")
+    # Public bucket root, including any CDN prefix, without the bucket name.
+    s3_catalog_public_url: str = Field(default="", alias="S3_CATALOG_PUBLIC_URL")
 
     # Google Maps Platform, server-side only. Places Autocomplete + Details.
     google_maps_api_key: str = Field(default="", alias="GOOGLE_MAPS_API_KEY")
