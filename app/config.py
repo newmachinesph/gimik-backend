@@ -49,6 +49,16 @@ class Settings(BaseSettings):
 
     # Google Maps Platform, server-side only. Places Autocomplete + Details.
     google_maps_api_key: str = Field(default="", alias="GOOGLE_MAPS_API_KEY")
+    openai_api_key: str = Field(default="", alias="OPENAI_API_KEY", repr=False)
+    place_assessment_model: str = Field(default="gpt-4o-mini", alias="PLACE_ASSESSMENT_MODEL")
+    place_search_retention_days: int = Field(default=90, ge=1, le=365, alias="PLACE_SEARCH_RETENTION_DAYS")
+
+    # V1 read-only customer lookup accepts a platform public SDK key too.
+    # Never use the V2 management key here or expose a secret key to the app.
+    revenuecat_api_key: str = Field(default="", alias="REVENUECAT_API_KEY", repr=False)
+    revenuecat_webhook_authorization: str = Field(default="", alias="REVENUECAT_WEBHOOK_AUTHORIZATION", repr=False)
+    # Explicit QA accounts only; sandbox purchases never grant everyone production access.
+    revenuecat_sandbox_user_ids: str = Field(default="", alias="REVENUECAT_SANDBOX_USER_IDS")
 
     # Google sign-in. A Google ID token names the client it was minted for in
     # its `aud` claim, and that client differs by platform: the Android library

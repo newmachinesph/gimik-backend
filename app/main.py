@@ -11,6 +11,7 @@ from app.config import get_settings
 from app.db import engine
 from app.routers import (
     auth,
+    billing,
     catalog,
     feed,
     groups,
@@ -74,6 +75,7 @@ app.add_middleware(
 )
 
 app.include_router(auth.router)
+app.include_router(billing.router)
 app.include_router(catalog.router)
 app.include_router(feed.router)
 app.include_router(social.router)

@@ -23,6 +23,10 @@ os.environ.setdefault("S3_SECRET_KEY", "test")
 # _provider_search return [] without ever opening a socket.
 os.environ["REDIS_URL"] = ""
 os.environ["GOOGLE_MAPS_API_KEY"] = ""
+os.environ["OPENAI_API_KEY"] = ""
+os.environ["REVENUECAT_API_KEY"] = ""
+os.environ["REVENUECAT_WEBHOOK_AUTHORIZATION"] = ""
+os.environ["REVENUECAT_SANDBOX_USER_IDS"] = ""
 os.environ["ABLY_API_KEY"] = ""
 os.environ["SMTP_HOST"] = ""
 os.environ["SENTRY_DSN"] = ""
