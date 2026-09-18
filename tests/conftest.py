@@ -39,7 +39,7 @@ from sqlalchemy.pool import StaticPool
 
 from app.db import get_session
 from app.models import Base, Someday
-from app.services import storage
+from app.services import images, storage
 
 
 @pytest.fixture(autouse=True)
@@ -50,6 +50,7 @@ def fake_storage(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr(storage, "presign_upload", lambda key, ct, expires=900: f"https://store.test/put/{key}")
     monkeypatch.setattr(storage, "presign_download", lambda key, expires=900: f"https://store.test/get/{key}")
     monkeypatch.setattr(storage, "delete_object", lambda key: None)
+    monkeypatch.setattr(images, "process_upload", images.normalized_key)
 
 
 @pytest.fixture

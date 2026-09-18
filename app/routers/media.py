@@ -7,6 +7,8 @@ from __future__ import annotations
 import logging
 import uuid
 
+import anyio
+from botocore.exceptions import BotoCoreError, ClientError
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,14 +18,16 @@ from app.deps import current_user
 from app.entitlements import PLUS_PHOTOS, PlusRequired, photo_allowance
 from app.models import User, UserPhoto
 from app.schemas import ClaimPhotoIn, PhotoOut, PresignUploadIn, PresignUploadOut
-from app.services import ratelimit, storage
+from app.services import images, ratelimit, storage
 
 router = APIRouter(prefix="/media", tags=["media"])
 log = logging.getLogger("gimik.media")
 
 # The ceiling for anyone; the tier decides how much of it an account gets.
 MAX_PHOTOS = PLUS_PHOTOS
-ALLOWED_TYPES = {"image/jpeg", "image/png", "image/webp"}
+ALLOWED_TYPES = images.ALLOWED_TYPES
+# Bound decoder memory and keep blocking S3/codec work off the event loop.
+image_limiter = anyio.CapacityLimiter(1)
 
 
 @router.post(
@@ -41,7 +45,8 @@ async def presign(
     return PresignUploadOut(key=key, upload_url=storage.presign_upload(key, payload.content_type))
 
 
-@router.post("/photos", response_model=PhotoOut, status_code=status.HTTP_201_CREATED)
+@router.post("/photos", response_model=PhotoOut, status_code=status.HTTP_201_CREATED,
+             dependencies=[Depends(ratelimit.limiter(ratelimit.SOCIAL_WRITE))])
 async def add_photo(
     payload: ClaimPhotoIn,
     user: User = Depends(current_user),
@@ -50,11 +55,19 @@ async def add_photo(
     # Only keys inside the caller's own namespace can become their photos.
     if not payload.key.startswith(f"{user.id}/"):
         raise HTTPException(status_code=403, detail="Not your object")
+    if "/" in payload.key.split("/", 1)[1]:
+        raise HTTPException(status_code=422, detail="Use the original upload key")
+    # Serialize claims for this account so parallel uploads cannot reuse a slot.
+    await session.scalar(select(User).where(User.id == user.id).with_for_update())
     existing = (
         await session.scalars(
             select(UserPhoto).where(UserPhoto.user_id == user.id).order_by(UserPhoto.position)
         )
     ).all()
+    target = images.normalized_key(payload.key)
+    claimed = next((photo for photo in existing if photo.object_key == target), None)
+    if claimed:
+        return PhotoOut(id=claimed.id, position=claimed.position, url=storage.presign_download(target))
     allowance = photo_allowance(user)
     if len(existing) >= allowance:
         # 402 when more is purchasable, 409 when it simply is not - the app
@@ -62,13 +75,24 @@ async def add_photo(
         if not user.is_plus:
             raise PlusRequired(f"A {PLUS_PHOTOS}-photo profile")
         raise HTTPException(status_code=409, detail=f"{allowance} photos is the limit")
+    try:
+        target = await anyio.to_thread.run_sync(images.process_upload, payload.key, limiter=image_limiter)
+    except images.InvalidImage as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except (BotoCoreError, ClientError) as error:
+        log.exception("profile image storage failed")
+        raise HTTPException(status_code=503, detail="Photo storage is temporarily unavailable. Try again.") from error
     photo = UserPhoto(
         user_id=user.id,
-        object_key=payload.key,
+        object_key=target,
         position=(existing[-1].position + 1) if existing else 0,
     )
     session.add(photo)
     await session.commit()
+    try:
+        await anyio.to_thread.run_sync(storage.delete_object, payload.key)
+    except (BotoCoreError, ClientError):
+        log.warning("could not remove original photo after normalization")
     return PhotoOut(id=photo.id, position=photo.position, url=storage.presign_download(photo.object_key))
 
 
