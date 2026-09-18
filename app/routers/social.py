@@ -259,6 +259,7 @@ async def accept_invite(
     invite.status = "accepted"
     thread = await _open_solo_thread(session, user.id, invite.from_user_id, invite.someday_id)
     await session.commit()
+    await realtime.publish(realtime.user_channel(invite.from_user_id), "invite", {"inviteId": str(invite.id), "status": "accepted"})
     return {"thread_id": str(thread.id)}
 
 
@@ -356,10 +357,12 @@ async def request_friend(
         if existing.status == "pending" and existing.requester_id == user_id:
             existing.status = "accepted"
             await session.commit()
+            await realtime.publish(realtime.user_channel(user_id), "friend", {"status": "accepted"})
             return {"status": "accepted"}
         return {"status": existing.status}
     session.add(Friendship(requester_id=user.id, addressee_id=user_id))
     await session.commit()
+    await realtime.publish(realtime.user_channel(user_id), "friend", {"status": "pending"})
     await push.send_to(
         session,
         [user_id],
@@ -387,6 +390,7 @@ async def accept_friend(
         raise HTTPException(status_code=404, detail="No pending request")
     row.status = "accepted"
     await session.commit()
+    await realtime.publish(realtime.user_channel(user_id), "friend", {"status": "accepted"})
 
 
 @router.post("/friends/{user_id}/decline", status_code=status.HTTP_204_NO_CONTENT)
@@ -405,6 +409,7 @@ async def decline_friend(
     if row is not None:
         await session.delete(row)
         await session.commit()
+        await realtime.publish(realtime.user_channel(user_id), "friend", {"status": "declined"})
 
 
 # ---------------------------------------------------------------------- hidden
