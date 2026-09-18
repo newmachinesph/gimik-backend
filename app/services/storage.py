@@ -18,6 +18,7 @@ import logging
 import uuid
 from functools import lru_cache
 from typing import Any
+from urllib.parse import urlsplit
 
 import boto3
 from botocore.client import Config
@@ -60,6 +61,10 @@ def _signing_client() -> Any:
     cannot be rewritten to a reachable one afterwards. It has to be signed
     against the public endpoint from the start.
     """
+    # R2 custom domains only serve public objects; they do not accept SigV4
+    # uploads or signed downloads. Sign against its public S3 API instead.
+    if (urlsplit(settings.s3_endpoint_url).hostname or "").endswith(".r2.cloudflarestorage.com"):
+        return _build(settings.s3_endpoint_url)
     return _build(settings.s3_public_url or settings.s3_endpoint_url)
 
 
@@ -126,8 +131,6 @@ def catalog_url(slug: str) -> str:
     public hostname (r2.dev or a custom domain) is already rooted at a bucket.
     An explicit catalog root also supports CDNs independently of S3 signing.
     """
-    from urllib.parse import urlsplit
-
     if settings.s3_catalog_public_url:
         return f"{settings.s3_catalog_public_url.rstrip('/')}/catalog/{slug}.webp"
     base = (settings.s3_public_url or settings.s3_endpoint_url).rstrip("/")
