@@ -52,6 +52,24 @@ router = APIRouter(tags=["catalog"])
 PAGE_SIZE = 40
 MAX_PAGE_SIZE = 100
 
+# Words people wrap a someday in ("I should finally go ...") that no title leans on.
+_FILLER_WORDS = frozenset(
+    "a an and at do finally for go i in it my of on should some the to try want with".split()
+)
+
+
+def _search_words(q: str) -> list[str]:
+    """Split a typed sentence into the words a title must contain.
+
+    People type sentences ("go scuba diving") and the catalog holds titles
+    ("Scuba diving"), so matching the whole phrase missed obvious hits. Each
+    remaining word must appear, in any order. A query of nothing but filler
+    keeps its words rather than widening to the whole catalog.
+    """
+    words = [word for word in q.lower().split() if word]
+    meaningful = [word for word in words if word not in _FILLER_WORDS]
+    return meaningful or words
+
 
 async def _someday(session: AsyncSession, someday_id: uuid.UUID) -> Someday:
     someday = await session.get(Someday, someday_id)
@@ -100,7 +118,7 @@ async def catalog(
         # Accept the older one-word names so a client mid-update still filters.
         filters.append(Someday.category == canonical(category))
     if q:
-        filters.append(Someday.title.ilike(f"%{q.strip()}%"))
+        filters.extend(Someday.title.ilike(f"%{word}%") for word in _search_words(q))
 
     total = await session.scalar(select(func.count()).select_from(Someday).where(*filters)) or 0
     rows = (
