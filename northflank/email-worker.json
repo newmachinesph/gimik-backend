@@ -1,12 +1,12 @@
 {
   "name": "Gimik Email Worker",
-  "description": "RQ worker and scheduler for Gimik transactional email",
+  "description": "RQ worker and scheduler for Gimik transactional email. Scaled to 0 until launch: the RQ scheduler polls Redis every second whether or not anything is queued (~605K Upstash commands/day for an empty queue). Scale to 1 before any real signup traffic; queued jobs have no TTL and will drain on restart.",
   "billing": {
     "deploymentPlan": "nf-compute-10",
     "buildPlan": "nf-compute-400-16"
   },
   "deployment": {
-    "instances": 1,
+    "instances": 0,
     "docker": {
       "configType": "customCommand",
       "customCommand": "python -m app.worker"
