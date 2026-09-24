@@ -326,6 +326,7 @@ class PlaceOut(BaseModel):
     id: uuid.UUID
     name: str
     area: str
+    provider: str = "google"
     # Absent unless something has had a reason to resolve them; Autocomplete
     # alone does not carry coordinates. See the Place model.
     lat: float | None = None

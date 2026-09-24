@@ -35,6 +35,7 @@ from app.models.domain import (
     User,
     UserPhoto,
 )
+from app.models.place_catalog import CatalogPlace, PlaceAssessment, PlaceSearchEvent
 
 __all__ = [
     "ATTACHMENT_TYPES",
@@ -52,6 +53,7 @@ __all__ = [
     "TIERS",
     "TIME_SLOTS",
     "Base",
+    "CatalogPlace",
     "Friendship",
     "Group",
     "GroupMember",
@@ -62,6 +64,8 @@ __all__ = [
     "Message",
     "Pass",
     "Place",
+    "PlaceAssessment",
+    "PlaceSearchEvent",
     "Plan",
     "PlanPerson",
     "PushToken",

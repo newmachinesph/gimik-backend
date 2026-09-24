@@ -268,23 +268,10 @@ class GroupMember(Base, CreatedMixin):
 
 
 class Place(Base, IdMixin, CreatedMixin):
-    """A specific place a plan can point at - THE restaurant, not "a restaurant".
+    """Plan-compatible identity. Open-data provenance lives in CatalogPlace.
 
-    Rows come from user picks: the first search for a place hits Google Places
-    Autocomplete, and the result is cached here so repeat searches are answered
-    from this table. Over time this becomes Gimik's own catalog of the places
-    people actually go.
-
-    Coordinates are nullable because Autocomplete does not return them - only a
-    place ID and two lines of text. Fetching them would mean a Place Details
-    call per result, and nothing in the product reads them: a plan stores the
-    place as the words a person would say out loud. The columns stay for the
-    day something needs a map, and are honest about being empty until then.
-
-    `refreshed_at` exists for Google's terms rather than for performance. Place
-    IDs may be cached indefinitely; the display text may not - so a row past
-    PLACE_CACHE_DAYS is re-fetched rather than served, and the ID it is keyed
-    by survives the refresh.
+    Google rows keep only IDs and short-lived coordinates; prediction labels
+    are response-only. They are never reusable catalogue entries.
     """
 
     __tablename__ = "places"
@@ -296,6 +283,9 @@ class Place(Base, IdMixin, CreatedMixin):
     area: Mapped[str] = mapped_column(String(200), default="", nullable=False)
     lat: Mapped[float | None] = mapped_column(nullable=True)
     lon: Mapped[float | None] = mapped_column(nullable=True)
+    coordinates_refreshed_at: Mapped[dt.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     refreshed_at: Mapped[dt.datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: dt.datetime.now(dt.UTC), nullable=False
     )

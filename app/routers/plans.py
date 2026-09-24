@@ -15,9 +15,11 @@ from sqlalchemy.orm import selectinload
 
 from app.db import get_session
 from app.deps import current_user
+from app.entitlements import PlusRequired
 from app.models import (
     SPLITS,
     TIME_SLOTS,
+    CatalogPlace,
     JournalEntry,
     Keep,
     Place,
@@ -36,6 +38,21 @@ from app.services import images, storage
 
 router = APIRouter(tags=["plans"])
 log = logging.getLogger("gimik.plans")
+
+
+async def _check_place(session: AsyncSession, place_id: uuid.UUID | None, user: User) -> None:
+    if place_id is None:
+        return
+    place = await session.get(Place, place_id)
+    if place is None:
+        raise HTTPException(404, "No such place")
+    if place.provider == "google":
+        if not user.is_plus:
+            raise PlusRequired("Live map places")
+    elif not await session.scalar(select(CatalogPlace.id).where(
+        CatalogPlace.place_id == place_id, CatalogPlace.reviewed.is_(True),
+    )):
+        raise HTTPException(404, "Place has not been reviewed")
 
 
 async def _plan_out(session: AsyncSession, plan: Plan) -> PlanOut:
@@ -98,6 +115,7 @@ async def lock(
     session: AsyncSession = Depends(get_session),
 ) -> PlanOut:
     _check(payload)
+    await _check_place(session, payload.place_id, user)
     someday = await session.get(Someday, payload.someday_id)
     if someday is None:
         raise HTTPException(status_code=404, detail="No such someday")
@@ -164,6 +182,7 @@ async def update_plan(
 ) -> PlanOut:
     _check(payload)
     plan = await _owned(session, plan_id, user.id)
+    await _check_place(session, payload.place_id, user)
     if payload.date is not None:
         plan.date = payload.date
     if payload.time_slot is not None:

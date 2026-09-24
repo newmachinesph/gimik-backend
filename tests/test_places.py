@@ -1,4 +1,4 @@
-"""Place search: Plus-gated, provider hit once, cached, and plans carry the pick."""
+"""Live Google results retain identity, not cached labels; plans carry the pick."""
 
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ FAKE_SUGGESTIONS = [
 ]
 
 
-async def test_search_caches_provider_results(client, make_plus_user, monkeypatch):
+async def test_google_labels_are_not_cached(client, make_plus_user, monkeypatch):
     me = await make_plus_user("Bea")
     calls = {"n": 0}
 
@@ -42,11 +42,15 @@ async def test_search_caches_provider_results(client, make_plus_user, monkeypatc
     assert first.json()[0]["lat"] is None
     assert calls["n"] == 1
 
-    # The second search is answered from the places table - no provider call.
+    # Google content is live; reusable open-data results are tested separately.
     again = await client.get("/places/search", params={"q": "toyo"}, headers=me)
     assert again.status_code == 200
     assert [row["name"] for row in again.json()] == ["Toyo Eatery"]
-    assert calls["n"] == 1
+    assert calls["n"] == 2
+    async with client.sessionmaker() as session:
+        row = await session.scalar(select(Place))
+        assert row.name == ""
+        assert row.area == ""
 
 
 async def test_search_is_plus_only(client, make_user, make_plus_user, monkeypatch):
@@ -75,12 +79,8 @@ async def test_search_is_plus_only(client, make_user, make_plus_user, monkeypatc
     assert called["n"] == 1
 
 
-async def test_stale_rows_are_refreshed_not_reserved(client, make_plus_user, monkeypatch):
-    """Google's terms cap how long the display text may be served.
-
-    A row past the window is refreshed in place - same row id, so every plan
-    already pointing at it survives - rather than served or duplicated.
-    """
+async def test_google_identity_is_stable(client, make_plus_user, monkeypatch):
+    """Fresh labels use the same durable place ID, preserving plan links."""
     me = await make_plus_user("Bea")
 
     async def fake_provider(q: str, session_token: str | None):
@@ -95,7 +95,7 @@ async def test_stale_rows_are_refreshed_not_reserved(client, make_plus_user, mon
         row = await session.scalar(select(Place))
         assert row is not None
         row.refreshed_at = dt.datetime.now(dt.UTC) - dt.timedelta(
-            days=places_router.PLACE_CACHE_DAYS + 1
+            days=31
         )
         await session.commit()
 
