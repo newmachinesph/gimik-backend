@@ -62,6 +62,10 @@ class User(Base, IdMixin, CreatedMixin):
     # Google's stable subject claim, which outlives an email change. Unique so
     # one Google account can only ever reach one user; null until it is used.
     google_sub: Mapped[str | None] = mapped_column(String(255), unique=True, nullable=True)
+    # Apple's stable subject, same reasoning as google_sub.
+    apple_sub: Mapped[str | None] = mapped_column(String(255), unique=True, nullable=True)
+    # Kept only so account deletion can revoke it, as App Store rules require.
+    apple_refresh_token: Mapped[str | None] = mapped_column(String(1024), nullable=True)
     name: Mapped[str] = mapped_column(String(80), default="", nullable=False)
     handle: Mapped[str] = mapped_column(String(40), unique=True, nullable=False)
     # Set once at sign-up and never editable afterwards (corpus 9).

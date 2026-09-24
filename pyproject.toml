@@ -16,7 +16,8 @@ dependencies = [
     "pydantic[email]>=2.9",
     "pydantic-settings>=2.6",
     "argon2-cffi>=23.1",
-    "PyJWT>=2.10",
+    # [crypto] for Apple: RS256 identity tokens and the ES256 client secret.
+    "PyJWT[crypto]>=2.10",
     "boto3>=1.35",
     "Pillow>=12.3,<13",
     "pillow-heif>=1.3,<2",

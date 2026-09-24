@@ -68,6 +68,14 @@ class Settings(BaseSettings):
     google_client_id: str = Field(default="", alias="GOOGLE_CLIENT_ID")
     google_ios_client_id: str = Field(default="", alias="GOOGLE_IOS_CLIENT_ID")
 
+    # Sign in with Apple. A native iOS identity token's `aud` is the bundle id.
+    # The key trio is only for exchanging and revoking tokens, which App Store
+    # rules require on account deletion; sign-in itself works without it.
+    apple_bundle_id: str = Field(default="com.sumnora.gimik", alias="APPLE_BUNDLE_ID")
+    apple_team_id: str = Field(default="", alias="APPLE_TEAM_ID")
+    apple_key_id: str = Field(default="", alias="APPLE_KEY_ID")
+    apple_private_key: str = Field(default="", alias="APPLE_PRIVATE_KEY", repr=False)
+
     # Realtime. The root key never leaves this process: clients are handed
     # short-lived tokens scoped to their own channels.
     ably_api_key: str = Field(default="", alias="ABLY_API_KEY")
@@ -158,6 +166,10 @@ class Settings(BaseSettings):
     def google_audiences(self) -> list[str]:
         """Client ids a Google ID token may be addressed to. Empty disables it."""
         return [c for c in (self.google_client_id, self.google_ios_client_id) if c]
+
+    @property
+    def apple_revocation_enabled(self) -> bool:
+        return bool(self.apple_team_id and self.apple_key_id and self.apple_private_key)
 
     @property
     def requires_tls(self) -> bool:

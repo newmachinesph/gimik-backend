@@ -31,6 +31,18 @@ class GoogleSignInIn(BaseModel):
     id_token: str = Field(min_length=1, max_length=8192)
 
 
+class AppleSignInIn(BaseModel):
+    """What Sign in with Apple hands the app. The token is verified, never trusted.
+
+    `name` is the only field not inside the token: Apple gives it to the app on
+    the first authorization and never again.
+    """
+
+    identity_token: str = Field(min_length=1, max_length=8192)
+    authorization_code: str | None = Field(default=None, max_length=1024)
+    name: str | None = Field(default=None, max_length=80)
+
+
 class TokenPair(BaseModel):
     access_token: str
     refresh_token: str

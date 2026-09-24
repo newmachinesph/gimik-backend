@@ -35,6 +35,11 @@ os.environ["SENTRY_DSN"] = ""
 # live while guaranteeing no real client is ever accepted here.
 os.environ["GOOGLE_CLIENT_ID"] = "test-client-id.apps.googleusercontent.com"
 os.environ["GOOGLE_IOS_CLIENT_ID"] = ""
+# Blank key trio: Apple code exchange and revocation never reach the network.
+os.environ["APPLE_BUNDLE_ID"] = "com.sumnora.gimik"
+os.environ["APPLE_TEAM_ID"] = ""
+os.environ["APPLE_KEY_ID"] = ""
+os.environ["APPLE_PRIVATE_KEY"] = ""
 
 import pytest
 from httpx import ASGITransport, AsyncClient

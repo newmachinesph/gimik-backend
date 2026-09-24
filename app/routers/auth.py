@@ -17,6 +17,7 @@ from app.db import get_session
 from app.deps import CREDENTIALS_ERROR, current_user
 from app.models import GENDERS, User
 from app.schemas import (
+    AppleSignInIn,
     EmailIn,
     ForgotPasswordIn,
     GoogleSignInIn,
@@ -36,8 +37,8 @@ from app.security import (
     token_is_current,
     verify_password,
 )
+from app.services import apple_auth, google_auth, ratelimit, storage
 from app.services import email as email_service
-from app.services import google_auth, ratelimit, storage
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 log = logging.getLogger("gimik.auth")
@@ -213,6 +214,64 @@ async def google_sign_in(
     session.add(user)
     await session.commit()
     # No verification mail: the address arrived already proved. Welcome only.
+    email_service.send_welcome(tasks, to=user.email, name=user.name)
+    return _pair_for(user)
+
+
+@router.post(
+    "/apple",
+    response_model=TokenPair,
+    dependencies=[Depends(ratelimit.limiter(ratelimit.SIGN_IN))],
+)
+async def apple_sign_in(
+    payload: AppleSignInIn,
+    tasks: BackgroundTasks,
+    session: AsyncSession = Depends(get_session),
+) -> TokenPair:
+    """Sign in - or sign up - with an Apple identity token.
+
+    The same three cases as Google, in the same order, and linking by email is
+    safe for the same reason. A "Hide My Email" relay address simply never
+    matches an existing account, so those always land as new or returning.
+    """
+    try:
+        claims = await run_in_threadpool(apple_auth.verify_identity_token, payload.identity_token)
+    except apple_auth.AppleAuthError as exc:
+        log.info("Apple sign-in rejected: %s", exc)
+        raise HTTPException(
+            status_code=401, detail="That Apple sign-in could not be verified"
+        ) from exc
+
+    refresh_token = (
+        await apple_auth.exchange_code(payload.authorization_code)
+        if payload.authorization_code
+        else None
+    )
+
+    user = await session.scalar(select(User).where(User.apple_sub == claims["sub"]))
+    if user is None:
+        user = await session.scalar(select(User).where(User.email == claims["email"]))
+        if user is not None:
+            user.apple_sub = claims["sub"]
+            user.email_verified = True
+    if user is not None:
+        if refresh_token:
+            user.apple_refresh_token = refresh_token
+        await session.commit()
+        return _pair_for(user)
+
+    name = (payload.name or "").strip() or claims["email"].split("@")[0]
+    user = User(
+        email=claims["email"],
+        password_hash=None,
+        apple_sub=claims["sub"],
+        apple_refresh_token=refresh_token,
+        name=name[:80],
+        handle=await _unique_handle(session, name),
+        email_verified=True,
+    )
+    session.add(user)
+    await session.commit()
     email_service.send_welcome(tasks, to=user.email, name=user.name)
     return _pair_for(user)
 
@@ -432,8 +491,16 @@ async def delete_me(
     photographs behind has not been deleted.
     """
     keys = [photo.object_key for photo in user.photos]
+    apple_token = user.apple_refresh_token
     await session.delete(user)
     await session.commit()
+    # App Store rules: deleting an account that used Sign in with Apple must
+    # revoke its Apple tokens. A failure is logged, never a reason to keep data.
+    if apple_token:
+        try:
+            await apple_auth.revoke(apple_token)
+        except Exception:  # noqa: BLE001
+            log.warning("could not revoke Apple token for deleted user %s", user.id)
     for key in keys:
         try:
             storage.delete_object(key)
