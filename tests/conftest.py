@@ -14,6 +14,10 @@ os.environ.setdefault("JWT_SECRET", "test-secret-not-for-production")
 os.environ.setdefault("S3_ENDPOINT_URL", "http://minio.test:9000")
 os.environ.setdefault("S3_ACCESS_KEY", "test")
 os.environ.setdefault("S3_SECRET_KEY", "test")
+os.environ["QSTASH_TOKEN"] = ""
+os.environ["QSTASH_CURRENT_SIGNING_KEY"] = ""
+os.environ["QSTASH_NEXT_SIGNING_KEY"] = ""
+os.environ["QSTASH_EMAIL_CALLBACK_URL"] = ""
 
 # Overwritten rather than defaulted: the container these run in carries real
 # credentials from .env, and a test suite must not reach the network. A shared

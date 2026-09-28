@@ -19,6 +19,7 @@ from app.routers import (
     places,
     plans,
     push,
+    qstash_email,
     realtime,
     social,
     threads,
@@ -86,6 +87,7 @@ app.include_router(media.router)
 app.include_router(places.router)
 app.include_router(push.router)
 app.include_router(realtime.router)
+app.include_router(qstash_email.router)
 
 
 @app.get("/health", tags=["ops"])

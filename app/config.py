@@ -86,10 +86,15 @@ class Settings(BaseSettings):
     # failing closed, because a broken limiter must not take the API down.
     redis_url: str = Field(default="", alias="REDIS_URL")
 
-    # Transactional mail is queued separately from rate-limit traffic, but it
-    # shares the same Redis deployment. The worker and API must use the same
-    # name; keeping it configurable lets staging and production coexist safely.
-    email_queue_name: str = Field(default="email", alias="EMAIL_QUEUE_NAME")
+    # QStash calls the API to deliver transactional mail. Redis remains in use
+    # for rate limiting, but no email worker process is needed.
+    qstash_url: str = Field(default="https://qstash-us-east-1.upstash.io", alias="QSTASH_URL")
+    qstash_token: str = Field(default="", alias="QSTASH_TOKEN", repr=False)
+    qstash_current_signing_key: str = Field(
+        default="", alias="QSTASH_CURRENT_SIGNING_KEY", repr=False
+    )
+    qstash_next_signing_key: str = Field(default="", alias="QSTASH_NEXT_SIGNING_KEY", repr=False)
+    qstash_email_callback_url: str = Field(default="", alias="QSTASH_EMAIL_CALLBACK_URL")
 
     # Mail. Mailpit locally (:1025, no auth, no TLS); a real relay later.
     smtp_host: str = Field(default="", alias="SMTP_HOST")
@@ -128,6 +133,25 @@ class Settings(BaseSettings):
         logging.getLogger("gimik.config").warning("%s Fine locally, not for deployment.", message)
         return self
 
+    @model_validator(mode="after")
+    def _check_qstash_mail(self) -> Settings:
+        configured = (
+            self.qstash_token,
+            self.qstash_current_signing_key,
+            self.qstash_next_signing_key,
+            self.qstash_email_callback_url,
+        )
+        if any(configured) and not all(configured):
+            raise ValueError("QStash email requires token, both signing keys and callback URL")
+        if self.is_production and self.mail_enabled and not all(configured):
+            raise ValueError("Production email requires QStash configuration")
+        if all(configured) and not (
+            self.qstash_url.startswith("https://")
+            and self.qstash_email_callback_url.startswith("https://")
+        ):
+            raise ValueError("QStash and email callback URLs must use HTTPS")
+        return self
+
     @property
     def realtime_enabled(self) -> bool:
         return bool(self.ably_api_key)
@@ -143,6 +167,10 @@ class Settings(BaseSettings):
     @property
     def mail_enabled(self) -> bool:
         return bool(self.smtp_host)
+
+    @property
+    def qstash_enabled(self) -> bool:
+        return bool(self.qstash_token and self.qstash_email_callback_url)
 
     @property
     def is_production(self) -> bool:

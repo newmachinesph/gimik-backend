@@ -54,13 +54,14 @@ the social edges (mutual friendship, group membership vs friendship, quiet
 hide/unhide, visibility gating). SQLite in memory, storage faked, the app
 otherwise real.
 
-## Email worker
+## Transactional email
 
-Production email is persisted to the Redis-backed `email` queue. Run one
-worker with the scheduler enabled so delayed retries and explicitly scheduled
-messages are promoted:
-
-    python -m app.worker
+The API publishes email jobs to QStash. QStash POSTs each job to
+`/internal/qstash/email`, where the API verifies `Upstash-Signature` before
+sending through SMTP. Configure the five `QSTASH_*` variables in
+`.env.example` and the SMTP settings on the API service. QStash retries failed
+deliveries after 60, 300 and 900 seconds. Job bodies are redacted in QStash
+logs. Local development without QStash sends through FastAPI background tasks.
 
 SMTP delivery uses ZeptoMail (`smtp.zeptomail.com:587`) with STARTTLS. Set
 `SMTP_USERNAME=emailapikey`, `SMTP_PASSWORD` to the ZeptoMail send-mail token,

@@ -1,8 +1,7 @@
-"""Transactional mail, queued in Redis and delivered by an RQ worker.
+"""Transactional mail delivered through QStash to this API's signed callback.
 
-Production requests persist each message before returning. The worker retries
-temporary SMTP failures on an increasing schedule. Local development without
-Redis keeps the old FastAPI background-task path so Mailpit remains convenient.
+QStash holds pending messages and retries temporary SMTP failures. Local
+development without QStash uses a FastAPI background task for Mailpit.
 
 The copy lives here rather than in a template engine because there are two
 messages. When there is a third, this becomes a directory of templates.
@@ -12,14 +11,11 @@ from __future__ import annotations
 
 import logging
 import smtplib
-from datetime import timedelta
 from email.message import EmailMessage
 from functools import lru_cache
 
 from fastapi import BackgroundTasks
-from redis import Redis
-from rq import Queue, Retry
-from rq.serializers import JSONSerializer
+from qstash import QStash
 
 from app.config import get_settings
 
@@ -27,23 +23,16 @@ settings = get_settings()
 log = logging.getLogger("gimik.email")
 
 TIMEOUT_SECONDS = 10
-CONNECT_TIMEOUT_SECONDS = 5
-JOB_TIMEOUT_SECONDS = 30
-RETRY_INTERVALS_SECONDS = [60, 300, 900]
+RETRY_DELAY = "min(900000, pow(5, retried) * 60000)"
 
 
 @lru_cache
-def _queue() -> Queue:
-    connection = Redis.from_url(
-        settings.redis_url,
-        socket_connect_timeout=CONNECT_TIMEOUT_SECONDS,
-        socket_timeout=CONNECT_TIMEOUT_SECONDS,
-    )
-    return Queue(settings.email_queue_name, connection=connection, serializer=JSONSerializer)
+def _qstash() -> QStash:
+    return QStash(settings.qstash_token, base_url=settings.qstash_url)
 
 
 def deliver_email(to: str, subject: str, text: str) -> None:
-    """RQ entry point. SMTP errors deliberately escape so RQ can retry them."""
+    """SMTP errors escape so QStash can retry the signed callback."""
     if not settings.mail_enabled:
         log.info("mail disabled; skipped %r", subject)
         return
@@ -62,23 +51,17 @@ def deliver_email(to: str, subject: str, text: str) -> None:
 
 
 def enqueue_email(to: str, subject: str, text: str, *, delay_seconds: int = 0) -> str:
-    """Persist an email job and return its ID.
-
-    A non-zero delay uses RQ's scheduled registry. The worker must run with
-    ``--with-scheduler`` so both delayed sends and delayed retries are promoted.
-    """
-    args = (deliver_email, to, subject, text)
-    options = {
-        "job_timeout": JOB_TIMEOUT_SECONDS,
-        "result_ttl": 86_400,
-        "failure_ttl": 604_800,
-        "retry": Retry(max=len(RETRY_INTERVALS_SECONDS), interval=RETRY_INTERVALS_SECONDS),
-    }
-    if delay_seconds > 0:
-        job = _queue().enqueue_in(timedelta(seconds=delay_seconds), *args, **options)
-    else:
-        job = _queue().enqueue(*args, **options)
-    return job.id
+    """Persist a redacted QStash message and return its ID."""
+    result = _qstash().message.publish_json(
+        url=settings.qstash_email_callback_url,
+        body={"to": to, "subject": subject, "text": text},
+        retries=3,
+        retry_delay=RETRY_DELAY,
+        delay=f"{delay_seconds}s" if delay_seconds > 0 else None,
+        timeout="30s",
+        redact={"body": True},
+    )
+    return result.message_id
 
 
 def _deliver_safely(to: str, subject: str, text: str) -> None:
@@ -93,14 +76,13 @@ def _dispatch(tasks: BackgroundTasks, to: str, subject: str, text: str) -> None:
     if not settings.mail_enabled:
         log.info("mail disabled; skipped %r", subject)
         return
-    if settings.redis_url:
+    if settings.qstash_enabled:
         try:
             job_id = enqueue_email(to, subject, text)
             log.info("queued %r as %s", subject, job_id)
             return
         except Exception:
-            # Redis should not turn account creation into an outage. A direct
-            # background send preserves delivery while the queue is degraded.
+            # A queue outage should not turn account creation into an outage.
             log.exception("could not queue %r; falling back to direct delivery", subject)
     tasks.add_task(_deliver_safely, to, subject, text)
 

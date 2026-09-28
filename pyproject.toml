@@ -23,7 +23,7 @@ dependencies = [
     "pillow-heif>=1.3,<2",
     "httpx>=0.27",
     "redis>=5.2",
-    "rq>=2.6,<3",
+    "qstash==3.4.0",
     # Google ID-token verification. requests is google-auth's transport;
     # the library refuses to import its verifier without one.
     "google-auth>=2.35",

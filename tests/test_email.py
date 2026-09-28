@@ -5,42 +5,43 @@ from fastapi import BackgroundTasks
 from app.services import email
 
 
-class FakeJob:
-    id = "job-123"
+class FakePublishResult:
+    message_id = "msg-123"
 
 
-class FakeQueue:
+class FakeMessages:
     def __init__(self) -> None:
-        self.calls: list[tuple[str, tuple, dict]] = []
+        self.calls: list[dict] = []
 
-    def enqueue(self, *args, **kwargs):
-        self.calls.append(("now", args, kwargs))
-        return FakeJob()
-
-    def enqueue_in(self, *args, **kwargs):
-        self.calls.append(("later", args, kwargs))
-        return FakeJob()
+    def publish_json(self, **kwargs):
+        self.calls.append(kwargs)
+        return FakePublishResult()
 
 
-def test_enqueue_email_uses_retries_and_scheduler(monkeypatch):
-    queue = FakeQueue()
-    monkeypatch.setattr(email, "_queue", lambda: queue)
+def test_enqueue_email_uses_signed_callback_and_redacts_body(monkeypatch):
+    from types import SimpleNamespace
+
+    messages = FakeMessages()
+    monkeypatch.setattr(email, "_qstash", lambda: SimpleNamespace(message=messages))
+    monkeypatch.setattr(
+        email.settings, "qstash_email_callback_url", "https://api.gimik.app/internal/qstash/email"
+    )
 
     job_id = email.enqueue_email("person@example.com", "Subject", "Body", delay_seconds=90)
 
-    assert job_id == "job-123"
-    kind, args, options = queue.calls[0]
-    assert kind == "later"
-    assert args[0].total_seconds() == 90
-    assert args[1] is email.deliver_email
-    assert options["retry"].max == 3
-    assert options["retry"].intervals == [60, 300, 900]
+    assert job_id == "msg-123"
+    options = messages.calls[0]
+    assert options["url"] == "https://api.gimik.app/internal/qstash/email"
+    assert options["body"] == {"to": "person@example.com", "subject": "Subject", "text": "Body"}
+    assert options["delay"] == "90s"
+    assert options["retries"] == 3
+    assert options["redact"] == {"body": True}
 
 
-def test_dispatch_falls_back_when_redis_is_disabled(monkeypatch):
+def test_dispatch_falls_back_when_qstash_is_disabled(monkeypatch):
     tasks = BackgroundTasks()
     monkeypatch.setattr(email.settings, "smtp_host", "smtp.test")
-    monkeypatch.setattr(email.settings, "redis_url", "")
+    monkeypatch.setattr(email.settings, "qstash_token", "")
 
     email._dispatch(tasks, "person@example.com", "Subject", "Body")
 
