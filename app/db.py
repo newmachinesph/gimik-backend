@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ssl
+from base64 import b64decode
 from collections.abc import AsyncGenerator
 from typing import Any
 
@@ -18,7 +19,12 @@ def _connect_args() -> dict[str, Any]:
     if settings.sqlalchemy_url.startswith("sqlite"):
         return args
     if settings.requires_tls:
-        args["ssl"] = ssl.create_default_context()
+        certificate = (
+            b64decode(settings.database_ca_cert_b64).decode("utf-8")
+            if settings.database_ca_cert_b64
+            else None
+        )
+        args["ssl"] = ssl.create_default_context(cadata=certificate)
     if settings.is_pgbouncer:
         args["statement_cache_size"] = 0
         args["prepared_statement_cache_size"] = 0

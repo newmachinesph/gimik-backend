@@ -25,6 +25,9 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     database_url: str = Field(alias="DATABASE_URL")
+    # DigitalOcean's managed database uses a cluster CA outside the system
+    # trust store. Keep its public PEM as base64 in the service environment.
+    database_ca_cert_b64: str = Field(default="", alias="DATABASE_CA_CERT_B64", repr=False)
 
     jwt_secret: str = Field(alias="JWT_SECRET")
     jwt_access_ttl_minutes: int = Field(default=30, alias="JWT_ACCESS_TTL_MINUTES")
