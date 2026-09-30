@@ -31,12 +31,23 @@ def _connect_args() -> dict[str, Any]:
     return args
 
 
+def _pool_args() -> dict[str, Any]:
+    # The Postgres cluster is shared with seven other apps and allows ~19
+    # connections in total. The default (5 held, 15 at burst) per app overbooks
+    # it and locks the others out (53300). Hold one, burst to three. SQLite's
+    # pool takes neither argument.
+    if settings.sqlalchemy_url.startswith("sqlite"):
+        return {}
+    return {"pool_size": 1, "max_overflow": 2}
+
+
 engine = create_async_engine(
     settings.sqlalchemy_url,
     connect_args=_connect_args(),
     pool_pre_ping=True,
     pool_recycle=300,
     echo=False,
+    **_pool_args(),
 )
 
 SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
