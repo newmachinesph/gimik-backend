@@ -482,18 +482,19 @@ async def _community_pool(
         if keep is None or owner is None or owner.id in blocked or not owner.is_active:
             continue
         open_to = set(keep.open_to or [])
-        known = ("friends" in open_to and owner.id in friends) or (
-            "groups" in open_to and owner.id in peers
-        )
-        city = (
-            "everyone" in open_to
-            and owner.id not in friends
-            and owner.id not in peers
-            and bool(owner.city)
-            and owner.city == user.city
-        )
+        nearby = "everyone" in open_to and bool(owner.city) and owner.city == user.city
+        acquainted = owner.id in friends or owner.id in peers
         # A friend who opened a someday to everyone is still a friend, so they
-        # belong to KNOWN and must not also come back in the CITY draw.
+        # belong to KNOWN and must not also come back in the CITY draw. That
+        # sentence was here before the code agreed with it: KNOWN asked for
+        # "friends" in open_to and CITY skipped friends, so a friend's
+        # everyone-only someday reached no deck at all.
+        known = (
+            ("friends" in open_to and owner.id in friends)
+            or ("groups" in open_to and owner.id in peers)
+            or (nearby and acquainted)
+        )
+        city = nearby and not acquainted
         if known if reach == KNOWN else city:
             visible_rows.append(row)
     return _rows_to_candidates(visible_rows, COMMUNITY)

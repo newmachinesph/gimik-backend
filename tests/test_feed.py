@@ -479,3 +479,25 @@ async def test_a_strangers_someday_still_waits_for_the_catalog(client, make_user
 
     page = await fetch(client, viewer, limit=10)
     assert "Queue at the new lugaw place" not in titles(page)
+
+
+async def test_a_friends_someday_open_to_everyone_reaches_their_deck(client, make_user):
+    """It used to reach nobody: KNOWN wanted "friends" in open_to, and the city
+    draw skipped friends so they would not appear twice."""
+    bea = await make_user("Bea", city="Cebu City")
+    mara = await make_user("Mara", city="Cebu City")
+    bea_id = (await client.get("/auth/me", headers=bea)).json()["id"]
+    mara_id = (await client.get("/auth/me", headers=mara)).json()["id"]
+    await client.post(f"/friends/{bea_id}/request", headers=mara)
+    await client.post(f"/friends/{mara_id}/accept", headers=bea)
+    made = await client.post(
+        "/somedays",
+        json={"title": "Night food crawl", "category": "Food & Drink", "open_to": ["everyone"], "party_as": ["duo"]},
+        headers=mara,
+    )
+    assert made.status_code == 201, made.text
+
+    deck = (await client.get("/feed", headers=bea)).json()
+    mine = [item for item in deck["items"] if item["someday"]["id"] == made.json()["someday"]["id"]]
+    assert len(mine) == 1, "once, as someone she knows - not missing and not twice"
+    assert mine[0]["pool"] == "community"

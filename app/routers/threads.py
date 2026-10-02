@@ -87,7 +87,7 @@ async def _thread_out(
         someday=someday_out(someday) if someday else None,
         plan_id=thread.plan_id,
         group_id=thread.group_id,
-        participants=[holder_out(person) for person in people.values()],
+        participants=[holder_out(p) for p in people.values() if p.id not in blocked],
         last_message=(
             await _message_out(session, last, people[last.sender_id])
             if last and last.sender_id in people

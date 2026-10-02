@@ -241,3 +241,21 @@ async def test_eject_removes_the_content_and_closes_the_account(client, make_use
     # Nobody can be pointed at the removed account, and its tokens are dead.
     assert (await client.post(f"/threads/solo/{bea_id}", headers=mara)).status_code == 404
     assert (await client.get("/auth/me", headers=bea)).status_code == 401
+
+
+async def test_a_blocked_member_is_not_listed_in_a_shared_group(client, make_user, make_plus_user):
+    bea = await make_plus_user("Bea", city="Cebu City")
+    mara = await make_user("Mara", city="Cebu City")
+    mara_id = await _id(client, mara)
+    group = (await client.post("/groups", json={"name": "Saturday People"}, headers=bea)).json()
+    joined = await client.post(f"/groups/join/{group['invite_token']}", headers=mara)
+    assert {member["name"] for member in joined.json()["members"]} == {"Bea", "Mara"}
+
+    await client.put(f"/hidden/{mara_id}", headers=bea)
+
+    # Both are still in the group; neither is shown the other in it.
+    for headers, seen in [(bea, {"Bea"}), (mara, {"Mara"})]:
+        listed = (await client.get(f"/groups/{group['id']}", headers=headers)).json()
+        assert {member["name"] for member in listed["members"]} == seen
+        thread = next(t for t in (await client.get("/threads", headers=headers)).json() if t["kind"] == "group")
+        assert {person["name"] for person in thread["participants"]} == seen

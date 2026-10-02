@@ -15,15 +15,18 @@ from app.db import get_session
 from app.deps import current_user
 from app.entitlements import requires_plus
 from app.models import Group, GroupMember, Thread, ThreadParticipant, User
-from app.routers.common import holder_out, users_by_ids
+from app.routers.common import blocked_ids, holder_out, users_by_ids
 from app.schemas import GroupCreate, GroupOut
 from app.services import moderation
 
 router = APIRouter(prefix="/groups", tags=["groups"])
 
 
-async def _group_out(session: AsyncSession, group: Group) -> GroupOut:
+async def _group_out(session: AsyncSession, group: Group, viewer_id: uuid.UUID) -> GroupOut:
+    """The group as one member sees it: nobody on either side of a block with
+    the viewer is listed, though both stay in the group."""
     member_ids = {member.user_id for member in group.members}
+    member_ids -= await blocked_ids(session, viewer_id)
     people = await users_by_ids(session, member_ids)
     return GroupOut(
         id=group.id,
@@ -70,7 +73,7 @@ async def my_groups(
             .where(GroupMember.user_id == user.id)
         )
     ).all()
-    return [await _group_out(session, group) for group in groups]
+    return [await _group_out(session, group, user.id) for group in groups]
 
 
 @router.post("", response_model=GroupOut, status_code=status.HTTP_201_CREATED)
@@ -97,7 +100,7 @@ async def create_group(
     session.add(ThreadParticipant(thread_id=thread.id, user_id=user.id))
     await session.commit()
     loaded = await _load(session, group.id)
-    return await _group_out(session, loaded)
+    return await _group_out(session, loaded, user.id)
 
 
 @router.get("/{group_id}", response_model=GroupOut)
@@ -109,7 +112,7 @@ async def group_detail(
     group = await _load(session, group_id)
     if user.id not in {member.user_id for member in group.members}:
         raise HTTPException(status_code=404, detail="No such group")
-    return await _group_out(session, group)
+    return await _group_out(session, group, user.id)
 
 
 @router.post("/join/{token}", response_model=GroupOut)
@@ -130,7 +133,7 @@ async def join_group(
             session.add(ThreadParticipant(thread_id=thread.id, user_id=user.id))
         await session.commit()
     group = await _load(session, group.id)
-    return await _group_out(session, group)
+    return await _group_out(session, group, user.id)
 
 
 @router.delete("/{group_id}/membership", status_code=status.HTTP_204_NO_CONTENT)
