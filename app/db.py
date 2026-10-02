@@ -6,6 +6,7 @@ import ssl
 from base64 import b64decode
 from collections.abc import AsyncGenerator
 from typing import Any
+from uuid import uuid4
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
@@ -26,8 +27,11 @@ def _connect_args() -> dict[str, Any]:
         )
         args["ssl"] = ssl.create_default_context(cadata=certificate)
     if settings.is_pgbouncer:
+        # Transaction mode: the next transaction may run on another server
+        # connection, so nothing cached and no sequential statement names.
         args["statement_cache_size"] = 0
         args["prepared_statement_cache_size"] = 0
+        args["prepared_statement_name_func"] = lambda: f"__asyncpg_{uuid4()}__"
     return args
 
 

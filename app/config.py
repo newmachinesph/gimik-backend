@@ -212,7 +212,9 @@ class Settings(BaseSettings):
 
     @property
     def is_pgbouncer(self) -> bool:
-        return "-pooler." in urlsplit(self.database_url).netloc
+        # Neon's pooler is a "-pooler." host; DigitalOcean's pools listen on 25061.
+        parts = urlsplit(self.database_url)
+        return "-pooler." in parts.netloc or parts.port == 25061
 
 
 @lru_cache
