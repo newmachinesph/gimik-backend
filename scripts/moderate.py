@@ -14,17 +14,24 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from sqlalchemy import delete, or_, select
+from sqlalchemy import delete, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.db import SessionLocal, engine
 from app.models import (
     Friendship,
+    Group,
     GroupMember,
+    HiddenUser,
     Invite,
+    JournalEntry,
     Keep,
     Message,
+    Pass,
+    Plan,
+    PlanPerson,
+    PushToken,
     Report,
     Someday,
     ThreadParticipant,
@@ -63,15 +70,38 @@ async def eject(session: AsyncSession, handle: str) -> bool:
     )
     if user is None:
         return False
+    mine = user.id
     keys = [photo.object_key for photo in user.photos]
+    keys += (
+        await session.scalars(
+            select(JournalEntry.photo_key).where(
+                JournalEntry.user_id == mine, JournalEntry.photo_key.is_not(None)
+            )
+        )
+    ).all()
     user.is_active = False
     user.token_version += 1
+    # The name and handle can be the offence, so they go too. The handle stays
+    # unique and says what happened to anyone reading an old report.
+    user.name = "Removed account"
+    user.handle = f"removed-{mine.hex[:12]}"
     user.bio = user.work = user.education = ""
+    user.city = user.hometown = user.religion = user.politics = None
+    user.interests = []
+    user.languages = []
     user.photos.clear()
-    mine = user.id
     await session.execute(delete(Someday).where(Someday.owner_id == mine))
     await session.execute(delete(Message).where(Message.sender_id == mine))
     await session.execute(delete(Keep).where(Keep.user_id == mine))
+    await session.execute(delete(Pass).where(Pass.user_id == mine))
+    await session.execute(delete(JournalEntry).where(JournalEntry.user_id == mine))
+    await session.execute(delete(PlanPerson).where(PlanPerson.user_id == mine))
+    await session.execute(delete(Plan).where(Plan.owner_id == mine))
+    await session.execute(delete(PushToken).where(PushToken.user_id == mine))
+    await session.execute(delete(HiddenUser).where(HiddenUser.user_id == mine))
+    # A group they started outlives them, for the people still in it, but not
+    # under a name they chose.
+    await session.execute(update(Group).where(Group.created_by == mine).values(name="Group"))
     await session.execute(
         delete(Invite).where(or_(Invite.from_user_id == mine, Invite.to_user_id == mine))
     )

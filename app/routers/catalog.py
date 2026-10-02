@@ -223,6 +223,9 @@ async def my_somedays(
             .order_by(Keep.created_at)
         )
     ).all()
+    # A someday kept from somebody since blocked leaves the list with them.
+    blocked = await blocked_ids(session, user.id)
+    rows = [(keep, someday) for keep, someday in rows if someday.owner_id not in blocked]
     # One extra query for the whole list rather than one per row: most keeps are
     # ordinary and carry no progress at all.
     trackable = [someday.id for _, someday in rows if someday.completion != "single"]

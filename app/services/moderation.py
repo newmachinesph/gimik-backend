@@ -8,60 +8,77 @@ Two tiers, because a public sentence and a private one are different things. A
 someday title, a profile and a group name are read by strangers, so they are
 held to the stricter list. A message between people who chose to talk is only
 refused for the words that are abuse in any company.
+
+The lists hold only words with no ordinary meaning. A filter that refuses
+"Maine Coon", "blue tits", "spic and span" or a man called Dick teaches people
+it is broken, so anything with an innocent reading is left to reports and
+blocks, which have a person behind them.
 """
 
 from __future__ import annotations
 
 import re
+import unicodedata
 
 from fastapi import HTTPException
 
-# Shown to the person who wrote it. The app matches on the status and this
-# exact text to say something better than "that did not save".
+# Shown to the person who wrote it. The app shows a 422's detail as it is,
+# which is better than telling someone their message "did not save".
 REJECTED = "That contains language Gimik does not allow."
 
 # Slurs, sexual violence and threats: refused everywhere, messages included.
 _SEVERE = frozenset(
     """
-    nigger nigga niggers niggas faggot faggots fag fags tranny trannies retard
-    retards retarded chink chinks spic spics kike kikes gook gooks wetback
-    coon coons dyke dykes rape rapes raped raping rapist rapists molest
-    molested pedo pedos pedophile pedophiles childporn kys
+    nigger nigga niggers niggas faggot faggots tranny trannies retard retards
+    retarded kike kikes gook gooks wetback wetbacks rape rapes raped raping
+    rapist rapists molest molested pedo pedos pedophile pedophiles childporn
+    kys
     """.split()
 )
 
 # Profanity and sexual language: refused wherever strangers can read it.
-# Deliberately absent, because they are ordinary words here: "cum" (cum laude),
-# "paki" (Tagalog for please), "cp" (a cellphone), "naked", "escort".
 _PROFANE = frozenset(
     """
     fuck fucks fucked fucker fuckers fucking motherfucker motherfuckers shit
-    shits shitty bullshit bitch bitches bastard bastards asshole assholes cunt
-    cunts dick dicks cock cocks pussy pussies whore whores slut sluts porn
-    porno blowjob handjob jerkoff cumshot anal nudes boobs tits titties horny
-    hooker hookers sext sexting
+    shits shitty bullshit bitch bitches asshole assholes cunt cunts pussy
+    pussies whore whores slut sluts porn porno blowjob handjob jerkoff cumshot
+    nudes boobs titties horny sext sexting
     puta putang putangina tangina tanginamo punyeta pakyu gago tarantado
-    tarantada ulol kupal kantot kantutan jakol tite titi pekpek burat pokpok
-    malibog libog
+    tarantada ulol kupal kantot kantutan jakol pekpek burat pokpok malibog
+    libog
     """.split()
 )
 
-# ponytail: an exact-word blocklist. It misses spaced-out or misspelled abuse
-# and anything in a photo; reports and blocks are what catch those. Swap in a
-# hosted moderation model when volume makes hand-review of reports slow.
+# Stems that are abuse inside any word, so "fuckyou" and "tanginamo" do not
+# slip through for want of a space. Nothing ordinary contains either.
+_STEMS = ("fuck", "tangina")
+
+# ponytail: a word blocklist. It misses spelled-out abuse ("f.u.c.k"), new
+# coinages and anything in a photo; reports and blocks are what catch those.
+# Swap in a hosted moderation model when volume makes hand-review slow.
 _LEET = str.maketrans("013457@$", "oieastas")
 _WORD = re.compile(r"[a-z]+")
 _RUN = re.compile(r"(.)\1{2,}")
+_INVISIBLE = re.compile(r"[​-‏⁠﻿]")
+
+
+def _words(text: str) -> list[str]:
+    """Lowercase words with the cheap disguises undone: accents, zero-width
+    characters, digits standing in for letters, and letters held down."""
+    plain = unicodedata.normalize("NFKD", _INVISIBLE.sub("", text))
+    plain = "".join(char for char in plain if not unicodedata.combining(char))
+    return _WORD.findall(_RUN.sub(r"\1", plain.lower().translate(_LEET)))
 
 
 def objectionable(text: str | None, *, public: bool = True) -> bool:
-    """True when any word of `text` is on the list for that audience."""
+    """True when `text` holds a word on the list for that audience."""
     if not text:
         return False
     blocked = _SEVERE | _PROFANE if public else _SEVERE
-    # "f u u u c k" is not caught; "fuuuck" and "sh1t" are.
-    normalized = _RUN.sub(r"\1", text.lower().translate(_LEET))
-    return any(word in blocked for word in _WORD.findall(normalized))
+    return any(
+        word in blocked or (public and any(stem in word for stem in _STEMS))
+        for word in _words(text)
+    )
 
 
 def screen(*texts: str | None, public: bool = True) -> None:

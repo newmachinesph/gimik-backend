@@ -202,7 +202,12 @@ async def google_sign_in(
         await session.commit()
         return _pair_for(user)
 
+    # A provider-supplied name is not refused - that would be a sign-in that
+    # fails for no reason the person can see - but an objectionable one is not
+    # shown either.
     name = claims["name"] or claims["email"].split("@")[0]
+    if moderation.objectionable(name):
+        name = "Gimik member"
     user = User(
         email=claims["email"],
         # No password: this account has never had one. See User.password_hash.
@@ -262,6 +267,8 @@ async def apple_sign_in(
         return _pair_for(user)
 
     name = (payload.name or "").strip() or claims["email"].split("@")[0]
+    if moderation.objectionable(name):
+        name = "Gimik member"
     user = User(
         email=claims["email"],
         password_hash=None,
@@ -306,7 +313,9 @@ async def update_me(
     session: AsyncSession = Depends(get_session),
 ) -> ProfileOut:
     # Everything on a profile that a stranger can read.
-    moderation.screen(payload.bio, payload.work, payload.education, payload.hometown)
+    moderation.screen(
+        payload.city, payload.bio, payload.work, payload.education, payload.hometown
+    )
     if payload.city is not None:
         user.city = payload.city.strip() or None
     if payload.bio is not None:

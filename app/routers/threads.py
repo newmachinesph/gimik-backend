@@ -63,9 +63,16 @@ async def _message_out(session: AsyncSession, message: Message, sender: User) ->
     )
 
 
-async def _thread_out(session: AsyncSession, thread: Thread, viewer_id: uuid.UUID) -> ThreadOut:
+async def _thread_out(
+    session: AsyncSession,
+    thread: Thread,
+    viewer_id: uuid.UUID,
+    blocked: set[uuid.UUID] | frozenset[uuid.UUID] = frozenset(),
+) -> ThreadOut:
     people = await users_by_ids(session, {p.user_id for p in thread.participants})
-    last = thread.messages[-1] if thread.messages else None
+    # The preview is the last thing the viewer is allowed to read: in a group,
+    # a blocked member's message must not surface as the line under the title.
+    last = next((m for m in reversed(thread.messages) if m.sender_id not in blocked), None)
     me = next((p for p in thread.participants if p.user_id == viewer_id), None)
     unread = bool(
         last
@@ -119,7 +126,7 @@ async def my_threads(
         for thread in threads
         if not (thread.kind == "solo" and any(p.user_id in blocked for p in thread.participants))
     ]
-    out = [await _thread_out(session, thread, user.id) for thread in threads]
+    out = [await _thread_out(session, thread, user.id, blocked) for thread in threads]
     out.sort(
         key=lambda t: (t.last_message.created_at if t.last_message else t.created_at),
         reverse=True,
@@ -135,7 +142,8 @@ async def open_solo(
 ) -> ThreadOut:
     if user_id == user.id:
         raise HTTPException(status_code=422, detail="A thread needs two people")
-    if await session.get(User, user_id) is None or user_id in await blocked_ids(session, user.id):
+    target = await session.get(User, user_id)
+    if target is None or not target.is_active or user_id in await blocked_ids(session, user.id):
         raise HTTPException(status_code=404, detail="No such person")
     thread = await _open_solo_thread(session, user.id, user_id, None)
     await session.commit()
@@ -160,8 +168,8 @@ async def thread_detail(
     people = await users_by_ids(
         session, {p.user_id for p in thread.participants} | {m.sender_id for m in thread.messages}
     )
-    base = await _thread_out(session, thread, user.id)
     blocked = await blocked_ids(session, user.id)
+    base = await _thread_out(session, thread, user.id, blocked)
     return ThreadDetailOut(
         **base.model_dump(exclude={"messages"}),
         messages=[
@@ -187,7 +195,9 @@ async def send_message(
     participant = await _participant(session, thread_id, user.id)
     if payload.attachment and payload.attachment.type not in ATTACHMENT_TYPES:
         raise HTTPException(status_code=422, detail="Unknown attachment type")
-    moderation.screen(payload.body, public=False)
+    moderation.screen(
+        payload.body, payload.attachment.label if payload.attachment else None, public=False
+    )
     # Everyone in the thread except the sender, who already has it.
     others = (
         await session.scalars(
@@ -216,6 +226,7 @@ async def send_message(
     # Published after the commit so realtime can never announce something that
     # rolled back, and awaited only for as long as the REST call takes. In a
     # group, nobody on either side of a block with the sender is notified.
+    everyone = len(others)
     others = [recipient for recipient in others if recipient not in blocked]
     event = {
         "threadId": str(thread_id),
@@ -224,7 +235,11 @@ async def send_message(
         "body": message.body,
         "at": message.created_at.isoformat(),
     }
-    await realtime.publish(realtime.thread_channel(thread_id), "message", event)
+    # The thread channel reaches every participant and carries the body, so it
+    # is skipped when someone in the thread must not receive this message. The
+    # per-person channels below still tell everyone else.
+    if len(others) == everyone:
+        await realtime.publish(realtime.thread_channel(thread_id), "message", event)
     for recipient in others:
         await realtime.publish(realtime.user_channel(recipient), "message", event)
     # Everyone in the thread but its author, on the devices they actually carry.

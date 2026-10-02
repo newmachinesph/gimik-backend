@@ -117,7 +117,7 @@ async def invites(
     user: User = Depends(current_user),
     session: AsyncSession = Depends(get_session),
 ) -> list[InviteOut]:
-    hidden = await hidden_ids(session, user.id)
+    hidden = await blocked_ids(session, user.id)
     rows = (
         await session.execute(
             select(Invite, Someday)
@@ -182,12 +182,10 @@ async def send_invite(
             raise PlusRequired(f"Sending more than {FREE_INVITES_PER_WEEK} invites a week")
     target = await session.get(User, payload.to_user_id)
     someday = await session.get(Someday, payload.someday_id)
-    if target is None or someday is None:
+    if target is None or someday is None or not target.is_active:
         raise HTTPException(status_code=404, detail="No such person or someday")
-    # Hidden goes both ways and is never explained (corpus 4).
-    if user.id in await hidden_ids(session, target.id) or target.id in await hidden_ids(
-        session, user.id
-    ):
+    # A block goes both ways and is never explained (corpus 4).
+    if target.id in await blocked_ids(session, user.id):
         raise HTTPException(status_code=404, detail="No such person or someday")
     # The someday must be on the target's list, visibly to the sender: an invite
     # answers a want the sender can actually see.
@@ -265,7 +263,11 @@ async def accept_invite(
     session: AsyncSession = Depends(get_session),
 ) -> dict[str, str]:
     invite = await session.get(Invite, invite_id)
-    if invite is None or invite.to_user_id != user.id:
+    if (
+        invite is None
+        or invite.to_user_id != user.id
+        or invite.from_user_id in await blocked_ids(session, user.id)
+    ):
         raise HTTPException(status_code=404, detail="No such invite")
     invite.status = "accepted"
     thread = await _open_solo_thread(session, user.id, invite.from_user_id, invite.someday_id)
@@ -341,7 +343,11 @@ async def friends(
             for row in incoming
             if row.requester_id in people and row.requester_id not in blocked
         ],
-        sent=[holder_out(people[row.addressee_id]) for row in outgoing if row.addressee_id in people],
+        sent=[
+            holder_out(people[row.addressee_id])
+            for row in outgoing
+            if row.addressee_id in people and row.addressee_id not in blocked
+        ],
     )
 
 
@@ -354,7 +360,7 @@ async def request_friend(
     if user_id == user.id:
         raise HTTPException(status_code=422, detail="You are already you")
     target = await session.get(User, user_id)
-    if target is None or user_id in await blocked_ids(session, user.id):
+    if target is None or not target.is_active or user_id in await blocked_ids(session, user.id):
         raise HTTPException(status_code=404, detail="No such person")
     existing = await session.scalar(
         select(Friendship).where(
@@ -398,7 +404,7 @@ async def accept_friend(
             Friendship.status == "pending",
         )
     )
-    if row is None:
+    if row is None or user_id in await blocked_ids(session, user.id):
         raise HTTPException(status_code=404, detail="No pending request")
     row.status = "accepted"
     await session.commit()
@@ -456,14 +462,27 @@ async def hide(
     if await session.get(HiddenUser, (user.id, user_id)) is None:
         session.add(HiddenUser(user_id=user.id, hidden_user_id=user_id))
         # A block is a report too: someone was bad enough to be shut out, and
-        # the people who can remove them should hear about it.
-        session.add(Report(reporter_id=user.id, reported_id=user_id, reason="blocked"))
-        # Their live invites die quietly with the block.
+        # the people who can remove them should hear about it. Once per pair,
+        # so blocking and unblocking in a loop cannot flood the inbox.
+        first = (
+            await session.scalar(
+                select(Report.id).where(
+                    Report.reporter_id == user.id,
+                    Report.reported_id == user_id,
+                    Report.reason == "blocked",
+                )
+            )
+        ) is None
+        if first:
+            session.add(Report(reporter_id=user.id, reported_id=user_id, reason="blocked"))
+        # Live invites between the two die quietly with the block, whoever sent them.
         rows = (
             await session.scalars(
                 select(Invite).where(
-                    Invite.to_user_id == user.id,
-                    Invite.from_user_id == user_id,
+                    or_(
+                        (Invite.to_user_id == user.id) & (Invite.from_user_id == user_id),
+                        (Invite.to_user_id == user_id) & (Invite.from_user_id == user.id),
+                    ),
                     Invite.status.in_(["new", "seen"]),
                 )
             )
@@ -471,7 +490,8 @@ async def hide(
         for invite in rows:
             invite.status = "declined"
         await session.commit()
-        _alert(tasks, reporter=user, reported=target, reason="blocked")
+        if first:
+            _alert(tasks, reporter=user, reported=target, reason="blocked")
 
 
 @router.delete("/hidden/{user_id}", status_code=status.HTTP_204_NO_CONTENT)

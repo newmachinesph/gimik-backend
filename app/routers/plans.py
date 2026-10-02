@@ -32,7 +32,7 @@ from app.models import (
 )
 from app.models.base import utcnow
 from app.routers import places
-from app.routers.common import holder_out, someday_out, users_by_ids
+from app.routers.common import blocked_ids, holder_out, someday_out, users_by_ids
 from app.schemas import JournalIn, JournalOut, PlanCreate, PlanOut, PlanPatch
 from app.services import images, storage
 
@@ -74,6 +74,17 @@ async def _plan_out(session: AsyncSession, plan: Plan) -> PlanOut:
         thread_id=thread_id,
         created_at=plan.created_at,
     )
+
+
+async def _check_people(session: AsyncSession, user: User, people: set[uuid.UUID]) -> None:
+    """Everyone being put on a plan exists, is still here, and is not across a
+    block. Adding someone to a plan puts its thread in their list, so without
+    this a blocked person could reach the one who blocked them."""
+    blocked = await blocked_ids(session, user.id)
+    for member_id in people - {user.id}:
+        member = await session.get(User, member_id)
+        if member is None or not member.is_active or member_id in blocked:
+            raise HTTPException(status_code=404, detail="No such person on the plan")
 
 
 async def _owned(session: AsyncSession, plan_id: uuid.UUID, user_id: uuid.UUID) -> Plan:
@@ -152,9 +163,8 @@ async def lock(
         if chosen is not None:
             await places.ensure_coordinates(session, chosen)
     member_ids = {user.id, *payload.people}
+    await _check_people(session, user, member_ids)
     for member_id in member_ids:
-        if member_id != user.id and await session.get(User, member_id) is None:
-            raise HTTPException(status_code=404, detail="No such person on the plan")
         session.add(
             PlanPerson(plan_id=plan.id, user_id=member_id, confirmed=member_id == user.id)
         )
@@ -198,9 +208,8 @@ async def update_plan(
         current = {p.user_id: p for p in plan.people}
         for gone in set(current) - wanted:
             await session.delete(current[gone])
+        await _check_people(session, user, wanted - set(current))
         for added in wanted - set(current):
-            if added != user.id and await session.get(User, added) is None:
-                raise HTTPException(status_code=404, detail="No such person on the plan")
             session.add(PlanPerson(plan_id=plan.id, user_id=added, confirmed=added == user.id))
         thread = await session.scalar(select(Thread).where(Thread.plan_id == plan.id))
         if thread is not None:

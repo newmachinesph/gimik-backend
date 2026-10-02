@@ -148,6 +148,7 @@ def send_moderation_alert(tasks: BackgroundTasks, *, subject: str, text: str) ->
     Logged as well as mailed: with mail switched off the report is still a row
     in `reports` and a line in the log, never nothing.
     """
+    subject = " ".join(subject.split())  # a header cannot hold a line break
     log.warning("moderation: %s", subject)
     _dispatch(tasks, settings.moderation_email, f"[Gimik moderation] {subject}", text)
 

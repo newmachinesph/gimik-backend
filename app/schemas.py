@@ -451,4 +451,6 @@ class PersonOut(BaseModel):
 
 
 class ReportIn(BaseModel):
-    reason: str = Field(min_length=1, max_length=60)
+    # One of the app's reason slugs. Letters only: it is stored, and it is put
+    # in the subject of the moderation mail, where a newline would lose it.
+    reason: str = Field(min_length=1, max_length=60, pattern=r"^[A-Za-z]+$")
