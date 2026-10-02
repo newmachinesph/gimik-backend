@@ -222,6 +222,8 @@ async def test_eject_removes_the_content_and_closes_the_account(client, make_use
     bea, mara, bea_id, mara_id = await _pair(client, make_user)
     someday = await _write(client, bea, "Walk the old Colon street at night")
     await client.patch("/auth/me", json={"bio": "hello"}, headers=bea)
+    thread = (await client.post(f"/threads/solo/{mara_id}", headers=bea)).json()["id"]
+    await client.post(f"/threads/{thread}/messages", json={"body": "hi"}, headers=bea)
     await client.post(
         "/plans",
         json={"someday_id": somedays["lights"], "date": "2030-01-05", "people": [mara_id]},
@@ -238,6 +240,11 @@ async def test_eject_removes_the_content_and_closes_the_account(client, make_use
     assert someday not in await _deck(client, mara)
     assert (await client.get("/people/bea", headers=mara)).status_code == 404
     assert (await client.get("/plans", headers=mara)).json() == []
+    # No half-conversation is left behind in the other person's list. (The
+    # plan's own thread goes with the plan in Postgres; SQLite here does not
+    # enforce that cascade, so only the conversation is asserted.)
+    left = (await client.get("/threads", headers=mara)).json()
+    assert [thread for thread in left if thread["kind"] == "solo"] == []
     # Nobody can be pointed at the removed account, and its tokens are dead.
     assert (await client.post(f"/threads/solo/{bea_id}", headers=mara)).status_code == 404
     assert (await client.get("/auth/me", headers=bea)).status_code == 401

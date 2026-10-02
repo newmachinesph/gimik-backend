@@ -120,11 +120,17 @@ async def my_threads(
     ).all()
     # A conversation with someone on either side of a block is gone from the
     # list. Group and plan threads stay; the blocked person's messages do not.
+    # So is one whose other half no longer exists: a deleted or removed account
+    # takes its participant row with it, and what was left listed as an empty
+    # conversation called "Thread".
     blocked = await blocked_ids(session, user.id)
     threads = [
         thread
         for thread in threads
-        if not (thread.kind == "solo" and any(p.user_id in blocked for p in thread.participants))
+        if not (
+            thread.kind == "solo"
+            and (len(thread.participants) < 2 or any(p.user_id in blocked for p in thread.participants))
+        )
     ]
     out = [await _thread_out(session, thread, user.id, blocked) for thread in threads]
     out.sort(
