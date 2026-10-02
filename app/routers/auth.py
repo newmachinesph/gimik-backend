@@ -37,7 +37,7 @@ from app.security import (
     token_is_current,
     verify_password,
 )
-from app.services import apple_auth, google_auth, ratelimit, storage
+from app.services import apple_auth, google_auth, moderation, ratelimit, storage
 from app.services import email as email_service
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -110,6 +110,7 @@ async def register(
 ) -> TokenPair:
     if payload.gender is not None and payload.gender not in GENDERS:
         raise HTTPException(status_code=422, detail="Unknown gender")
+    moderation.screen(payload.name)
     existing = await session.scalar(select(User.id).where(User.email == payload.email.lower()))
     if existing:
         raise HTTPException(status_code=409, detail="That email already has an account")
@@ -304,6 +305,8 @@ async def update_me(
     user: User = Depends(current_user),
     session: AsyncSession = Depends(get_session),
 ) -> ProfileOut:
+    # Everything on a profile that a stranger can read.
+    moderation.screen(payload.bio, payload.work, payload.education, payload.hometown)
     if payload.city is not None:
         user.city = payload.city.strip() or None
     if payload.bio is not None:

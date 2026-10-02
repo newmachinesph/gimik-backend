@@ -27,6 +27,7 @@ from app.models import (
     User,
 )
 from app.routers.common import (
+    blocked_ids,
     friend_ids,
     group_peer_ids,
     holder_out,
@@ -43,7 +44,7 @@ from app.schemas import (
     SomedayCreate,
     Visibility,
 )
-from app.services import ratelimit
+from app.services import moderation, ratelimit
 from app.taxonomy import CATEGORIES, canonical, is_canonical
 
 router = APIRouter(tags=["catalog"])
@@ -173,6 +174,7 @@ async def create_someday(
         raise HTTPException(status_code=422, detail="Unknown category")
 
     title = payload.title.strip()
+    moderation.screen(title)
     existing = await session.scalar(
         select(Someday).where(
             Someday.owner_id == user.id,
@@ -433,12 +435,13 @@ async def holders(
 
     my_friends = await friend_ids(session, user.id)
     my_peers = await group_peer_ids(session, user.id)
+    blocked = await blocked_ids(session, user.id)
     holders_users = await users_by_ids(session, {keep.user_id for keep in keeps})
 
     visible: list[HolderOut] = []
     for keep_row in keeps:
         holder = holders_users.get(keep_row.user_id)
-        if holder is None:
+        if holder is None or holder.id in blocked or not holder.is_active:
             continue
         open_to = set(keep_row.open_to)
         allowed = False

@@ -23,10 +23,10 @@ from app.models import (
     User,
 )
 from app.models.base import utcnow
-from app.routers.common import holder_out, someday_out, users_by_ids
+from app.routers.common import blocked_ids, holder_out, someday_out, users_by_ids
 from app.routers.social import _open_solo_thread
 from app.schemas import AttachmentIn, MessageIn, MessageOut, ThreadDetailOut, ThreadOut
-from app.services import push, ratelimit, realtime
+from app.services import moderation, push, ratelimit, realtime
 
 router = APIRouter(prefix="/threads", tags=["threads"])
 
@@ -111,6 +111,14 @@ async def my_threads(
             .where(ThreadParticipant.user_id == user.id)
         )
     ).all()
+    # A conversation with someone on either side of a block is gone from the
+    # list. Group and plan threads stay; the blocked person's messages do not.
+    blocked = await blocked_ids(session, user.id)
+    threads = [
+        thread
+        for thread in threads
+        if not (thread.kind == "solo" and any(p.user_id in blocked for p in thread.participants))
+    ]
     out = [await _thread_out(session, thread, user.id) for thread in threads]
     out.sort(
         key=lambda t: (t.last_message.created_at if t.last_message else t.created_at),
@@ -127,7 +135,7 @@ async def open_solo(
 ) -> ThreadOut:
     if user_id == user.id:
         raise HTTPException(status_code=422, detail="A thread needs two people")
-    if await session.get(User, user_id) is None:
+    if await session.get(User, user_id) is None or user_id in await blocked_ids(session, user.id):
         raise HTTPException(status_code=404, detail="No such person")
     thread = await _open_solo_thread(session, user.id, user_id, None)
     await session.commit()
@@ -153,12 +161,13 @@ async def thread_detail(
         session, {p.user_id for p in thread.participants} | {m.sender_id for m in thread.messages}
     )
     base = await _thread_out(session, thread, user.id)
+    blocked = await blocked_ids(session, user.id)
     return ThreadDetailOut(
         **base.model_dump(exclude={"messages"}),
         messages=[
             await _message_out(session, message, people[message.sender_id])
             for message in thread.messages
-            if message.sender_id in people
+            if message.sender_id in people and message.sender_id not in blocked
         ],
     )
 
@@ -178,6 +187,21 @@ async def send_message(
     participant = await _participant(session, thread_id, user.id)
     if payload.attachment and payload.attachment.type not in ATTACHMENT_TYPES:
         raise HTTPException(status_code=422, detail="Unknown attachment type")
+    moderation.screen(payload.body, public=False)
+    # Everyone in the thread except the sender, who already has it.
+    others = (
+        await session.scalars(
+            select(ThreadParticipant.user_id).where(
+                ThreadParticipant.thread_id == thread_id,
+                ThreadParticipant.user_id != user.id,
+            )
+        )
+    ).all()
+    blocked = await blocked_ids(session, user.id)
+    thread = await session.get(Thread, thread_id)
+    # A block ends the conversation for both sides, and says nothing about why.
+    if thread is not None and thread.kind == "solo" and any(o in blocked for o in others):
+        raise HTTPException(status_code=404, detail="No such thread")
     message = Message(
         thread_id=thread_id,
         sender_id=user.id,
@@ -189,17 +213,10 @@ async def send_message(
     await session.commit()
     out = await _message_out(session, message, user)
 
-    # Everyone in the thread except the sender, who already has it. Published
-    # after the commit so realtime can never announce something that rolled
-    # back, and awaited only for as long as the REST call takes.
-    others = (
-        await session.scalars(
-            select(ThreadParticipant.user_id).where(
-                ThreadParticipant.thread_id == thread_id,
-                ThreadParticipant.user_id != user.id,
-            )
-        )
-    ).all()
+    # Published after the commit so realtime can never announce something that
+    # rolled back, and awaited only for as long as the REST call takes. In a
+    # group, nobody on either side of a block with the sender is notified.
+    others = [recipient for recipient in others if recipient not in blocked]
     event = {
         "threadId": str(thread_id),
         "messageId": str(message.id),

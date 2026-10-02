@@ -106,6 +106,9 @@ class Settings(BaseSettings):
     smtp_password: str = Field(default="", alias="SMTP_PASSWORD")
     smtp_use_tls: bool = Field(default=False, alias="SMTP_USE_TLS")
     mail_from: str = Field(default="Gimik <hello@gimik.ph>", alias="MAIL_FROM")
+    # Where reports and blocks land. A person reads this inbox daily: App Store
+    # guideline 1.2 gives 24 hours to act on a report.
+    moderation_email: str = Field(default="support@gimik.app", alias="MODERATION_EMAIL")
     app_base_url: str = Field(default="http://localhost:8100", alias="APP_BASE_URL")
     # The deep link a reset email points at, opened by the app itself.
     app_scheme: str = Field(default="gimik", alias="APP_SCHEME")

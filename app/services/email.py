@@ -142,6 +142,16 @@ Three is usually enough to start.
     )
 
 
+def send_moderation_alert(tasks: BackgroundTasks, *, subject: str, text: str) -> None:
+    """A report or a block, sent to the people who have 24 hours to act on it.
+
+    Logged as well as mailed: with mail switched off the report is still a row
+    in `reports` and a line in the log, never nothing.
+    """
+    log.warning("moderation: %s", subject)
+    _dispatch(tasks, settings.moderation_email, f"[Gimik moderation] {subject}", text)
+
+
 def send_password_changed(tasks: BackgroundTasks, *, to: str, name: str) -> None:
     """Sent after a password change, because the useful one is the warning you
     did not expect."""

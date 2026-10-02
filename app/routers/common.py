@@ -69,6 +69,23 @@ async def hidden_ids(session: AsyncSession, user_id: uuid.UUID) -> set[uuid.UUID
     return set(rows)
 
 
+async def blocked_ids(session: AsyncSession, user_id: uuid.UUID) -> set[uuid.UUID]:
+    """Everyone this person blocked, and everyone who blocked them.
+
+    A block cuts both ways: neither side sees the other's somedays, profile or
+    messages, and neither can reach the other. `hidden_ids` is the one-way half,
+    for the list a person manages themselves.
+    """
+    rows = (
+        await session.execute(
+            select(HiddenUser.user_id, HiddenUser.hidden_user_id).where(
+                or_(HiddenUser.user_id == user_id, HiddenUser.hidden_user_id == user_id)
+            )
+        )
+    ).all()
+    return {theirs if mine == user_id else mine for mine, theirs in rows}
+
+
 async def users_by_ids(session: AsyncSession, ids: set[uuid.UUID]) -> dict[uuid.UUID, User]:
     if not ids:
         return {}

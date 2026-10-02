@@ -1,9 +1,13 @@
-"""People reaching each other: invites, friendships, hiding, reporting, and the
-public face of a person.
+"""People reaching each other: invites, friendships, blocking, reporting, and
+the public face of a person.
 
 The quiet rules from the corpus hold everywhere here: declining is silent,
-hiding is silent and reversible, a report is never shown to its subject, and
+blocking is silent and reversible, a report is never shown to its subject, and
 nobody is a friend until both sides said so.
+
+Blocking is stored as `hidden_users`, the name it had when it only stopped
+invites. It now cuts both people off from each other everywhere, and - like a
+report - tells the moderation inbox (App Store guideline 1.2).
 """
 
 from __future__ import annotations
@@ -11,7 +15,7 @@ from __future__ import annotations
 import datetime as dt
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased, selectinload
@@ -33,7 +37,14 @@ from app.models import (
     ThreadParticipant,
     User,
 )
-from app.routers.common import friend_ids, hidden_ids, holder_out, someday_out, users_by_ids
+from app.routers.common import (
+    blocked_ids,
+    friend_ids,
+    hidden_ids,
+    holder_out,
+    someday_out,
+    users_by_ids,
+)
 from app.schemas import (
     FriendRequestOut,
     FriendsOut,
@@ -44,7 +55,7 @@ from app.schemas import (
     PhotoOut,
     ReportIn,
 )
-from app.services import push, ratelimit, realtime, storage
+from app.services import email, push, ratelimit, realtime, storage
 
 router = APIRouter(tags=["social"])
 
@@ -299,7 +310,8 @@ async def friends(
     user: User = Depends(current_user),
     session: AsyncSession = Depends(get_session),
 ) -> FriendsOut:
-    accepted = await friend_ids(session, user.id)
+    blocked = await blocked_ids(session, user.id)
+    accepted = await friend_ids(session, user.id) - blocked
     incoming = (
         await session.scalars(
             select(Friendship).where(
@@ -327,7 +339,7 @@ async def friends(
                 id=row.id, from_user=holder_out(people[row.requester_id]), created_at=row.created_at
             )
             for row in incoming
-            if row.requester_id in people
+            if row.requester_id in people and row.requester_id not in blocked
         ],
         sent=[holder_out(people[row.addressee_id]) for row in outgoing if row.addressee_id in people],
     )
@@ -342,7 +354,7 @@ async def request_friend(
     if user_id == user.id:
         raise HTTPException(status_code=422, detail="You are already you")
     target = await session.get(User, user_id)
-    if target is None:
+    if target is None or user_id in await blocked_ids(session, user.id):
         raise HTTPException(status_code=404, detail="No such person")
     existing = await session.scalar(
         select(Friendship).where(
@@ -425,17 +437,28 @@ async def hidden(
     return [holder_out(person) for person in people.values()]
 
 
-@router.put("/hidden/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.put(
+    "/hidden/{user_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(ratelimit.limiter(ratelimit.SOCIAL_WRITE))],
+)
 async def hide(
     user_id: uuid.UUID,
+    tasks: BackgroundTasks,
     user: User = Depends(current_user),
     session: AsyncSession = Depends(get_session),
 ) -> None:
-    if await session.get(User, user_id) is None:
+    """Block someone. Takes effect on the next request either of them makes:
+    `blocked_ids` is read by the feed, holders, search, profiles and threads."""
+    target = await session.get(User, user_id)
+    if target is None or user_id == user.id:
         raise HTTPException(status_code=404, detail="No such person")
     if await session.get(HiddenUser, (user.id, user_id)) is None:
         session.add(HiddenUser(user_id=user.id, hidden_user_id=user_id))
-        # Their live invites die quietly with the hide.
+        # A block is a report too: someone was bad enough to be shut out, and
+        # the people who can remove them should hear about it.
+        session.add(Report(reporter_id=user.id, reported_id=user_id, reason="blocked"))
+        # Their live invites die quietly with the block.
         rows = (
             await session.scalars(
                 select(Invite).where(
@@ -448,6 +471,7 @@ async def hide(
         for invite in rows:
             invite.status = "declined"
         await session.commit()
+        _alert(tasks, reporter=user, reported=target, reason="blocked")
 
 
 @router.delete("/hidden/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -492,7 +516,7 @@ async def find_people(
     needle = q.strip()
     if len(needle) < SEARCH_FLOOR:
         return []
-    hidden = await hidden_ids(session, user.id)
+    hidden = await blocked_ids(session, user.id)
     like = f"%{needle}%"
     rows = (
         await session.scalars(
@@ -518,7 +542,11 @@ async def person(
     target = await session.scalar(
         select(User).options(selectinload(User.photos)).where(User.handle == handle)
     )
-    if target is None or not target.is_active:
+    if (
+        target is None
+        or not target.is_active
+        or target.id in await blocked_ids(session, user.id)
+    ):
         raise HTTPException(status_code=404, detail="No such person")
 
     their_keeps = (
@@ -592,14 +620,82 @@ async def person(
     )
 
 
-@router.post("/people/{user_id}/report", status_code=status.HTTP_204_NO_CONTENT)
+def _alert(
+    tasks: BackgroundTasks, *, reporter: User, reported: User, reason: str, content: str = ""
+) -> None:
+    """Tell the moderation inbox, with enough in the message to act on it."""
+    email.send_moderation_alert(
+        tasks,
+        subject=f"{reason}: @{reported.handle}",
+        text=f"""Reported: {reported.name} (@{reported.handle}, {reported.id})
+By: {reporter.name} (@{reporter.handle}, {reporter.id})
+Reason: {reason}
+{content}
+Act within 24 hours. If the report holds, remove the account and everything
+it posted:
+
+    python scripts/moderate.py eject {reported.handle}
+""",
+    )
+
+
+@router.post(
+    "/people/{user_id}/report",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(ratelimit.limiter(ratelimit.SOCIAL_WRITE))],
+)
 async def report(
     user_id: uuid.UUID,
     payload: ReportIn,
+    tasks: BackgroundTasks,
     user: User = Depends(current_user),
     session: AsyncSession = Depends(get_session),
 ) -> None:
-    if await session.get(User, user_id) is None:
+    target = await session.get(User, user_id)
+    if target is None or user_id == user.id:
         raise HTTPException(status_code=404, detail="No such person")
     session.add(Report(reporter_id=user.id, reported_id=user_id, reason=payload.reason))
     await session.commit()
+    _alert(
+        tasks,
+        reporter=user,
+        reported=target,
+        reason=payload.reason,
+        content=f"Bio: {target.bio}\nWork: {target.work}\nEducation: {target.education}\n",
+    )
+
+
+@router.post(
+    "/somedays/{someday_id}/report",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(ratelimit.limiter(ratelimit.SOCIAL_WRITE))],
+)
+async def report_someday(
+    someday_id: uuid.UUID,
+    payload: ReportIn,
+    tasks: BackgroundTasks,
+    user: User = Depends(current_user),
+    session: AsyncSession = Depends(get_session),
+) -> None:
+    """Flag a someday somebody wrote. The report is filed against its author.
+
+    Catalog somedays have no author and are not user content, so there is
+    nothing to report; they answer 404 like a someday that does not exist.
+    """
+    someday = await session.get(Someday, someday_id)
+    author = await session.get(User, someday.owner_id) if someday and someday.owner_id else None
+    if someday is None or author is None or author.id == user.id:
+        raise HTTPException(status_code=404, detail="No such someday")
+    # ponytail: the someday rides in `reason` (60 chars: 15 + "|someday:" + a
+    # uuid) rather than its own column, which would need a migration. Give
+    # reports a someday_id column when they get an admin screen.
+    reason = f"{payload.reason[:15]}|someday:{someday.id}"
+    session.add(Report(reporter_id=user.id, reported_id=author.id, reason=reason))
+    await session.commit()
+    _alert(
+        tasks,
+        reporter=user,
+        reported=author,
+        reason=payload.reason,
+        content=f"Someday {someday.id}: {someday.title}\n",
+    )

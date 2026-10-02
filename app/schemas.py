@@ -142,6 +142,9 @@ class SomedayOut(BaseModel):
     party: str
     needs: list[str]
     artwork_url: str | None = None
+    # Who wrote it, for a someday somebody wrote; null for the catalog. The app
+    # offers Report only where there is an author who is not the viewer.
+    owner_id: uuid.UUID | None = None
 
 
 class FeedItemOut(BaseModel):

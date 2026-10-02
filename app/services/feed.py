@@ -86,7 +86,7 @@ from sqlalchemy import Select, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import Friendship, Keep, Pass, Someday, User
-from app.routers.common import group_peer_ids
+from app.routers.common import blocked_ids, group_peer_ids
 
 # --- weights -------------------------------------------------------------
 # Tuned by hand against the seeded world rather than learned, and deliberately
@@ -472,11 +472,14 @@ async def _community_pool(
         ).all()
     }
 
+    # Nothing written by someone on either side of a block, or by an account
+    # that has been removed, reaches this deck.
+    blocked = await blocked_ids(session, user.id)
     visible_rows = []
     for row in rows:
         keep = author_keeps.get((row.id, row.owner_id))
         owner = owners.get(row.owner_id)
-        if keep is None or owner is None:
+        if keep is None or owner is None or owner.id in blocked or not owner.is_active:
             continue
         open_to = set(keep.open_to or [])
         known = ("friends" in open_to and owner.id in friends) or (

@@ -17,6 +17,7 @@ from app.entitlements import requires_plus
 from app.models import Group, GroupMember, Thread, ThreadParticipant, User
 from app.routers.common import holder_out, users_by_ids
 from app.schemas import GroupCreate, GroupOut
+from app.services import moderation
 
 router = APIRouter(prefix="/groups", tags=["groups"])
 
@@ -81,6 +82,7 @@ async def create_group(
     user: User = Depends(requires_plus("Creating groups")),
     session: AsyncSession = Depends(get_session),
 ) -> GroupOut:
+    moderation.screen(payload.name)
     group = Group(
         name=payload.name.strip(),
         invite_token=secrets.token_urlsafe(12),
